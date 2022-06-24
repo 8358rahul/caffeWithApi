@@ -12,11 +12,10 @@ import {
 import { icons, images, SIZES, COLORS, FONTS } from "../constants";
 import { categoryData } from "../constants/categoryData";
 import { restaurantData } from "../constants/restaurantData";
-import { addToCart } from "../redux/cartSlice";
+import { addToCart,decreaseCart,getTotals,  } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from '@jamsch/react-native-toastify';
 import { Button } from 'react-native-paper';
-import { car } from "../constants/icons";
 const Home = ({ navigation }) => {
 
   const initialCurrentLocation = {
@@ -26,15 +25,32 @@ const Home = ({ navigation }) => {
       longitude: 110.36381866919922,
     },
   };
-  const cart = useSelector((state) => state.cart);
+  const cart = useSelector((state) => state.cart.cartItems);
+  const {cartTotalQuantity,cartTotalAmount} = useSelector((state) => state.cart);
   const dispatch = useDispatch();
-  const [categories, setCategories] = React.useState(categoryData);
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [restaurants, setRestaurants] = React.useState(restaurantData);
-  const [currentLocation, setCurrentLocation] = React.useState(
-    initialCurrentLocation
-  );
+  const [clickAdd, setClickAdd] = React.useState(false);
+  const [cart_item_ids, setcart_item_ids] = React.useState([]);
 
+  React.useEffect(() => {
+     dispatch(getTotals());
+     
+     if(cart.length > 0){
+        let cart_item_id = cart.map(item => item.id);
+        setcart_item_ids(cart_item_id)
+     }
+     
+  }, [cart]);
+
+function checkIsItemInCart(id){
+ let flag = cart_item_ids.find((i)=>i === id);
+ if(flag){
+   return true;
+ }else{
+    return false;
+ }
+}
 
   function renderHeader() {
     return (
@@ -70,7 +86,7 @@ const Home = ({ navigation }) => {
               borderRadius: SIZES.radius,
             }}
           >
-            <Text style={{ ...FONTS.h3 }}>{currentLocation.streetName}</Text>
+            <Text style={{ ...FONTS.h3 }}>{initialCurrentLocation.streetName}</Text>
           </View>
         </View>
 
@@ -113,7 +129,6 @@ const Home = ({ navigation }) => {
           onPress={() => {
             setSelectedCategory(item);
             let temp = restaurantData.filter((a) => a.category.includes(item.name))
-            console.log('temp------[',temp)
             setRestaurants(
               restaurantData.filter((a) => a.category.includes(item.name))
             );
@@ -163,21 +178,24 @@ const Home = ({ navigation }) => {
 
     return (
       <View style={{ padding: SIZES.padding * 2 }}>
-        <View style={{ flexDirection: 'row',justifyContent: 'space-between'  }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
             <Text style={{ ...FONTS.h2 }}>Main</Text>
             <Text style={{ ...FONTS.h2 }}>Categories</Text>
           </View>
-            <Button icon={icons.dollar}  mode="elevated" onPress={() => console.log('Pressed')}>
-            <Text style={{ ...FONTS.h2 }}></Text>
+          <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
+
+            <Button icon={icons.dollar} mode="elevated" onPress={() => navigation.navigate('ConfirmOrder')}>
+              <Text style={{ ...FONTS.h2 }}>{cartTotalAmount}</Text>
             </Button>
-            <Button icon="cart"  mode="elevated" onPress={() => console.log('Pressed')}>
-            <Text style={{ ...FONTS.h2 }}>{cart.cartItems.length}</Text>
+            <Button icon="cart" mode="elevated" onPress={() => navigation.navigate('ConfirmOrder')}>
+              <Text style={{ ...FONTS.h2 }}>{cartTotalQuantity}</Text>
             </Button>
+          </View>
         </View>
 
         <FlatList
-          data={categories}
+          data={categoryData}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item) => `${item.id}`}
@@ -196,13 +214,17 @@ const Home = ({ navigation }) => {
           marginBottom: SIZES.padding * 2,
           width: "100%",
           paddingVertical: 16,
+          
+        
         }}
       >
         {/* Image */}
         <View
           style={{
+            flex:1,
             marginBottom: SIZES.padding,
             borderRadius: 20,
+            flexDirection:"row"
           }}
         >
           <Image
@@ -212,40 +234,99 @@ const Home = ({ navigation }) => {
               width: "40%",
               height: 110,
               borderRadius: SIZES.radius,
-              position: "absolute",
             }}
           />
+
+
+          {/* Restaurant Info */}
+
+          <View
+            style={{
+              marginTop: SIZES.padding - 10,
+              marginLeft: 10,
+              flex:1
+            }}
+          >
+            <Text style={{ ...FONTS.body2 }}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', }}>
+              <Text style={{ ...FONTS.body2 }}>$-{item.price}</Text>
+              <Text style={{ ...FONTS.body2, marginLeft: 20, }}>Ć-{item.calories}</Text>
+            </View>
+          </View>
         </View>
+        {!checkIsItemInCart(item.id) ?
+          <Button mode="contained"
+            color={COLORS.primary}
+            contentStyle={{
+              width: "100%",
+              height: 40,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 20,
+            }}
+            labelStyle={{
+              fontSize: SIZES.font * 1.4,
+              fontWeight: "bold",
+              color: COLORS.white,
+              marginTop: 4,
+            }}
+            onPress={() => {
+              dispatch(addToCart(item))
+              setClickAdd(true)
 
-        {/* Restaurant Info */}
-
-        <View
-          style={{
-            marginTop: SIZES.padding - 15,
-            marginLeft: 170,
-          }}
-        >
-          <Text style={{ ...FONTS.body2 }}>{item.name}</Text>
-          <Text style={{ ...FONTS.body2 }}>$-{item.price}</Text>
-          <Text style={{ ...FONTS.body2 }}>Ć-{item.calories}</Text>
-        </View>
-
-        <TouchableOpacity
-          style={{
-            backgroundColor: COLORS.primary,
-            width: "100%",
-            height: 40,
-            marginTop: SIZES.padding * 4,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 20,
-          }}
-          onPress={() => dispatch(addToCart(item))}
-        >
-          <Text style={{ color: "#000", ...FONTS.body2, fontWeight: "bold" }}>
+            }}>
             ADD
-          </Text>
-        </TouchableOpacity>
+          </Button>
+          :
+          <View style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            marginTop: SIZES.padding + 10,
+
+          }}>
+
+            <Button mode="contained"
+              color={COLORS.primary}
+              contentStyle={{
+                // width: "50%",
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+              }}
+              labelStyle={{
+                fontSize: SIZES.font * 1.4,
+                fontWeight: "bold",
+                color: COLORS.white,
+                marginTop: SIZES.padding - 5,
+              }}
+              onPress={() => dispatch(addToCart(item))}>
+              INCREMENT
+            </Button>
+            <Button mode="contained"
+              color={COLORS.primary}
+              contentStyle={{
+                // width: "50%",
+                height: 40,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+                padding: 0,
+              }}
+              labelStyle={{
+                fontSize: SIZES.font * 1.4,
+                fontWeight: "bold",
+                color: COLORS.white,
+                marginTop: 4,
+                // width: '100%',
+              }}
+              onPress={() => dispatch(decreaseCart(item.id))}
+               >
+              DECREMENT
+            </Button>
+          </View>
+        }
       </View>
     );
 
@@ -259,7 +340,7 @@ const Home = ({ navigation }) => {
           renderItem={renderItem}
           contentContainerStyle={{
             paddingHorizontal: SIZES.padding * 2,
-            paddingBottom: 30,
+            paddingBottom: 50,
           }}
         />
       </View>
