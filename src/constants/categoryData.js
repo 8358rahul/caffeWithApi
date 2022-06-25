@@ -3,7 +3,7 @@ import { icons } from "../constants";
 export const categoryData = [
     {
       id: 1,
-      name: "All Categories",
+      name: "AllCategories",
       icon: icons.rice_bowl,
     },
     {
@@ -13,7 +13,7 @@ export const categoryData = [
     },
     {
       id: 3,
-      name: "Hot Dogs",
+      name: "HotDogs",
       icon: icons.hotdog,
     },
     {

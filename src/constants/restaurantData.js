@@ -7,7 +7,7 @@ export const restaurantData = [
     photo: images.crispy_chicken_burger,
     description: "Burgers with crispy chicken, cheese and lettuce",
     calories: 200,
-    category: "Burgers",
+    category: "AllCategories",
     price: 10,
   },
   {
@@ -72,7 +72,7 @@ export const restaurantData = [
     photo: images.chicago_hot_dog,
     description: "Fresh tomatoes, all beef hot dogs",
     calories: 100,
-    category: "Hot Dog",
+    category: "HotDog",
     price: 20,
   },
 
@@ -82,7 +82,7 @@ export const restaurantData = [
     photo: images.sushi,
     description: "Fresh salmon, sushi rice, fresh juicy avocado",
     calories: 100,
-    category: "Sushi sets",
+    category: "Sushi",
     price: 50,
   },
 
@@ -92,7 +92,7 @@ export const restaurantData = [
     photo: images.kolo_mee,
     description: "Noodles with char siu",
     calories: 200,
-    category: "Cuisine",
+    category: "Noodles",
     price: 5,
   },
   {
@@ -101,7 +101,7 @@ export const restaurantData = [
     photo: images.sarawak_laksa,
     description: "Vermicelli noodles, cooked prawns",
     calories: 300,
-    category: "Cuisine",
+    category: "Noodles",
     price: 8,
   },
   {
@@ -129,7 +129,7 @@ export const restaurantData = [
     photo: images.teh_c_peng,
     description: "Three Layer Teh C Peng",
     calories: 100,
-    category: "Dessets",
+    category: "Desserts",
     price: 2,
   },
   {
@@ -138,7 +138,7 @@ export const restaurantData = [
     photo: images.ice_kacang,
     description: "Shaved Ice with red beans",
     calories: 100,
-    category: "Dessets",
+    category: "Desserts",
     price: 3,
   },
   {
@@ -147,7 +147,34 @@ export const restaurantData = [
     photo: images.kek_lapis,
     description: "Layer cakes",
     calories: 300,
-    category: "Dessets",
+    category: "Desserts",
+    price: 20,
+  },
+  {
+    id: 17,
+    name: "Kek Lapis",
+    photo: images.kek_lapis,
+    description: "Layer cakes",
+    calories: 300,
+    category: "Salads",
+    price: 20,
+  },
+  {
+    id: 18,
+    name: "Kek Lapis",
+    photo: images.kek_lapis,
+    description: "Layer cakes",
+    calories: 300,
+    category: "Snacks",
+    price: 20,
+  },
+  {
+    id: 19,
+    name: "Kek Lapis",
+    photo: images.kek_lapis,
+    description: "Layer cakes",
+    calories: 300,
+    category: "Drinks",
     price: 20,
   },
 ];

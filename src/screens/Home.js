@@ -12,49 +12,43 @@ import {
 import { icons, images, SIZES, COLORS, FONTS } from "../constants";
 import { categoryData } from "../constants/categoryData";
 import { restaurantData } from "../constants/restaurantData";
-import { addToCart,decreaseCart,getTotals,  } from "../redux/cartSlice";
+import { addToCart, decreaseCart, getTotals, } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from '@jamsch/react-native-toastify';
 import { Button } from 'react-native-paper';
 const Home = ({ navigation }) => {
-
-  const initialCurrentLocation = {
-    streetName: "Our Menu",
-    gps: {
-      latitude: 1.5496614931250685,
-      longitude: 110.36381866919922,
-    },
-  };
   const cart = useSelector((state) => state.cart.cartItems);
-  const {cartTotalQuantity,cartTotalAmount} = useSelector((state) => state.cart);
+  const { cartTotalQuantity, cartTotalAmount } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [restaurants, setRestaurants] = React.useState(restaurantData);
-  const [clickAdd, setClickAdd] = React.useState(false);
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
-
   React.useEffect(() => {
-     dispatch(getTotals());
-     
-     if(cart.length > 0){
-        let cart_item_id = cart.map(item => item.id);
-        setcart_item_ids(cart_item_id)
-     }
-     
+    dispatch(getTotals());
+    if (cart.length > 0) {
+      let cart_item_id = cart.map(item => item.id);
+      setcart_item_ids(cart_item_id)
+    }
+    else {
+      setcart_item_ids([])
+    }
+
+  
   }, [cart]);
 
-function checkIsItemInCart(id){
- let flag = cart_item_ids.find((i)=>i === id);
- if(flag){
-   return true;
- }else{
-    return false;
- }
-}
-
+  function checkIsItemInCart(id) {
+    let flag = cart_item_ids.find((i) => i == id);
+    if (flag) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
+ 
   function renderHeader() {
     return (
-      <View style={{ flexDirection: "row", height: 50 }}>
+      <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}>
         <TouchableOpacity
           style={{
             width: 50,
@@ -74,20 +68,10 @@ function checkIsItemInCart(id){
         </TouchableOpacity>
 
         <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          style={{ flex: 1, alignItems: "center", justifyContent: "center", }}
         >
-          <View
-            style={{
-              width: "70%",
-              height: "100%",
-              backgroundColor: COLORS.lightGray3,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: SIZES.radius,
-            }}
-          >
-            <Text style={{ ...FONTS.h3 }}>{initialCurrentLocation.streetName}</Text>
-          </View>
+
+          <Text style={{ ...FONTS.h3, color: COLORS.primary, fontWeight: '900', }}>Our Menu</Text>
         </View>
 
         <TouchableOpacity
@@ -128,10 +112,10 @@ function checkIsItemInCart(id){
           }}
           onPress={() => {
             setSelectedCategory(item);
-            let temp = restaurantData.filter((a) => a.category.includes(item.name))
             setRestaurants(
               restaurantData.filter((a) => a.category.includes(item.name))
             );
+            
 
           }}
         >
@@ -180,8 +164,8 @@ function checkIsItemInCart(id){
       <View style={{ padding: SIZES.padding * 2 }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
-            <Text style={{ ...FONTS.h2 }}>Main</Text>
-            <Text style={{ ...FONTS.h2 }}>Categories</Text>
+            <Text style={{ ...FONTS.h2, color: COLORS.primary, fontWeight: '900', }}>Main</Text>
+            <Text style={{ ...FONTS.h2, color: COLORS.primary, fontWeight: '900', }}>Categories</Text>
           </View>
           <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
 
@@ -214,17 +198,17 @@ function checkIsItemInCart(id){
           marginBottom: SIZES.padding * 2,
           width: "100%",
           paddingVertical: 16,
-          
-        
+
+
         }}
       >
         {/* Image */}
         <View
           style={{
-            flex:1,
+            flex: 1,
             marginBottom: SIZES.padding,
             borderRadius: 20,
-            flexDirection:"row"
+            flexDirection: "row"
           }}
         >
           <Image
@@ -244,13 +228,13 @@ function checkIsItemInCart(id){
             style={{
               marginTop: SIZES.padding - 10,
               marginLeft: 10,
-              flex:1
+              flex: 1
             }}
           >
-            <Text style={{ ...FONTS.body2 }}>{item.name}</Text>
-            <View style={{ flexDirection: 'row', }}>
-              <Text style={{ ...FONTS.body2 }}>$-{item.price}</Text>
-              <Text style={{ ...FONTS.body2, marginLeft: 20, }}>Ć-{item.calories}</Text>
+            <Text style={{ ...FONTS.body2,color:COLORS.black }}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', marginTop: 5,}}>
+              <Text style={{ ...FONTS.body3,color:COLORS.black }}>Price - {item.price}</Text>
+              <Text style={{ ...FONTS.body3, marginLeft: 20,color:COLORS.black }}>Ćalories - {item.calories}</Text>
             </View>
           </View>
         </View>
@@ -272,7 +256,6 @@ function checkIsItemInCart(id){
             }}
             onPress={() => {
               dispatch(addToCart(item))
-              setClickAdd(true)
 
             }}>
             ADD
@@ -301,9 +284,19 @@ function checkIsItemInCart(id){
                 color: COLORS.white,
                 marginTop: SIZES.padding - 5,
               }}
-              onPress={() => dispatch(addToCart(item))}>
+              onPress={() => {
+                dispatch(addToCart(item))
+              }}>
               INCREMENT
             </Button>
+            {cart.map((i) => (
+              (i.id==item.id) ?
+              <View key={item.id}>
+                <Text style={{ fontSize: SIZES.font * 1.4, }}>{i.cartQuantity}</Text>
+              </View>
+              :null
+            ))}
+
             <Button mode="contained"
               color={COLORS.primary}
               contentStyle={{
@@ -321,8 +314,10 @@ function checkIsItemInCart(id){
                 marginTop: 4,
                 // width: '100%',
               }}
-              onPress={() => dispatch(decreaseCart(item.id))}
-               >
+              onPress={() => {
+                dispatch(decreaseCart(item))
+              }}
+            >
               DECREMENT
             </Button>
           </View>

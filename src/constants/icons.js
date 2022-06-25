@@ -25,6 +25,7 @@ export const sushi = require("../assets/icons/sushi.png");
 export const user = require("../assets/icons/user.png");
 export const scan = require("../assets/icons/scan.png");
 export const dollar = require("../assets/icons/dollar.png");
+export const logo = require("../assets/icons/fast-food.png");
 
 export default {
     back,
@@ -54,4 +55,5 @@ export default {
     user,
     scan,
     dollar,
+    logo,
 }
