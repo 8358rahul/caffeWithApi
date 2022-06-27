@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ConfirmOrder,Billing,Scan ,Home} from "../screens";
+import { ConfirmOrder,Billing,Scan ,Home,LoginSigninScreen,WelcomeScreeen} from "../screens";
 import TabNavigation from './TabNavigation'
 
 
@@ -15,9 +15,10 @@ const StackNavigation = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={"Root"}
+      initialRouteName={"Menu"}
     >
-      <Stack.Screen name="Root" component={Home} />
+      <Stack.Screen name="WelcomeScreeen" component={WelcomeScreeen} />
+      <Stack.Screen name="Menu" component={Home} />
       <Stack.Screen name="ConfirmOrder" component={ConfirmOrder} />
       <Stack.Screen name="Billing" component={Billing} />
       <Stack.Screen name="Scan" component={Scan} />

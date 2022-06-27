@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
-import { RNCamera } from "react-native-camera";
+import { RNCamera as Camera } from "react-native-camera";
 import { COLORS, FONTS, SIZES, icons, images } from "../constants";
 
 const Scan = ({ navigation }) => {
@@ -35,7 +35,7 @@ const Scan = ({ navigation }) => {
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           <Text style={{ color: COLORS.white, ...FONTS.body3 }}>
-            Scan for Payment
+            Scan for Menu
           </Text>
         </View>
 
@@ -79,6 +79,8 @@ const Scan = ({ navigation }) => {
             marginTop: "-55%",
             width: 200,
             height: 300,
+            tintColor: COLORS.white,
+            
           }}
         />
       </View>
@@ -185,12 +187,12 @@ const Scan = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.transparent }}>
-      <RNCamera
-        ref={ref => this.camera = ref}
+      <Camera
+        // ref={ref => this.camera = ref}
         style={{ flex: 1 }}
         captureAudio={false}
-        type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.off}
+        type={Camera.Constants.Type.back}
+        flashMode={Camera.Constants.FlashMode.off}
         onBarCodeRead={onBarCodeRead}
         androidCameraPermissionOptions={{
           title: "Permission to use camera",
@@ -201,8 +203,8 @@ const Scan = ({ navigation }) => {
       >
         {renderHeader()}
         {renderScanFocus()}
-        {renderPaymentMethods()}
-      </RNCamera>
+        {/* {renderPaymentMethods()} */}
+      </Camera>
     </View>
   );
 };

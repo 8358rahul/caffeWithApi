@@ -1,6 +1,15 @@
 import { Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
+export const  widthPercentToDp = widthPercent => {
+    const screenWidth = Dimensions.get("window").width;
+    return Math.round(screenWidth * parseFloat(widthPercent) / 100);
+}
+export const heightPercentToDp = heightPercent => {
+    const screenHeight = Dimensions.get("window").height;
+    return Math.round(screenHeight * parseFloat(heightPercent) / 100);
+}
+
 export const COLORS = {
     // base colors
     primary: "#FC6D3F", // orange
@@ -57,6 +66,10 @@ export const FONTS = {
     body3: { fontFamily: "Roboto-Regular", fontSize: SIZES.body3, lineHeight: 22 },
     body4: { fontFamily: "Roboto-Regular", fontSize: SIZES.body4, lineHeight: 22 },
     body5: { fontFamily: "Roboto-Regular", fontSize: SIZES.body5, lineHeight: 22 },
+    BalooBold: { fontFamily: "Baloo-Bhai2-Bold", fontSize: SIZES.body1, lineHeight: 36 },
+    BalooExtra: { fontFamily: "BalooBhai2-ExtraBold", fontSize: SIZES.body1, lineHeight: 36 },
+    BalooRegular: { fontFamily: "BalooBhai2-Regular", fontSize: SIZES.body1, lineHeight: 36 },
+    LatoBoldItalic: { fontFamily: "Lato-BoldItalic", fontSize: SIZES.body1, lineHeight: 36 },
 };
 
 const appTheme = { COLORS, SIZES, FONTS };

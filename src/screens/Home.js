@@ -15,6 +15,7 @@ import { restaurantData } from "../constants/restaurantData";
 import { addToCart, decreaseCart, getTotals, } from "../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from '@jamsch/react-native-toastify';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-paper';
 const Home = ({ navigation }) => {
   const cart = useSelector((state) => state.cart.cartItems);
@@ -33,7 +34,7 @@ const Home = ({ navigation }) => {
       setcart_item_ids([])
     }
 
-  
+
   }, [cart]);
 
   function checkIsItemInCart(id) {
@@ -44,8 +45,8 @@ const Home = ({ navigation }) => {
       return false;
     }
   }
-  
- 
+
+
   function renderHeader() {
     return (
       <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}>
@@ -115,7 +116,7 @@ const Home = ({ navigation }) => {
             setRestaurants(
               restaurantData.filter((a) => a.category.includes(item.name))
             );
-            
+
 
           }}
         >
@@ -198,7 +199,10 @@ const Home = ({ navigation }) => {
           marginBottom: SIZES.padding * 2,
           width: "100%",
           paddingVertical: 16,
-
+          paddingHorizontal: SIZES.padding,
+          backgroundColor: COLORS.white,
+          borderRadius: SIZES.radius,
+          ...styles.shadow,
 
         }}
       >
@@ -209,14 +213,15 @@ const Home = ({ navigation }) => {
             marginBottom: SIZES.padding,
             borderRadius: 20,
             flexDirection: "row"
+
           }}
         >
           <Image
             source={item.photo}
-            resizeMode="cover"
+            // resizeMode="cover"
             style={{
               width: "40%",
-              height: 110,
+              height: 150,
               borderRadius: SIZES.radius,
             }}
           />
@@ -231,95 +236,83 @@ const Home = ({ navigation }) => {
               flex: 1
             }}
           >
-            <Text style={{ ...FONTS.body2,color:COLORS.black }}>{item.name}</Text>
-            <View style={{ flexDirection: 'row', marginTop: 5,}}>
-              <Text style={{ ...FONTS.body3,color:COLORS.black }}>Price - {item.price}</Text>
-              <Text style={{ ...FONTS.body3, marginLeft: 20,color:COLORS.black }}>Ćalories - {item.calories}</Text>
+            <FontAwesome5 name="utensils" size={20} color={COLORS.primary} style={{marginLeft: '80%',}} />
+
+            <Text style={{ ...FONTS.body3, color: COLORS.black }}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', marginTop: 5, }}>
+              <Text style={{ ...FONTS.body4, color: COLORS.black }}>Rs.{item.price}</Text>
+              <Text style={{ ...FONTS.body4, marginLeft: 20, color: COLORS.black }}>Kcal-{item.calories}</Text>
             </View>
+              <Text style={{ ...FONTS.body4, color: COLORS.black }}>{item.description}</Text>
           </View>
         </View>
         {!checkIsItemInCart(item.id) ?
-          <Button mode="contained"
-            color={COLORS.primary}
-            contentStyle={{
-              width: "100%",
+          <TouchableOpacity 
+            style={{
+              width: "40%",
               height: 40,
               justifyContent: "center",
               alignItems: "center",
-              borderRadius: 20,
-            }}
-            labelStyle={{
-              fontSize: SIZES.font * 1.4,
-              fontWeight: "bold",
-              color: COLORS.white,
-              marginTop: 4,
+              borderRadius: 10,
+              backgroundColor: '#ffe5c7',
+              marginTop: -20,
+              borderColor:'#fa8f14',
+              borderWidth:1,
             }}
             onPress={() => {
               dispatch(addToCart(item))
 
             }}>
-            ADD
-          </Button>
+            <Text style={{ ...FONTS.body2, color: COLORS.primary,fontWeight:'900'}}>ADD</Text>
+          </TouchableOpacity>
           :
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            width: '100%',
-            marginTop: SIZES.padding + 10,
-
+            width: '40%',
+            marginTop:-20,
+            alignItems: 'center',
+            borderRadius: 10,
+            backgroundColor: COLORS.primary,
+            borderColor:'#fa8f14',
+            borderWidth:1,
           }}>
 
-            <Button mode="contained"
-              color={COLORS.primary}
-              contentStyle={{
-                // width: "50%",
+            <TouchableOpacity 
+              style={{
+                width: "50%",
                 height: 40,
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 20,
-              }}
-              labelStyle={{
-                fontSize: SIZES.font * 1.4,
-                fontWeight: "bold",
-                color: COLORS.white,
-                marginTop: SIZES.padding - 5,
               }}
               onPress={() => {
                 dispatch(addToCart(item))
               }}>
-              INCREMENT
-            </Button>
+            <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900',}}>+</Text>
+            </TouchableOpacity>
             {cart.map((i) => (
-              (i.id==item.id) ?
-              <View key={item.id}>
-                <Text style={{ fontSize: SIZES.font * 1.4, }}>{i.cartQuantity}</Text>
-              </View>
-              :null
+              (i.id == item.id) ?
+                <View key={item.id}>
+                  <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900',}}>{i.cartQuantity}</Text>
+                </View>
+                : null
             ))}
 
-            <Button mode="contained"
-              color={COLORS.primary}
-              contentStyle={{
-                // width: "50%",
+            <TouchableOpacity 
+              style={{
+                width: "50%",
                 height: 40,
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 20,
-                padding: 0,
-              }}
-              labelStyle={{
-                fontSize: SIZES.font * 1.4,
-                fontWeight: "bold",
-                color: COLORS.white,
-                marginTop: 4,
-                // width: '100%',
               }}
               onPress={() => {
                 dispatch(decreaseCart(item))
               }}
             >
-              DECREMENT
-            </Button>
+             <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900',}}>-</Text>
+            </TouchableOpacity>
           </View>
         }
       </View>
