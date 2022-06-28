@@ -37,7 +37,7 @@ const WelcomeScreeen = ({navigation}) => {
             <Animated.View style={[styles.bottomPart, { flex: bottomFlex }]}>
                 {startClick ?
                     <View style={{ flex: 1, backgroundColor: "#fffd", borderTopLeftRadius: wp(20),  }}>
-                        <Text style={{ fontSize: wp(6), fontFamily: FONTS.regular, color: COLORS.black, marginHorizontal: wp(20), marginVertical: wp(2), letterSpacing: 2, fontWeight: 'bold', }}>LOGIN</Text>
+                        <Text style={{ fontSize: wp(6), fontFamily: FONTS.regular, color: COLORS.primary, marginHorizontal: wp(20), marginVertical: wp(2), letterSpacing: 2, fontWeight: 'bold', }}>LOGIN</Text>
                         <TextInput style={styles.textInputStyle} placeholder="Email" placeholderTextColor={COLORS.black}
                             keyboardType="email-address"
 
@@ -48,7 +48,7 @@ const WelcomeScreeen = ({navigation}) => {
                         />
                         <TouchableOpacity onPress={() => {
                             setStartClick(false) 
-                            navigation.navigate('Root')
+                            navigation.navigate('Menu')
                         }}
                             style={[styles.buttonStyle, { backgroundColor: startClick ? COLORS.primary : COLORS.white }]}>
                             <Text style={[styles.buttonTextStyle, { color: !startClick ? COLORS.primary : COLORS.white }]}>
@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
         fontFamily: 'BalooBhai2-ExtraBold.ttf',
     },
     buttonStyle: {
-        borderRadius: wp(5),
         elevation: 5,
         shadowColor: COLORS.lightGray,
         shadowOffset: { width: 0, height: 5 },
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
         width: wp(60),
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: wp(5),
+        borderRadius: wp(2),
         alignSelf: 'center',
         
     },
@@ -118,7 +117,6 @@ const styles = StyleSheet.create({
     },
     textInputStyle: {
         backgroundColor: COLORS.white,
-        borderRadius: wp(5),
         elevation: 5,
         shadowColor: '#010101',
         shadowOffset: { width: 0, height: 5 },
@@ -128,11 +126,12 @@ const styles = StyleSheet.create({
         width: wp(60),
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: wp(5),
+        borderRadius: wp(2),
         alignSelf: 'center',
         marginVertical: hp(2),
         letterSpacing: wp(1),
         fontFamily: FONTS.BalooExtra.fontFamily,
+        paddingHorizontal: wp(3),
     },
 
 

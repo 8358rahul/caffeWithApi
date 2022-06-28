@@ -6,17 +6,16 @@ import StackNavigation from "./src/navigation/StackNavigation";
 import { Provider as PaperProvider } from 'react-native-paper';
 const store = configureStore({
   reducer: {
-    cart : cartSlice,
+    cart: cartSlice,
   },
 });
 
 const App = () => {
   return (
-    
     <Provider store={store}>
       <PaperProvider>
-      <StackNavigation />
-    </PaperProvider>
+        <StackNavigation />
+      </PaperProvider>
     </Provider>
   );
 };

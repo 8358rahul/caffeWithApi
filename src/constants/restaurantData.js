@@ -5,7 +5,7 @@ export const restaurantData = [
     id: 1,
     name: "Crispy Chicken Burgers",
     photo: images.crispy_chicken_burger,
-    description: "Burgers with crispy chicken, cheese and lettuce",
+    description: "Burgers with crispy chicken, cheese and lettuce on a bed of fries with a side of fries and a drink.Burgers with crispy chicken, cheese and lettuce on a bed of fries with a side of fries and a drink ",
     calories: 200,
     category: "AllCategories",
     price: 10,

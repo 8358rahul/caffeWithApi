@@ -49,49 +49,12 @@ const Home = ({ navigation }) => {
 
   function renderHeader() {
     return (
-      <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}>
-        <TouchableOpacity
-          style={{
-            width: 50,
-            paddingLeft: SIZES.padding * 2,
-            justifyContent: "center",
-          }}
-        >
-
-          <Image
-            source={icons.nearby}
-            resizeMode="contain"
-            style={{
-              width: 30,
-              height: 30,
-            }}
-          />
-        </TouchableOpacity>
-
-        <View
+      <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}> 
+       <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center", }}
-        >
-
+        > 
           <Text style={{ ...FONTS.h3, color: COLORS.primary, fontWeight: '900', }}>Our Menu</Text>
-        </View>
-
-        <TouchableOpacity
-          style={{
-            width: 50,
-            paddingRight: SIZES.padding * 2,
-            justifyContent: "center",
-          }}
-          onPress={() => navigation.navigate("Scan")}
-        >
-          <Image
-            source={icons.scan}
-            resizeMode="contain"
-            style={{
-              width: 30,
-              height: 30,
-            }}
-          />
-        </TouchableOpacity>
+        </View> 
       </View>
     );
   }
@@ -162,7 +125,17 @@ const Home = ({ navigation }) => {
     };
 
     return (
-      <View style={{ padding: SIZES.padding * 2 }}>
+      <View
+        style={{
+          justifyContent: "center",
+          marginTop: SIZES.padding,
+          marginBottom: SIZES.padding,
+          marginHorizontal: 16,
+
+
+        }}
+
+      >
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View>
             <Text style={{ ...FONTS.h2, color: COLORS.primary, fontWeight: '900', }}>Main</Text>
@@ -198,8 +171,6 @@ const Home = ({ navigation }) => {
         style={{
           marginBottom: SIZES.padding * 2,
           width: "100%",
-          paddingVertical: 16,
-          paddingHorizontal: SIZES.padding,
           backgroundColor: COLORS.white,
           borderRadius: SIZES.radius,
           ...styles.shadow,
@@ -236,18 +207,22 @@ const Home = ({ navigation }) => {
               flex: 1
             }}
           >
-            <FontAwesome5 name="utensils" size={20} color={COLORS.primary} style={{marginLeft: '80%',}} />
+            <FontAwesome5 name="utensils" size={20} color={COLORS.primary} style={{ marginLeft: '80%', }} />
 
             <Text style={{ ...FONTS.body3, color: COLORS.black }}>{item.name}</Text>
             <View style={{ flexDirection: 'row', marginTop: 5, }}>
               <Text style={{ ...FONTS.body4, color: COLORS.black }}>Rs.{item.price}</Text>
               <Text style={{ ...FONTS.body4, marginLeft: 20, color: COLORS.black }}>Kcal-{item.calories}</Text>
             </View>
-              <Text style={{ ...FONTS.body4, color: COLORS.black }}>{item.description}</Text>
+
+            <Text style={{ ...FONTS.body4, color: COLORS.black }}
+              numberOfLines={3}
+            >{item.description}</Text>
+
           </View>
         </View>
         {!checkIsItemInCart(item.id) ?
-          <TouchableOpacity 
+          <TouchableOpacity
             style={{
               width: "40%",
               height: 40,
@@ -256,29 +231,29 @@ const Home = ({ navigation }) => {
               borderRadius: 10,
               backgroundColor: '#ffe5c7',
               marginTop: -20,
-              borderColor:'#fa8f14',
-              borderWidth:1,
+              borderColor: '#fa8f14',
+              borderWidth: 1,
             }}
             onPress={() => {
               dispatch(addToCart(item))
 
             }}>
-            <Text style={{ ...FONTS.body2, color: COLORS.primary,fontWeight:'900'}}>ADD</Text>
+            <Text style={{ ...FONTS.body2, color: COLORS.primary, fontWeight: '900' }}>ADD</Text>
           </TouchableOpacity>
           :
           <View style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '40%',
-            marginTop:-20,
+            marginTop: -20,
             alignItems: 'center',
             borderRadius: 10,
             backgroundColor: COLORS.primary,
-            borderColor:'#fa8f14',
-            borderWidth:1,
+            borderColor: '#fa8f14',
+            borderWidth: 1,
           }}>
 
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{
                 width: "50%",
                 height: 40,
@@ -289,17 +264,17 @@ const Home = ({ navigation }) => {
               onPress={() => {
                 dispatch(addToCart(item))
               }}>
-            <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900',}}>+</Text>
+              <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900', }}>+</Text>
             </TouchableOpacity>
             {cart.map((i) => (
               (i.id == item.id) ?
                 <View key={item.id}>
-                  <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900',}}>{i.cartQuantity}</Text>
+                  <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900', }}>{i.cartQuantity}</Text>
                 </View>
                 : null
             ))}
 
-            <TouchableOpacity 
+            <TouchableOpacity
               style={{
                 width: "50%",
                 height: 40,
@@ -311,7 +286,7 @@ const Home = ({ navigation }) => {
                 dispatch(decreaseCart(item))
               }}
             >
-             <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900',}}>-</Text>
+              <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900', }}>-</Text>
             </TouchableOpacity>
           </View>
         }
@@ -339,7 +314,7 @@ const Home = ({ navigation }) => {
   return (
 
     <SafeAreaView style={styles.container}>
-      {renderHeader()}
+      {/* {renderHeader()} */}
       {renderMainCategories()}
       {renderRestaurantList()}
     </SafeAreaView>
@@ -351,6 +326,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.lightGray4,
+
   },
   shadow: {
     shadowColor: "#000",

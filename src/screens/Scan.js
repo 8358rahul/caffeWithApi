@@ -1,9 +1,11 @@
-import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
-import { RNCamera as Camera } from "react-native-camera";
+import React,{useState} from "react";
+import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import { RNCamera } from "react-native-camera";
 import { COLORS, FONTS, SIZES, icons, images } from "../constants";
+import { toast } from '@jamsch/react-native-toastify';
 
 const Scan = ({ navigation }) => {
+  const [number , setNumber] = useState("");
   function renderHeader() {
     return (
       <View
@@ -80,7 +82,7 @@ const Scan = ({ navigation }) => {
             width: 200,
             height: 300,
             tintColor: COLORS.white,
-            
+
           }}
         />
       </View>
@@ -100,9 +102,10 @@ const Scan = ({ navigation }) => {
           borderTopLeftRadius: SIZES.radius,
           borderTopRightRadius: SIZES.radius,
           backgroundColor: COLORS.white,
+
         }}
       >
-        <Text style={{ ...FONTS.h4 }}>Another payment methods</Text>
+        <Text style={{ ...FONTS.h4 }}>Enter Table Number</Text>
 
         <View
           style={{
@@ -112,87 +115,71 @@ const Scan = ({ navigation }) => {
             marginTop: SIZES.padding * 2,
           }}
         >
-          <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-            onPress={() => console.log("Phone Number")}
-          >
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                backgroundColor: COLORS.lightpurple,
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: 10,
-              }}
-            >
-              <Image
-                source={icons.phone}
-                resizeMode="cover"
-                style={{
-                  height: 25,
-                  width: 25,
-                  tintColor: COLORS.purple,
-                }}
-              />
-            </View>
-            <Text style={{ marginLeft: SIZES.padding, ...FONTS.body4 }}>
-              Phone Number
-            </Text>
-          </TouchableOpacity>
+          <TextInput
 
-          <TouchableOpacity
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginLeft: SIZES.padding * 2,
+              flex: 1,
+              borderColor: COLORS.gray,
+              borderWidth: 1,
+              borderRadius: 10,
+              padding: SIZES.padding,
+              marginRight: SIZES.padding,
+              marginLeft: SIZES.padding,
+              fontSize: SIZES.font * 1.2,
+              fontFamily: FONTS.BalooExtra.fontFamily,
+              color: COLORS.black,
             }}
-            onPress={() => console.log("Barcode")}
-          >
-            <View
-              style={{
-                width: 40,
-                height: 40,
-                backgroundColor: COLORS.lightGreen,
-                alignItems: "center",
-                justifyContent: "center",
-                borderRadius: 10,
-              }}
+            placeholder="Table Number"
+            placeholderTextColor={COLORS.gray}
+            keyboardType="numeric"
+            returnKeyType="done"
+            onChangeText={(text) => setNumber(text)}
+            value={number}
+          />
+          
+
+        </View>
+        <TouchableOpacity
+            style={{
+              height: 50,
+              width: '100%',
+              backgroundColor: COLORS.primary,
+              borderRadius: 10,
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: SIZES.padding,
+            }}
+            onPress=
+            {
+              number?() =>{ navigation.navigate("Billing",{number:number})
+               setNumber("")
+              }:()=> toast.info("Please Enter Table Number")
+              
+            }
             >
-              <Image
-                source={icons.barcode}
-                resizeMode="cover"
-                style={{
-                  height: 25,
-                  width: 25,
-                  tintColor: COLORS.primary,
-                }}
-              />
-            </View>
-            <Text style={{ marginLeft: SIZES.padding, ...FONTS.body4 }}>
-              Barcode
+            <Text style={{ ...FONTS.h4, color: COLORS.white,fontWeight: '900', }}>
+              Continue
             </Text>
           </TouchableOpacity>
-        </View>
       </View>
     );
   }
 
   function onBarCodeRead(result) {
-    console.log(result.data);
+    if (result.data.length > 0) {
+      navigation.navigate("Billing", {
+        number: result.data,
+      });
+    }
   }
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.transparent }}>
-      <Camera
-        // ref={ref => this.camera = ref}
+      <RNCamera
         style={{ flex: 1 }}
         captureAudio={false}
-        type={Camera.Constants.Type.back}
-        flashMode={Camera.Constants.FlashMode.off}
+        type={RNCamera.Constants.Type.back}
+        flashMode={RNCamera.Constants.FlashMode.off}
         onBarCodeRead={onBarCodeRead}
         androidCameraPermissionOptions={{
           title: "Permission to use camera",
@@ -203,10 +190,14 @@ const Scan = ({ navigation }) => {
       >
         {renderHeader()}
         {renderScanFocus()}
-        {/* {renderPaymentMethods()} */}
-      </Camera>
+        {renderPaymentMethods()}
+      </RNCamera>
+
     </View>
   );
 };
 
 export default Scan;
+
+
+
