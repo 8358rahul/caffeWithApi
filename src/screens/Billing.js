@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View, Image, ScrollView, Dimensions } from 'react-native'
 import React from 'react'
 import { Table, Row, Rows } from 'react-native-table-component';
-import { icons, images, SIZES, COLORS, FONTS } from "../constants";
+import { icons, images, SIZES, COLORS, FONTS,animation } from "../constants";
 import { useSelector, useDispatch } from 'react-redux'
+import LottieView from 'lottie-react-native';
 const Billing = (props) => {
   const { cartTotalQuantity, cartTotalAmount, tax } = useSelector((state) => state.cart);
   const cart = useSelector(state => state.cart.cartItems);
@@ -17,7 +18,6 @@ const Billing = (props) => {
   }, [cart]);
 
   const date = new Date()  // get current date
-  // const newDate =  date.toISOString().slice(0, 16).replace('T', ' ')
   const newDate =  date.toGMTString().replace('GMT', '') 
 
    
@@ -27,11 +27,10 @@ const Billing = (props) => {
         <View style={{
           justifyContent: 'center',
           alignItems: 'center',
-          top: 10,
         }}>
-        <Image source={icons.logo} style={{ width: 120, height: 120,  }} />
-        <Text style={{ ...FONTS.h3, fontWeight: 'bold', color: '#000',  }}>Table -{props?.route?.params?.number}</Text>
+        <LottieView source={animation.check_mark} autoPlay loop  style={{  width: 150,  height: 150, }}  />
         </View>
+        <Text style={{ ...FONTS.h3, fontWeight: 'bold', color: '#000',  }}>Table - {props?.route?.params?.number}</Text>
         <Text style={{ ...FONTS.h4, color: '#000',marginTop: 20,}}> {newDate}</Text> 
         <View style={{ marginTop: 10, }}>
           <Table borderStyle={{ borderWidth: 1, borderColor: '#c8e1ff' }}>
@@ -43,6 +42,9 @@ const Billing = (props) => {
         <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Total Quantity - {cartTotalQuantity}</Text>
         <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Charges & Taxes - {tax}</Text>
         <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Total Price - {cartTotalAmount}</Text>
+        </View>
+        <View style={{alignItems:'center',justifyContent:'center'}}>
+        <LottieView source={animation.cooking} autoPlay loop  style={{  width: 150,  height: 150, }}/>
         </View>
       </ScrollView>
     </View>

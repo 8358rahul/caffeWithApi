@@ -53,22 +53,23 @@ const ConfirmOrder = ({ navigation }) => {
 
                     <Text style={{ width: '20%',marginLeft: 30,  }}>{item.price}</Text>
                     <Text style={{ width: '20%',marginLeft: -30,paddingLeft:15 }}>{item.totalPrice}</Text>
-                    <Divider />
+                    <Divider /> 
                   </View>
                 ))
               }
-              <View style={[styles.innerView, { width: '85%', }]}>
-                <Text style={styles.bottomHeader}>Total Quentity - {cartTotalQuantity}</Text>
-                <Text style={styles.bottomHeader}>Total Price - {cartTotalAmount}</Text>
+               <View style={styles.innerView }>
+                <Text style={{...styles.bottomHeader,width:'50%'}}>Total Quentity - {cartTotalQuantity}</Text>
+                <Text style={{...styles.bottomHeader,width:'50%'}}>Total Price - {cartTotalAmount}</Text> 
               </View>
-              <View style={styles.bottomBtn}>
+              <View style={{...styles.innerView,justifyContent:'space-between', } }>
                 <TouchableOpacity onPress={() => dispatch(clearCart())}
                   style={[styles.btnStyle, {
                     backgroundColor: 'red',
-                    width: '40%',
+                    width: '50%',
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 10,
+                    
                   }]}>
 
                   <Text
@@ -83,7 +84,7 @@ const ConfirmOrder = ({ navigation }) => {
                 <TouchableOpacity
                   style={[styles.btnStyle, {
                     backgroundColor: COLORS.primary,
-                    width: '40%',
+                    width: '50%',
                     alignItems: 'center',
                     justifyContent: 'center',
                     borderRadius: 10,
@@ -121,18 +122,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     backgroundColor: COLORS.white,
-
+    
+  
   },
   subContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    marginHorizontal: 16,
-
     backgroundColor: COLORS.white,
     borderRadius: 20,
     shadowColor: "#000",
-    marginVertical: 16,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -140,19 +139,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+    marginRight: 16,
 
 
   },
   innerView: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 10,
-    marginHorizontal: 10,
     backgroundColor: COLORS.white,
     borderRadius: 20,
     padding: 10,
     shadowColor: "#000",
+    marginHorizontal: 16,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -198,6 +198,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '600',
     fontFamily: FONTS.BalooExtra.fontFamily,
+    
 
 
   },
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     backgroundColor: COLORS.white,
     padding: 10,
+    paddingHorizontal: 20,
   }
 
 

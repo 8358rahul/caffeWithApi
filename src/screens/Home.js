@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+
 } from "react-native";
 
 import { icons, images, SIZES, COLORS, FONTS } from "../constants";
@@ -17,6 +18,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast, ToastContainer } from '@jamsch/react-native-toastify';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Button } from 'react-native-paper';
+import ReadMore from 'react-native-read-more-text';
+
+
+
 const Home = ({ navigation }) => {
   const cart = useSelector((state) => state.cart.cartItems);
   const { cartTotalQuantity, cartTotalAmount } = useSelector((state) => state.cart);
@@ -33,9 +38,8 @@ const Home = ({ navigation }) => {
     else {
       setcart_item_ids([])
     }
-
-
   }, [cart]);
+
 
   function checkIsItemInCart(id) {
     let flag = cart_item_ids.find((i) => i == id);
@@ -49,12 +53,12 @@ const Home = ({ navigation }) => {
 
   function renderHeader() {
     return (
-      <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}> 
-       <View
+      <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}>
+        <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center", }}
-        > 
+        >
           <Text style={{ ...FONTS.h3, color: COLORS.primary, fontWeight: '900', }}>Our Menu</Text>
-        </View> 
+        </View>
       </View>
     );
   }
@@ -131,8 +135,6 @@ const Home = ({ navigation }) => {
           marginTop: SIZES.padding,
           marginBottom: SIZES.padding,
           marginHorizontal: 16,
-
-
         }}
 
       >
@@ -174,6 +176,7 @@ const Home = ({ navigation }) => {
           backgroundColor: COLORS.white,
           borderRadius: SIZES.radius,
           ...styles.shadow,
+          minHeight: 200,
 
         }}
       >
@@ -184,6 +187,7 @@ const Home = ({ navigation }) => {
             marginBottom: SIZES.padding,
             borderRadius: 20,
             flexDirection: "row"
+
 
           }}
         >
@@ -209,30 +213,44 @@ const Home = ({ navigation }) => {
           >
             <FontAwesome5 name="utensils" size={20} color={COLORS.primary} style={{ marginLeft: '80%', }} />
 
-            <Text style={{ ...FONTS.body3, color: COLORS.black }}>{item.name}</Text>
-            <View style={{ flexDirection: 'row', marginTop: 5, }}>
+            <Text style={{ ...FONTS.body4, color: COLORS.black }}>{item.name}</Text>
+            <View style={{ flexDirection: 'row',  }}>
               <Text style={{ ...FONTS.body4, color: COLORS.black }}>Rs.{item.price}</Text>
               <Text style={{ ...FONTS.body4, marginLeft: 20, color: COLORS.black }}>Kcal-{item.calories}</Text>
             </View>
 
-            <Text style={{ ...FONTS.body4, color: COLORS.black }}
-              numberOfLines={3}
-            >{item.description}</Text>
+            <View style={{  marginRight: "3%", }}>
+
+              <ReadMore
+                numberOfLines={2}
+                renderTruncatedFooter={(handlePress) => <Text style={{ ...FONTS.body5, color: '#000',fontWeight: '900', }}
+                  onPress={handlePress}>read more</Text>
+                }
+              >
+                <Text style={{ ...FONTS.body5, color: COLORS.black }}>{item.description}</Text>
+              </ReadMore>
+            </View>
+
 
           </View>
         </View>
         {!checkIsItemInCart(item.id) ?
           <TouchableOpacity
             style={{
+              flex: 1,
               width: "40%",
               height: 40,
               justifyContent: "center",
               alignItems: "center",
               borderRadius: 10,
               backgroundColor: '#ffe5c7',
-              marginTop: -20,
               borderColor: '#fa8f14',
               borderWidth: 1,
+              marginBottom: 10,
+              marginLeft: 5,
+              position: 'absolute',
+              alignSelf: 'auto',
+              marginTop: 150, 
             }}
             onPress={() => {
               dispatch(addToCart(item))
@@ -245,21 +263,27 @@ const Home = ({ navigation }) => {
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '40%',
-            marginTop: -20,
             alignItems: 'center',
             borderRadius: 10,
             backgroundColor: COLORS.primary,
-            borderColor: '#fa8f14',
-            borderWidth: 1,
+            position: 'absolute',
+            marginTop: 150,
+            marginLeft: 5,
+
+
           }}>
 
             <TouchableOpacity
               style={{
                 width: "50%",
-                height: 40,
                 justifyContent: "center",
                 alignItems: "center",
-                borderRadius: 20,
+                borderRadius: 10,
+                justifyContent: "center",
+
+                
+                
+  
               }}
               onPress={() => {
                 dispatch(addToCart(item))
@@ -277,10 +301,12 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               style={{
                 width: "50%",
-                height: 40,
                 justifyContent: "center",
                 alignItems: "center",
                 borderRadius: 20,
+                marginBottom: 10,
+                 
+  
               }}
               onPress={() => {
                 dispatch(decreaseCart(item))
@@ -296,7 +322,7 @@ const Home = ({ navigation }) => {
     return (
 
       <View  >
-        <ToastContainer position="top-left" />
+        <ToastContainer position="top-center"  />
         <FlatList
           data={restaurants}
           keyExtractor={(item) => `${item.id}`}

@@ -14,7 +14,7 @@ export const restaurantData = [
     id: 2,
     name: "Crispy Chicken Burgers with Honey Mustard",
     photo: images.honey_mustard_chicken_burger,
-    description: "Crispy Chicken Burgers with Honey Mustard Coleslaw",
+    description: "Crispy Chicken Burgers with Honey Mustard Coleslawcheese and lettuce on a bed of fries with a side of fries ",
     calories: 250,
     category: "Burgers",
     price: 15,
