@@ -1,63 +1,69 @@
-import React,{useState} from "react";
-import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
-import { RNCamera } from "react-native-camera";
-import { COLORS, FONTS, SIZES, icons, images } from "../constants";
-import { toast } from '@jamsch/react-native-toastify';
+import React, {useState} from 'react';
+import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
+import {RNCamera} from 'react-native-camera';
+import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+import {toast} from '@jamsch/react-native-toastify';
+import {TextButton, FormInput} from '../components';
+import {utils} from '../utils';
+import { Divider } from 'react-native-paper';
 
-const Scan = ({ navigation }) => {
-  const [number , setNumber] = useState("");
+const Scan = ({navigation}) => {
+  const [number, setNumber] = useState('');
+  const [error, setError] = useState('');
+
+  const isEnableNumber= () => number != ''&& error == '';
+
   function renderHeader() {
     return (
       <View
         style={{
-          flexDirection: "row",
+          flexDirection: 'row',
           marginTop: SIZES.padding * 4,
           paddingHorizontal: SIZES.padding * 3,
-        }}
-      >
+           
+        }}>
         <TouchableOpacity
           style={{
-            width: 45,
+            width: 25,
+            height: 25,
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => console.log('flash')}
         >
           <Image
-            source={icons.close}
+            source={icons.flash}
             style={{
-              height: 20,
+              height: 35,
               width: 20,
               tintColor: COLORS.white,
             }}
           />
         </TouchableOpacity>
 
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-        >
-          <Text style={{ color: COLORS.white, ...FONTS.body3 }}>
-            Scan for Menu
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{color: COLORS.white, ...FONTS.body3}}>
+            Scan for QR Code
           </Text>
         </View>
 
         <TouchableOpacity
           style={{
-            height: 45,
-            width: 45,
-            backgroundColor: COLORS.green,
-            borderRadius: 10,
+            height: 25,
+            width: 25,
+            backgroundColor: COLORS.lightGray1,
+            borderRadius: 5,
             alignItems: "center",
             justifyContent: "center",
           }}
-          onPress={() => console.log("Info")}
+          onPress={() => navigation.navigate("Home")}
         >
           <Image
-            source={icons.info}
+            source={icons.cross}
             style={{
-              height: 25,
-              width: 25,
-              tintColor: COLORS.white,
+              height: 20,
+              width: 20,
+              tintColor: COLORS.black,
             }}
           />
         </TouchableOpacity>
@@ -70,30 +76,36 @@ const Scan = ({ navigation }) => {
       <View
         style={{
           flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
         <Image
           source={images.focus}
           resizeMode="stretch"
           style={{
-            marginTop: "-55%",
-            width: 200,
+            marginTop: '-55%',
+            width: '70%',
             height: 300,
-            tintColor: COLORS.white,
-
+            tintColor: COLORS.blue,
           }}
         />
+        {/* <Divider style={{
+          backgroundColor: COLORS.blue,
+          height: 3,
+          width: '70%',
+          marginTop: SIZES.padding * 2,
+          marginBottom: SIZES.padding * 2, 
+
+          }} /> */}
       </View>
     );
   }
 
-  function renderPaymentMethods() {
+  function renderEnterNumber() {
     return (
       <View
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
@@ -102,102 +114,100 @@ const Scan = ({ navigation }) => {
           borderTopLeftRadius: SIZES.radius,
           borderTopRightRadius: SIZES.radius,
           backgroundColor: COLORS.white,
-
-        }}
-      >
-        <Text style={{ ...FONTS.h4 }}>Enter Table Number</Text>
-
+        }}>
         <View
           style={{
             flex: 1,
-            flexDirection: "row",
-            alignItems: "flex-start",
-            marginTop: SIZES.padding * 2,
-          }}
-        >
-          <TextInput
-
-            style={{
-              flex: 1,
-              borderColor: COLORS.gray,
-              borderWidth: 1,
-              borderRadius: 10,
-              padding: SIZES.padding,
-              marginRight: SIZES.padding,
-              marginLeft: SIZES.padding,
-              fontSize: SIZES.font * 1.2,
-              fontFamily: FONTS.BalooExtra.fontFamily,
-              color: COLORS.black,
-            }}
-            placeholder="Table Number"
-            placeholderTextColor={COLORS.gray}
+            marginTop: SIZES.padding * 0.5,
+          }}>
+          <FormInput
+            label="Table Number"
+            placeholder="Enter table Number"
             keyboardType="numeric"
-            returnKeyType="done"
-            onChangeText={(text) => setNumber(text)}
-            value={number}
-          />
-          
-
-        </View>
-        <TouchableOpacity
-            style={{
-              height: 50,
-              width: '100%',
-              backgroundColor: COLORS.primary,
-              borderRadius: 10,
-              alignItems: "center",
-              justifyContent: "center",
-              marginLeft: SIZES.padding,
-            }}
-            onPress=
-            {
-              number?() =>{ navigation.navigate("Billing",{number:number})
-               setNumber("")
-              }:()=> toast.info("Please Enter Table Number")
-              
+            onChange={text =>{
+                utils.onlyValidNumbers(text, setError);
+              setNumber(text)}}
+            errorMsg={error}
+            appendComponent={
+              <View
+                style={{
+                  justifyContent: 'center',
+                }}>
+                <Image
+                  source={
+                    number == '' || (number != '' && error == '')
+                      ? icons.correct
+                      : icons.cencel
+                  }
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor:
+                      number == ''
+                        ? COLORS.gray
+                        : number != '' && error == ''
+                        ? COLORS.green
+                        : COLORS.red,
+                  }}
+                />
+              </View>
             }
-            >
-            <Text style={{ ...FONTS.h4, color: COLORS.white,fontWeight: '900', }}>
-              Continue
-            </Text>
-          </TouchableOpacity>
+          />
+        </View>
+       
+      <TextButton 
+        label="Continue"
+        disabled={!isEnableNumber()}
+        buttonContainerStyle={{
+          height:55,
+          alignItems: 'center',
+          marginTop: SIZES.padding,
+          borderRadius: SIZES.radius,
+          backgroundColor: isEnableNumber() ? COLORS.primary : COLORS.transparentPrimary,
+      }}
+      onPress={() =>{
+        if(isEnableNumber()){
+          navigation.navigate('Billing', {number: number});
+          setNumber('');
+        }else{
+          toast.info('Please Enter Table Number')
+        }  
+      }}
+      
+      />
+
       </View>
     );
   }
 
   function onBarCodeRead(result) {
     if (result.data.length > 0) {
-      navigation.navigate("Billing", {
+      navigation.navigate('Billing', {
         number: result.data,
       });
     }
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.transparent }}>
+    <View style={{flex: 1, backgroundColor: COLORS.transparent}}>
       <RNCamera
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         captureAudio={false}
         type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.off}
+        flashMode={RNCamera.Constants.FlashMode.on}
         onBarCodeRead={onBarCodeRead}
         androidCameraPermissionOptions={{
-          title: "Permission to use camera",
-          message: "Camera is required for barcode scanning",
-          buttonPositive: "OK",
-          buttonNegative: "Cancel",
-        }}
-      >
+          title: 'Permission to use camera',
+          message: 'Camera is required for barcode scanning',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        }}>
         {renderHeader()}
         {renderScanFocus()}
-        {renderPaymentMethods()}
+        {renderEnterNumber()}
       </RNCamera>
-
     </View>
   );
 };
 
 export default Scan;
-
-
-

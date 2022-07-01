@@ -27,6 +27,7 @@ const Billing = (props) => {
         <View style={{
           justifyContent: 'center',
           alignItems: 'center',
+          minHeight: 150,
         }}>
         <LottieView source={animation.check_mark} autoPlay loop  style={{  width: 150,  height: 150, }}  />
         </View>
@@ -43,7 +44,16 @@ const Billing = (props) => {
         <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Charges & Taxes - {tax}</Text>
         <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Total Price - {cartTotalAmount}</Text>
         </View>
-        <View style={{alignItems:'center',justifyContent:'center'}}>
+        <View style={{
+          flex: 1,
+          alignItems:'center',
+        justifyContent:'center',
+        minHeight: 150,
+        marginTop: 20,
+        marginBottom:  Dimensions.get('window').height * 0.1,
+
+        
+        }}>
         <LottieView source={animation.cooking} autoPlay loop  style={{  width: 150,  height: 150, }}/>
         </View>
       </ScrollView>

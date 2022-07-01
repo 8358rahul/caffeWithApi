@@ -26,8 +26,36 @@ export const user = require("../assets/icons/user.png");
 export const scan = require("../assets/icons/scan.png");
 export const dollar = require("../assets/icons/dollar.png");
 export const logo = require("../assets/icons/fast-food.png");
+const coupon = require("../assets/icons/coupon.png")
+const cross = require("../assets/icons/cross.png")
+const cart = require("../assets/icons/cart.png")
+const menu = require("../assets/icons/menu.png")
+const filter = require("../assets/icons/filter.png")
+const down_arrow = require("../assets/icons/down_arrow.png")
+const eye = require("../assets/icons/eye.png")
+const eye_close = require("../assets/icons/eye_close.png")
+const favourite = require("../assets/icons/favourite.png")
+const fb = require("../assets/icons/fb.png")
+const google = require("../assets/icons/google.png")
+const burger = require("../assets/icons/burger.png")
+const cherry = require("../assets/icons/cherry.png")
+const correct = require("../assets/icons/correct.png")
+const rice = require("../assets/icons/rice.png")
+const love = require("../assets/icons/love.png")
+const calories = require("../assets/icons/calories.png")
+const home = require("../assets/icons/home.png")
+const logout = require("../assets/icons/logout.png")
+const notification = require("../assets/icons/notification.png")
+const profile = require("../assets/icons/profile.png")
+const setting = require("../assets/icons/setting.png")
+const wallet = require("../assets/icons/wallet.png")
+const help = require("../assets/icons/help.png")
+const close = require("../assets/icons/close.png")
+const flash = require("../assets/icons/flash.png")
+
 
 export default {
+    close,
     back,
     car,
     cutlery,
@@ -48,7 +76,6 @@ export default {
     red_pin,
     rice_bowl,
     salad,
-    search,
     basket,
     star,
     sushi,
@@ -56,4 +83,31 @@ export default {
     scan,
     dollar,
     logo,
+    coupon,
+    cross,
+    cart,
+    menu,
+    search,
+    filter,
+    down_arrow,
+    eye,
+    eye_close,
+    favourite,
+    fb,
+    google,
+    burger,
+    cherry,
+    correct,
+    rice,
+    love,
+    calories,
+    home,
+    logout,
+    notification,
+    profile,
+    setting,
+    wallet,
+    help,
+    flash,
+   
 }

@@ -1,187 +1,350 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  Image,
-  TextInput,
-  Modal,
-  FlatList,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform,
-} from 'react-native';
-
-import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import React from "react";
+import { View, Text, TouchableOpacity, Image,ScrollView } from "react-native";
+import { FONTS, COLORS, SIZES, icons } from "../constants";
+import { FormInput, TextInput, TextIconButton, TextButton } from "../components/";
+import { utils } from "../utils";
+import AuthLayout from "./AuthLayout";
 
 const SignUp = ({navigation}) => {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [areas, setAreas] = React.useState([]);
-  const [selectedArea, setSelectedArea] = React.useState(null);
-  const [modalVisible, setModalVisible] = React.useState(false);
+  const [email, setemail] = React.useState("");
+  const [userName, setUserName] = React.useState("");
+  const [number , setNumber] = React.useState("");
+  const [gender,setGender] = React.useState('')
+  const [password, setPassword] = React.useState("");
+  const [showPass, setShowPass] = React.useState(false);
+  const [address,setAddress] = React.useState('')
 
-  function renderHeader() {
-    return (
-      <TouchableOpacity
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: SIZES.padding * 6,
-          paddingHorizontal: SIZES.padding * 2,
-        }}
-        onPress={() => navigation.navigate('WelcomeScreeen')}>
-        <Image
-          source={icons.back}
-          resizeMode="contain"
-          style={{
-            width: 20,
-            height: 20,
-            tintColor: COLORS.lightGray3,
-          }}
-        />
+  const [emailError, setEmailError] = React.useState("");
+  const [userNameError, setUserNameError] = React.useState("");
+  const [numberError, setNumberError] = React.useState("");
+  const [genderError, setGenderError] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState("");
+  const [addressError, setAddressError] = React.useState("");
 
-        <Text
-          style={{
-            marginLeft: SIZES.padding * 1.5,
-            color: COLORS.white,
-            ...FONTS.h4,
-          }}>
-          Sign Up
-        </Text>
-      </TouchableOpacity>
-    );
-  }
+    const isEnableSignUp = () =>(
+        email != "" && userName != "" && password != "" && emailError == "" && userNameError == "" && passwordError == ""
+    )
 
-  function renderLogo() {
-    return (
-      <View
-        style={{
-          marginTop: SIZES.padding * 5,
-          height: 100,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Image
-          source={images.avatar_2}
-          resizeMode="contain"
-          style={{
-            width: '40%',
-          }}
-        />
-      </View>
-    );
-  }
-
-  function renderForm() {
-    return (
-      <View
-        style={{
-          marginTop: SIZES.padding * 3,
-          marginHorizontal: SIZES.padding * 3,
-        }}>
-        {/* Full Name */}
-        <View style={{marginTop: SIZES.padding * 3}}>
-          <TextInput
-            style={{
-              marginVertical: SIZES.padding,
-              borderBottomColor: COLORS.black,
-              borderBottomWidth: 1,
-              height: 40,
-              color: COLORS.black,
-              ...FONTS.body3,
-            }}
-            placeholder="Enter Full Name"
-            placeholderTextColor={COLORS.white}
-            selectionColor={COLORS.white}
-          />
-        </View>
-
-        {/* Phone Number */}
-        <View style={{marginTop: SIZES.padding * 2}}>
-          <View style={{flexDirection: 'row'}}>
-            {/* Phone Number */}
-            <TextInput
-              style={{
-                flex: 1,
-                marginVertical: SIZES.padding,
-                borderBottomColor: COLORS.black,
-                borderBottomWidth: 1,
-                height: 40,
-                color: COLORS.black,
-                ...FONTS.body3,
-              }}
-              placeholder="Enter email address"
-              placeholderTextColor={COLORS.white}
-              selectionColor={COLORS.white}
-            />
-          </View>
-        </View>
-
-        {/* Password */}
-        <View style={{marginTop: SIZES.padding * 2}}>
-          <TextInput
-            style={{
-              marginVertical: SIZES.padding,
-              borderBottomColor: COLORS.black,
-              borderBottomWidth: 1,
-              height: 40,
-              color: COLORS.black,
-              ...FONTS.body3,
-            }}
-            placeholder="Enter Password"
-            placeholderTextColor={COLORS.white}
-            selectionColor={COLORS.white}
-            secureTextEntry={!showPassword}
-          />
-          <TouchableOpacity
-            style={{
-              position: 'absolute',
-              right: 0,
-              bottom: 10,
-              height: 30,
-              width: 30,
-            }}
-            onPress={() => setShowPassword(!showPassword)}>
-            <Image
-              source={showPassword ? icons.disable_eye : icons.eye}
-              style={{
-                height: 20,
-                width: 20,
-                tintColor: COLORS.white,
-              }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  }
-
-  function renderButton() {
-    return (
-      <View style={{margin: SIZES.padding * 3}}>
-        <TouchableOpacity
-          style={{
-            height: 60,
-            backgroundColor: COLORS.black,
-            borderRadius: SIZES.radius / 1.5,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onPress={() => navigation.navigate('WelcomeScreeen')}>
-          <Text style={{color: COLORS.white, ...FONTS.h3}}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   return (
-    <View style={{flex: 1, backgroundColor: COLORS.primary}}>
-      {renderHeader()}
-      {renderLogo()}
-      {renderForm()}
-      {renderButton()}
-    </View>
+    <ScrollView>
+    <AuthLayout
+      title="Getting Started"
+      subtitle="Create an account to continue!"
+      titleContainerStyle={{
+        marginTop: SIZES.radius,
+      }}
+    >
+      {/* Form Input and signup */}
+
+      <View
+        style={{
+          flex: 1,
+          marginTop: SIZES.padding,
+        }}
+      >
+        <FormInput
+          label="Email"
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          autoCompleteType="email"
+          onChange={(text) => {
+            //Validate Email
+            utils.validateEmail(text, setEmailError);
+            setemail(text);
+          }}
+          errorMsg={emailError}
+          appendComponent={
+            <View
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={
+                  email == "" || (email != "" && emailError == "")
+                    ? icons.correct
+                    : icons.cencel
+                }
+                style={{
+                  height: 20,
+                  width: 20,
+                  tintColor:
+                    email == ""
+                      ? COLORS.gray
+                      : email != "" && emailError == ""
+                      ? COLORS.green
+                      : COLORS.red,
+                }}
+              />
+            </View>
+          }
+        />
+
+        <FormInput
+          label="User Name"
+          placeholder="Enter your user name"
+          onChange={(text) => setUserName(text)}
+          errorMsg={userNameError}
+          appendComponent={
+            <View
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={
+                  userName == "" || (userName != "" && userNameError == "")
+                    ? icons.correct
+                    : icons.cencel
+                }
+                style={{
+                  height: 20,
+                  width: 20,
+                  tintColor:
+                    userName == ""
+                      ? COLORS.gray
+                      : userName != "" && userNameError == ""
+                      ? COLORS.green
+                      : COLORS.red,
+                }}
+              />
+            </View>
+          }
+        />
+        <FormInput
+          label="Mobile Number"
+          placeholder="Enter your mobile number"
+          onChange={(text) => {
+            //Validate Phone Number
+            utils.isvalidaPhoneNumber(text, setNumberError);
+            setNumber(text)}}
+          errorMsg={numberError}
+          appendComponent={
+            <View
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={
+                  number == "" || (number != "" && numberError == "")
+                    ? icons.correct
+                    : icons.cencel
+                }
+                style={{
+                  height: 20,
+                  width: 20,
+                  tintColor:
+                    userName == ""
+                      ? COLORS.gray
+                      : number != "" && numberError == ""
+                      ? COLORS.green
+                      : COLORS.red,
+                }}
+              />
+            </View>
+          }
+        />
+
+        
+<FormInput
+          label="Gender"
+          placeholder="Enter your gender"
+          onChange={(text) => setGender(text)}
+          errorMsg={genderError}
+          appendComponent={
+            <View
+              style={{
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={
+                  gender == "" || (gender != "" && genderError == "")
+                    ? icons.correct
+                    : icons.cencel
+                }
+                style={{
+                  height: 20,
+                  width: 20,
+                  tintColor:
+                    gender == ""
+                      ? COLORS.gray
+                      : gender != "" && genderError == ""
+                      ? COLORS.green
+                      : COLORS.red,
+                }}
+              />
+            </View>
+          }
+        />
+      
+
+        <FormInput
+          label="Password"
+          placeholder="Enter your password"
+          
+          secureTextEntry={!showPass}
+          autoCompleteType="password"
+          onChange={(text) =>  {
+            //Validate Password
+            utils.validatePassword(text, setPasswordError);
+            
+            setPassword(text)}}
+          errorMsg={passwordError}
+          containerStyle={{
+            marginTop: SIZES.padding,
+          }}
+          appendComponent={
+            <TouchableOpacity
+              onPress={() => {
+                setShowPass(!showPass);
+              }}
+              style={{
+                justifyContent: "center",
+                alignItems: "center",
+                width: 40,
+              }}
+            >
+              <Image
+                source={showPass ? icons.eye_close : icons.eye}
+                style={{
+                  height: 20,
+                  width: 20,
+                  tintColor: COLORS.gray,
+                }}
+              />
+            </TouchableOpacity>
+          }
+        />
+
+<FormInput
+          label="Address"
+          placeholder="Enter your address"
+          onChange={(text) => setAddress(text)}
+          errorMsg={addressError}
+          appendComponent={
+            <View
+              style={{
+                justifyContent: "center",
+
+              }}
+            >
+              <Image
+                source={
+                  address == "" || (address != "" && addressError == "")
+                    ? icons.correct
+                    : icons.cencel
+                }
+                style={{
+                  height: 20,
+                  width: 20,
+                  tintColor:
+                    address == ""
+                      ? COLORS.gray
+                      : address != "" && addressError == ""
+                      ? COLORS.green
+                      : COLORS.red,
+                }}
+              />
+            </View>
+          }
+        />
+        {/* SignUp & Sign IN  */}
+
+        <TextButton
+            label="Sign Up"
+            disabled={isEnableSignUp()?false:true}
+            buttonContainerStyle={{
+                height:55,
+                alignItems: 'center',
+                marginTop: SIZES.padding,
+                borderRadius: SIZES.radius-20,
+                backgroundColor: isEnableSignUp() ? COLORS.primary : COLORS.transparentPrimary,
+            }}
+            onPress={() => navigation.navigate("Otp")}
+
+
+            />
+            <View style={{
+                flexDirection: 'row',
+                marginTop:  SIZES.radius,
+                justifyContent: 'center',
+            }}>
+                <Text style={{
+                    color: COLORS.gray,
+                    ...FONTS.body3
+                }}
+
+                >
+                    Already have an account?
+                </Text>
+                <TextButton 
+                
+                label="Sign In"
+                buttonContainerStyle={{
+                    backgroundColor:null}}
+                    labelStyle={{
+                        color: COLORS.primary,
+                        ...FONTS.body3}}
+                onPress={() => navigation.goBack()}
+                />
+            </View>
+        
+      </View>
+
+      {/* Footer */}
+      <View style={{
+        marginTop: 10,
+      }} >
+
+{/* Facebook */}
+<TextIconButton
+    containerStyle={{
+        height:50,
+        alignItems: 'center',
+        borderRadius: SIZES.radius-20,
+        backgroundColor: COLORS.blue,
+    }}
+    icon={icons.fb}
+    iconPosition="LEFT"
+    iconStyle={{
+        tintColor: COLORS.white,
+    }}
+    label="Sign In with Facebook"
+    labelStyle={{
+        marginLeft:SIZES.radius,
+        color: COLORS.white,
+    }}
+    onPress={() => console.log('Facebook')}
+/>
+
+{/* Goggl?e */}
+<TextIconButton
+    containerStyle={{
+        height:50,
+        alignItems: 'center',
+        borderRadius: SIZES.radius-20,
+        marginTop:SIZES.radius,
+        backgroundColor: COLORS.gray2,
+    }}
+    icon={icons.google}
+    iconPosition="LEFT"
+    iconStyle={{
+        tintColor:null,
+    }}
+    label="Sign In with Google"
+    labelStyle={{
+        marginLeft:SIZES.radius,
+        color: COLORS.white,
+    }}
+    onPress={() => console.log('Google')}
+/>
+
+</View>
+    </AuthLayout>
+    </ScrollView>
   );
 };
 

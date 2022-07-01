@@ -2,13 +2,22 @@ import Home from './Home'
 import ConfirmOrder from './ConfirmOrder'
 import Billing from './Billing'
 import Scan from './Scan'
-import WelcomeScreeen from './WelcomeScreeen'
-import SignUp from './SignUp'
+import OnBoarding from "./OnBoarding"
+
+
+// Authentication
+import SignIn from "./SignIn"
+import SignUp from "./SignUp"
+import Otp from "./Otp"
+import ForgotPassword from "./ForgotPassword"
 export {
     Home,
     ConfirmOrder,
     Billing,
     Scan,
-    WelcomeScreeen,
-    SignUp
+    OnBoarding,
+    SignIn,
+    SignUp,
+    Otp,
+    ForgotPassword,
 }
