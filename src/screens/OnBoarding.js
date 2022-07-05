@@ -125,6 +125,9 @@ const OnBoarding = ({ navigation }) => {
             }}
             labelStyle={{
               color: COLORS.darkGray2,
+              ...FONTS.h4,
+              fontWeight: '900',
+
             }}
             onPress={() => navigation.navigate("SignIn")}
           />
@@ -135,6 +138,11 @@ const OnBoarding = ({ navigation }) => {
               height: 50,
               width: 200,
               borderRadius: SIZES.radius,
+            }}
+            labelStyle={{
+              color: COLORS.white,
+              ...FONTS.h4,
+              fontWeight: '900',
             }}
             onPress={() => {
               flatListRef?.current?.scrollToIndex({
@@ -156,9 +164,13 @@ const OnBoarding = ({ navigation }) => {
             label="Let's Get Started"
             buttonContainerStyle={{
               height: 50,
-                width: 300, 
-
+              width: 300,  
               borderRadius: SIZES.radius,
+            }}
+            labelStyle={{
+              color: COLORS.white,
+              ...FONTS.h4,
+              fontWeight: '900',
             }}
             onPress={() => navigation.navigate("SignIn")}
           />
@@ -216,7 +228,6 @@ const OnBoarding = ({ navigation }) => {
                   style={{
                     flex: 1,
                     width: "100%",
-                    height: "100%",
                     alignItems: "center",
                     justifyContent: "flex-end",
                   }}
@@ -245,8 +256,7 @@ const OnBoarding = ({ navigation }) => {
               >
                 <Text
                   style={{
-                    ...FONTS.h1,
-                    fontSize: 25,
+                    ...FONTS.h2,
                   }}
                 >
                   {item.title}

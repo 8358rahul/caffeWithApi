@@ -34,8 +34,8 @@ const Scan = ({navigation}) => {
           <Image
             source={icons.flash}
             style={{
-              height: 35,
-              width: 20,
+              height: 25,
+              width: 25,
               tintColor: COLORS.white,
             }}
           />
@@ -89,14 +89,6 @@ const Scan = ({navigation}) => {
             tintColor: COLORS.blue,
           }}
         />
-        {/* <Divider style={{
-          backgroundColor: COLORS.blue,
-          height: 3,
-          width: '70%',
-          marginTop: SIZES.padding * 2,
-          marginBottom: SIZES.padding * 2, 
-
-          }} /> */}
       </View>
     );
   }
@@ -162,8 +154,12 @@ const Scan = ({navigation}) => {
           height:55,
           alignItems: 'center',
           marginTop: SIZES.padding,
-          borderRadius: SIZES.radius,
+          borderRadius: SIZES.radius-20,
           backgroundColor: isEnableNumber() ? COLORS.primary : COLORS.transparentPrimary,
+      }}
+      labelStyle={{
+        ...FONTS.h4,
+        fontWeight: '900',
       }}
       onPress={() =>{
         if(isEnableNumber()){

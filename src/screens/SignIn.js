@@ -21,7 +21,6 @@ const SignIn = ({navigation}) => {
   const isEnableSignIn = () => email != '' && password != '' && emailError == '';
 
   return (
-    <ScrollView>
       <AuthLayout
         title="Let's Sign You In"
         subtitle="Welcome back, you've been missed">
@@ -105,7 +104,7 @@ const SignIn = ({navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              marginTop: SIZES.radius,
+              marginTop: SIZES.radius-15,
               justifyContent: 'space-between',
             }}>
             <CustomSwitch value={saveMe} onChange={value => setSaveMe(value)} />
@@ -136,14 +135,22 @@ const SignIn = ({navigation}) => {
                 : COLORS.transparentPrimary,
               borderRadius: SIZES.radius-20,
             }}
+            labelStyle={{
+              ...FONTS.h4,
+              color: isEnableSignIn() ? COLORS.white : COLORS.gray,
+              fontWeight: '900',
+
+            }}
             onPress={() => navigation.navigate('Home')}
           />
           {/* SignUP */}
           <View
             style={{
               flexDirection: 'row',
-              marginTop: SIZES.radius,
+              marginTop: SIZES.radius-20,
               justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom:  SIZES.padding,
             }}>
             <Text
               style={{
@@ -161,6 +168,7 @@ const SignIn = ({navigation}) => {
               labelStyle={{
                 color: COLORS.primary,
                 ...FONTS.h4,
+                fontWeight: '900',
               }}
               onPress={() => navigation.navigate('SignUp')}
             />
@@ -168,7 +176,12 @@ const SignIn = ({navigation}) => {
         </View>
         {/* Footer */}
 
-        <View>
+        <View  
+          style={{
+           marginTop:  SIZES.padding*2,
+
+          }}
+        >
           {/* Facebook */}
           <TextIconButton
             containerStyle={{
@@ -176,7 +189,6 @@ const SignIn = ({navigation}) => {
               alignItems: 'center',
               borderRadius: SIZES.radius-20,
               backgroundColor: COLORS.blue,
-              marginTop: SIZES.padding * 0.7,
             }}
             icon={icons.fb}
             iconPosition="LEFT"
@@ -187,6 +199,8 @@ const SignIn = ({navigation}) => {
             labelStyle={{
               marginLeft: SIZES.radius,
               color: COLORS.white,
+              ...FONTS.h5,
+              fontWeight: '900',
             }}
             onPress={() => console.log('Facebook')}
           />
@@ -197,7 +211,7 @@ const SignIn = ({navigation}) => {
               height: 50,
               alignItems: 'center',
               borderRadius: SIZES.radius-20,
-              marginTop: SIZES.radius,
+              marginTop: SIZES.radius-20,
               backgroundColor: COLORS.gray2,
             }}
             icon={icons.google}
@@ -209,12 +223,13 @@ const SignIn = ({navigation}) => {
             labelStyle={{
               marginLeft: SIZES.radius,
               color: COLORS.white,
+              ...FONTS.h5,
+              fontWeight: '900',
             }}
             onPress={() => console.log('Google')}
           />
         </View>
       </AuthLayout>
-    </ScrollView>
   );
 };
 

@@ -32,7 +32,7 @@ const SignUp = ({navigation}) => {
       title="Getting Started"
       subtitle="Create an account to continue!"
       titleContainerStyle={{
-        marginTop: SIZES.radius,
+        marginTop: SIZES.radius-20,
       }}
     >
       {/* Form Input and signup */}
@@ -224,6 +224,8 @@ const SignUp = ({navigation}) => {
           placeholder="Enter your address"
           onChange={(text) => setAddress(text)}
           errorMsg={addressError}
+          multiline={true}
+         
           appendComponent={
             <View
               style={{
@@ -263,13 +265,18 @@ const SignUp = ({navigation}) => {
                 borderRadius: SIZES.radius-20,
                 backgroundColor: isEnableSignUp() ? COLORS.primary : COLORS.transparentPrimary,
             }}
+            labelStyle={{
+                color: isEnableSignUp() ? COLORS.white : COLORS.gray,
+                ...FONTS.h4,
+                fontWeight: '900',
+            }}
             onPress={() => navigation.navigate("Otp")}
 
 
             />
             <View style={{
                 flexDirection: 'row',
-                marginTop:  SIZES.radius,
+                marginTop:  SIZES.padding ,
                 justifyContent: 'center',
             }}>
                 <Text style={{
@@ -287,7 +294,10 @@ const SignUp = ({navigation}) => {
                     backgroundColor:null}}
                     labelStyle={{
                         color: COLORS.primary,
-                        ...FONTS.body3}}
+                        ...FONTS.h4,
+                        fontWeight: '900',
+                      
+                      }}
                 onPress={() => navigation.goBack()}
                 />
             </View>
@@ -295,9 +305,7 @@ const SignUp = ({navigation}) => {
       </View>
 
       {/* Footer */}
-      <View style={{
-        marginTop: 10,
-      }} >
+      <View >
 
 {/* Facebook */}
 <TextIconButton
@@ -306,6 +314,7 @@ const SignUp = ({navigation}) => {
         alignItems: 'center',
         borderRadius: SIZES.radius-20,
         backgroundColor: COLORS.blue,
+        marginTop: SIZES.padding * 2,
     }}
     icon={icons.fb}
     iconPosition="LEFT"
@@ -316,6 +325,8 @@ const SignUp = ({navigation}) => {
     labelStyle={{
         marginLeft:SIZES.radius,
         color: COLORS.white,
+        ...FONTS.h5,
+        fontWeight: '900',
     }}
     onPress={() => console.log('Facebook')}
 />
@@ -326,8 +337,9 @@ const SignUp = ({navigation}) => {
         height:50,
         alignItems: 'center',
         borderRadius: SIZES.radius-20,
-        marginTop:SIZES.radius,
+        marginTop:SIZES.radius-20,
         backgroundColor: COLORS.gray2,
+        marginTop: SIZES.padding * 0.7,
     }}
     icon={icons.google}
     iconPosition="LEFT"
@@ -338,6 +350,8 @@ const SignUp = ({navigation}) => {
     labelStyle={{
         marginLeft:SIZES.radius,
         color: COLORS.white,
+        ...FONTS.h5,
+        fontWeight: '900',
     }}
     onPress={() => console.log('Google')}
 />

@@ -9,7 +9,7 @@ const onboarding_screens = [
     {
         id: 2,
         backgroundImage: require("../assets/images/background_02.png"),
-        bannerImage: require("../assets/images/hot_delivery.png"),
+        bannerImage: require("../assets/images/burger1.png"),
         title: "Hot Delivery to Home",
         description: "We make food ordering fasr, simple and free-no matter if you order online or cash"
     },

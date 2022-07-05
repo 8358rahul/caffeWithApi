@@ -83,6 +83,12 @@ const ForgotPassword = ({navigation}) => {
                     borderRadius: SIZES.radius-20,
                     backgroundColor: isEnableSignIn() ? COLORS.primary : COLORS.transparentPrimary,
                 }}
+                labelStyle={{
+
+                    color: COLORS.white,
+                    ...FONTS.h4,
+                    fontWeight: '900',
+                }}
                 onPress={() => navigation.goBack()}
             />
 

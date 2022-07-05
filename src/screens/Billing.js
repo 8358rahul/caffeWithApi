@@ -4,6 +4,7 @@ import { Table, Row, Rows } from 'react-native-table-component';
 import { icons, images, SIZES, COLORS, FONTS,animation } from "../constants";
 import { useSelector, useDispatch } from 'react-redux'
 import LottieView from 'lottie-react-native';
+import AuthLayout from './AuthLayout';
 const Billing = (props) => {
   const { cartTotalQuantity, cartTotalAmount, tax } = useSelector((state) => state.cart);
   const cart = useSelector(state => state.cart.cartItems);
@@ -22,42 +23,40 @@ const Billing = (props) => {
 
    
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false} >
-        <View style={{
+    <AuthLayout
+      title={ `Table - ${props?.route?.params?.number}`}
+      subtitle={`${newDate}`}
+    >
+        {/* <View style={{
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: 150,
         }}>
         <LottieView source={animation.check_mark} autoPlay loop  style={{  width: 150,  height: 150, }}  />
-        </View>
-        <Text style={{ ...FONTS.h3, fontWeight: 'bold', color: '#000',  }}>Table - {props?.route?.params?.number}</Text>
-        <Text style={{ ...FONTS.h4, color: '#000',marginTop: 20,}}> {newDate}</Text> 
+        </View> */}
         <View style={{ marginTop: 10, }}>
           <Table borderStyle={{ borderWidth: 1, borderColor: '#c8e1ff' }}>
             <Row data={tableHead1} style={styles.head} textStyle={styles.text} flexArr={[2, 1, 1, 1]} />
             <Rows data={tableData} textStyle={styles.text} flexArr={[2, 1, 1, 1]} style={{marginVertical: SIZES.base, }} />
           </Table>
         </View>
-        <View style={styles.bottomView}>
-        <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Total Quantity - {cartTotalQuantity}</Text>
-        <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Charges & Taxes - {tax}</Text>
-        <Text style={{ ...FONTS.h5, fontWeight: '600', color: '#000', marginTop: 10, }}>Total Price - {cartTotalAmount}</Text>
-        </View>
+        
+        <Text style={styles.bottom}>Total Quantity - {cartTotalQuantity}</Text>
+        <Text style={styles.bottom}>Charges & Taxes - {tax}</Text>
+        <Text style={styles.bottom}>Total Price - {cartTotalAmount}</Text>
+{/*         
         <View style={{
           flex: 1,
           alignItems:'center',
-        justifyContent:'center',
-        minHeight: 150,
-        marginTop: 20,
-        marginBottom:  Dimensions.get('window').height * 0.1,
+          justifyContent:'center',
+          minHeight: 100,
+          marginBottom: 10,
 
         
         }}>
         <LottieView source={animation.cooking} autoPlay loop  style={{  width: 150,  height: 150, }}/>
-        </View>
-      </ScrollView>
-    </View>
+        </View> */}
+    </AuthLayout>
 
   )
 }
@@ -76,21 +75,19 @@ const styles = StyleSheet.create({
     ...FONTS.h5,
     height: 40,
     backgroundColor: '#f1f8ff',
+    color:COLORS.black,   
+    fontWeight: '900',
 
   },
   text: {
     margin: 6,
     textAlign: 'center',
-    color: '#000',
+    color: COLORS.darkGray2,
   },
-  bottomView: {
-    marginTop: 20,
-    marginBottom: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#c8e1ff',
-    paddingTop: 10,
-    paddingBottom: 10,
-    backgroundColor: '#fff',
+  bottom:{
+    ...FONTS.h5, fontWeight: '600', color: COLORS.darkGray, marginTop: 10, 
+    fontWeight: '700',
+    
   }
 
 

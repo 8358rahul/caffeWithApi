@@ -22,41 +22,28 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Divider} from 'react-native-paper';
 import {TextButton} from '../components';
+import AuthLayout from './AuthLayout';
 const ConfirmOrder = ({navigation}) => {
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cartItems);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            top: 10,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image
-            source={icons.logo}
-            style={{width: 120, height: 120, backgroundColor: '#fff'}}
-          />
-          <Text style={{...FONTS.h2, fontWeight: 'bold', color: '#000'}}>
-            Your Order
-          </Text>
-        </View>
-        {cart.length === 0 ? (
-          <Text
-            style={{
-              fontSize: 20,
-              alignItems: 'center',
-              color: '#000',
-              fontFamily: FONTS.BalooExtra.fontFamily,
-              marginTop: 30,
-            }}>
-            No Items
-          </Text>
-        ) : (
-          <View style={styles.subContainer}>
+    <AuthLayout 
+      title= {cart.length==0?'No Items In Cart':'Your Order'}
+      subtitle={cart.length==0?'No Items In Cart':'Total - Rs. '+ cartTotalAmount + ', Items - '+cartTotalQuantity}
+     
+    > 
+    <View 
+      style={{
+        flex: 1,
+        paddingVertical: SIZES.padding,
+        width: '100%',
+        height: '100%',
+      }}
+    >
+    {cart.length != 0  ?
+          <View >
             <View style={styles.innerView}>
               <Text style={[styles.hearder, {width: '30%'}]}>Product</Text>
               <Text style={[styles.hearder, {width: '30%'}]}>Quentity</Text>
@@ -99,140 +86,65 @@ const ConfirmOrder = ({navigation}) => {
               </View>
             ))}
             <View style={styles.innerView}>
-              <Text style={{...styles.bottomHeader, width: '50%'}}>
-                Total Quentity - {cartTotalQuantity}
-              </Text>
-              <Text style={{...styles.bottomHeader, width: '50%'}}>
-                Total Price - {cartTotalAmount}
-              </Text>
-            </View>
-            <View style={styles.innerView}>
-
               <TextButton
                 label="Clear Cart"
-                buttonContainerStyle={{...styles.btnStyle,
+                buttonContainerStyle={{ 
                   backgroundColor: COLORS.red,
-                  width: '50%',
-                  height: 50,
+                  width: '45%',
+                  height: 45,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: COLORS.red, 
+                
+                  
                 }}
                 labelStyle= {{
                   fontWeight: 'bold',
+                  paddingHorizontal: 10,
+                  ...FONTS.h6,
                 }}
                 onPress={() => dispatch(clearCart())}>
 
               </TextButton>
               <TextButton
                 label="Confirm Order"
-                buttonContainerStyle={{...styles.btnStyle,
+                buttonContainerStyle={{ 
                   backgroundColor: COLORS.primary,
-                  width: '50%',
-                  height: 50,
+                  width: '45%',
+                  height: 45,
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: COLORS.primary, 
                 }}
                 labelStyle= {{
                   fontWeight: 'bold',
+                  paddingHorizontal: 10,
+                  ...FONTS.h6,
 
                 }}
                 onPress={() => navigation.navigate('Scan')}>
 
-              </TextButton>
-
-
-{/* 
-              <TouchableOpacity
-                onPress={() => dispatch(clearCart())}
-                style={[
-                  styles.btnStyle,
-                  {
-                    backgroundColor: 'red',
-                    width: '50%',
-                    height: 50,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                  },
-                ]}>
-                <Text
-                  style={{
-                    ...FONTS.h5,
-                    color: '#fff',
-                    fontWeight: 'bold',
-                  }}>
-                  Clear Cart
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.btnStyle,
-                  {
-                    backgroundColor: COLORS.primary,
-                    width: '50%',
-                    height: 50,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: 10,
-                  },
-                ]}
-                onPress={() => navigation.navigate('Scan')}>
-                <Text
-                  style={{
-                    ...FONTS.h5,
-                    color: '#fff',
-                    fontWeight: 'bold',
-                  }}>
-                  ConfirmOrder
-                </Text>
-              </TouchableOpacity> */}
-
+              </TextButton> 
             </View>
           </View>
-        )}
-      </ScrollView>
-    </SafeAreaView>
+          :null} 
+          </View>
+    </AuthLayout>
   );
 };
 
 export default ConfirmOrder;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    backgroundColor: COLORS.white,
-  },
-  subContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
-    backgroundColor: COLORS.white,
-    borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    marginRight: 16,
-  },
   innerView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 10,
     backgroundColor: COLORS.white,
-    borderRadius: 20,
+    borderRadius: SIZES.radius-20,
     padding: 10,
     shadowColor: '#000',
-    marginHorizontal: 16,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -245,12 +157,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: '30%',
     height: 40,
-    borderRadius: 15,
-    justifyContent: 'space-around',
+    borderRadius: 10,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
-    marginTop: 10,
-    marginLeft: 10,
-    padding: 5,
+    marginTop: 5,
     backgroundColor: COLORS.white,
     shadowColor: '#000',
     shadowOffset: {
@@ -262,27 +172,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   hearder: {
-    fontSize: SIZES.font * 1.2,
+   ...FONTS.h5,
     width: '20%',
     fontFamily: FONTS.BalooExtra.fontFamily,
     color: COLORS.black,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: '650',
   },
-  bottomHeader: {
-    fontSize: SIZES.font * 1.2,
-    color: COLORS.black,
-    textAlign: 'center',
-    fontWeight: '600',
-    fontFamily: FONTS.BalooExtra.fontFamily,
-  },
-  bottomBtn: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
-    marginHorizontal: 16,
-    backgroundColor: COLORS.white,
-    padding: 10,
-    paddingHorizontal: 20,
-  },
+ 
 });

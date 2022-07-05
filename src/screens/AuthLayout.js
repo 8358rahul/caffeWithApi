@@ -1,30 +1,34 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React from "react";
-import { FONTS, COLORS, SIZES, images } from "../constants";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-const AuthLayout = ({ title, subtitle, titleContainerStyle, children }) => {
+import {Image, StyleSheet, Text, View,ScrollView} from 'react-native';
+import React from 'react';
+import {FONTS, COLORS, SIZES, images} from '../constants';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+const AuthLayout = ({title, subtitle, titleContainerStyle, children}) => {
   return (
     <View
       style={{
         flex: 1,
         paddingVertical: SIZES.padding,
         backgroundColor: COLORS.white,
-      }}
-    >
+        paddingHorizontal: SIZES.padding,
+        
+
+
+        
+      }}>
+    <ScrollView>
       <KeyboardAwareScrollView
         keyboardDismissMode="on-drag"
         contentContainerStyle={{
           paddingHorizontal: SIZES.padding,
           flex: 1,
-        }}
-      >
+        }}>
         {/* App Icon */}
         <View
           style={{
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+            alignItems: 'center',
+            justifyContent: 'center',
+            
+          }}>
           <Image
             source={images.logo_02}
             resizeMode="contain"
@@ -40,31 +44,30 @@ const AuthLayout = ({ title, subtitle, titleContainerStyle, children }) => {
           style={{
             marginTop: SIZES.padding,
             ...titleContainerStyle,
-          }}
-        >
+          }}>
           <Text
             style={{
-              textAlign: "center",
-              ...FONTS.h2,
-            }}
-          >
+              textAlign: 'center',
+              ...FONTS.h3,
+              fontWeight: '900',
+            }}>
             {title}
           </Text>
           <Text
             style={{
-              textAlign: "center",
+              textAlign: 'center',
               color: COLORS.darkGray,
               marginTop: SIZES.base,
-              ...FONTS.body3,
-            }}
-          >
+              ...FONTS.body4,
+            }}>
             {subtitle}
           </Text>
         </View>
- 
+
         {/* Content / children */}
         {children}
       </KeyboardAwareScrollView>
+      </ScrollView>
     </View>
   );
 };

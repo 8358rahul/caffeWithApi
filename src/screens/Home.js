@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   SafeAreaView,
   View,
@@ -7,43 +7,47 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  ScrollView,
+  Animated,
+} from 'react-native';
 
-} from "react-native";
-
-import { icons, images, SIZES, COLORS, FONTS } from "../constants";
-import { categoryData } from "../constants/categoryData";
-import { restaurantData } from "../constants/restaurantData";
-import { addToCart, decreaseCart, getTotals, } from "../redux/cartSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { toast, ToastContainer } from '@jamsch/react-native-toastify';
+import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {categoryData} from '../constants/categoryData';
+import {restaurantData} from '../constants/restaurantData';
+import {addToCart, decreaseCart, getTotals} from '../redux/cartSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {toast, ToastContainer} from '@jamsch/react-native-toastify';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { Button } from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import ReadMore from 'react-native-read-more-text';
-import { TextButton } from "../components";
+import {TextButton} from '../components';
+ 
 
 
 
-const Home = ({ navigation }) => {
-  const cart = useSelector((state) => state.cart.cartItems);
-  const { cartTotalQuantity, cartTotalAmount } = useSelector((state) => state.cart);
+const Home = ({navigation}) => {
+  const cart = useSelector(state => state.cart.cartItems);
+  const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [restaurants, setRestaurants] = React.useState(restaurantData);
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
-  React.useEffect(() => {
+ 
+
+
+ 
+   React.useEffect(() => {
     dispatch(getTotals());
     if (cart.length > 0) {
       let cart_item_id = cart.map(item => item.id);
-      setcart_item_ids(cart_item_id)
-    }
-    else {
-      setcart_item_ids([])
+      setcart_item_ids(cart_item_id);
+    } else {
+      setcart_item_ids([]);
     }
   }, [cart]);
 
-
   function checkIsItemInCart(id) {
-    let flag = cart_item_ids.find((i) => i == id);
+    let flag = cart_item_ids.find(i => i == id);
     if (flag) {
       return true;
     } else {
@@ -51,21 +55,20 @@ const Home = ({ navigation }) => {
     }
   }
 
-
   function renderHeader() {
     return (
-      <View style={{ flexDirection: "row", height: 50, marginVertical: 5, }}>
-        <View
-          style={{ flex: 1, alignItems: "center", justifyContent: "center", }}
-        >
-          <Text style={{ ...FONTS.h3, color: COLORS.primary, fontWeight: '900', }}>Our Menu</Text>
+      <View style={{flexDirection: 'row', height: 50, marginVertical: 5}}>
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text style={{...FONTS.h3, color: COLORS.primary, fontWeight: '900'}}>
+            Our Menu
+          </Text>
         </View>
       </View>
     );
   }
 
   function renderMainCategories() {
-    const renderItem = ({ item }) => {
+    const renderItem = ({item}) => {
       return (
         <TouchableOpacity
           style={{
@@ -74,36 +77,30 @@ const Home = ({ navigation }) => {
             backgroundColor:
               selectedCategory?.id == item.id ? COLORS.primary : COLORS.white,
             borderRadius: SIZES.radius,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             marginRight: SIZES.padding,
             ...styles.shadow,
           }}
           onPress={() => {
             setSelectedCategory(item);
             setRestaurants(
-              restaurantData.filter((a) => a.category.includes(item.name))
+              restaurantData.filter(a => a.category.includes(item.name)),
             );
-
-
-          }}
-        >
+          }}>
           <View
             style={{
               width: 50,
               height: 50,
 
               borderRadius: 25,
-              alignItems: "center",
-              justifyContent: "center",
+              alignItems: 'center',
+              justifyContent: 'center',
               backgroundColor:
                 selectedCategory?.id == item.id
                   ? COLORS.white
                   : COLORS.lightGray,
-            }}
-          >
-
-
+            }}>
             <Image
               source={item.icon}
               resizeMode="contain"
@@ -114,15 +111,13 @@ const Home = ({ navigation }) => {
             />
           </View>
 
-
           <Text
             style={{
               marginTop: SIZES.padding,
               color:
                 selectedCategory?.id == item.id ? COLORS.white : COLORS.black,
               ...FONTS.body5,
-            }}
-          >
+            }}>
             {item.name}
           </Text>
         </TouchableOpacity>
@@ -132,25 +127,35 @@ const Home = ({ navigation }) => {
     return (
       <View
         style={{
-          justifyContent: "center",
+          justifyContent: 'center',
           marginTop: SIZES.padding,
           marginBottom: SIZES.padding,
           marginHorizontal: 16,
-        }}
+          marginVertical: 20,
+        }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text
+            style={{
+              ...FONTS.h2,
+              color: COLORS.primary,
+              fontWeight: '900',
+              marginTop: 8,
+            }}>
+            Categories
+          </Text>
 
-      >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View>
-            <Text style={{ ...FONTS.h2, color: COLORS.primary, fontWeight: '900', }}>Main</Text>
-            <Text style={{ ...FONTS.h2, color: COLORS.primary, fontWeight: '900', }}>Categories</Text>
-          </View>
-          <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between' }}>
-
-            <Button icon={icons.dollar} mode="elevated" onPress={() => navigation.navigate('ConfirmOrder')}>
-              <Text style={{ ...FONTS.h2 }}>{cartTotalAmount}</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Button
+              icon={icons.dollar}
+              mode="elevated"
+              onPress={() => navigation.navigate('ConfirmOrder')}>
+              <Text style={{...FONTS.h3}}>{cartTotalAmount}</Text>
             </Button>
-            <Button icon="cart" mode="elevated" onPress={() => navigation.navigate('ConfirmOrder')}>
-              <Text style={{ ...FONTS.h2 }}>{cartTotalQuantity}</Text>
+            <Button
+              icon="cart"
+              mode="elevated"
+              onPress={() => navigation.navigate('ConfirmOrder')}>
+              <Text style={{...FONTS.h3}}>{cartTotalQuantity}</Text>
             </Button>
           </View>
         </View>
@@ -159,192 +164,191 @@ const Home = ({ navigation }) => {
           data={categoryData}
           horizontal
           showsHorizontalScrollIndicator={false}
-          keyExtractor={(item) => `${item.id}`}
+          keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
-          contentContainerStyle={{ paddingVertical: SIZES.padding * 2 }}
+          contentContainerStyle={{paddingVertical: SIZES.padding * 2}}
         />
-
       </View>
     );
   }
 
   function renderRestaurantList() {
-    const renderItem = ({ item }) => (
+ 
+    const renderItem = ({item,index}) => (
       <View
         style={{
           marginBottom: SIZES.padding * 2,
-          width: "100%",
+          width: '100%',
           backgroundColor: COLORS.white,
-          borderRadius: SIZES.radius,
           ...styles.shadow,
-          minHeight: 200,
-
-        }}
-      >
+          minHeight: 160,
+          borderTopRightRadius: SIZES.radius,
+          borderBottomLeftRadius: SIZES.radius,
+        }}>
         {/* Image */}
         <View
           style={{
             flex: 1,
             marginBottom: SIZES.padding,
-            borderRadius: 20,
-            flexDirection: "row"
-
-
-          }}
-        >
+            flexDirection: 'row',
+          }}>
           <Image
             source={item.photo}
-            // resizeMode="cover"
+            resizeMode="cover"
             style={{
-              width: "40%",
-              height: 150,
-              // borderRadius: SIZES.radius,
+              width: '40%',
+              height: 120,
               borderBottomRightRadius: 25,
             }}
           />
-
 
           {/* Restaurant Info */}
 
           <View
             style={{
-              marginTop: SIZES.padding - 10,
+              marginTop: SIZES.padding - 5,
               marginLeft: 10,
-              flex: 1
-            }}
-          >
+              flex: 1,
+            }}>
             {/* <FontAwesome5 name="utensils" size={20} color={COLORS.primary} style={{ marginLeft: '80%', }} /> */}
 
-            <Text style={{ ...FONTS.body4, color: COLORS.black }}>{item.name}</Text>
-            <View style={{ flexDirection: 'row',  }}>
-              <Text style={{ ...FONTS.body4, color: COLORS.black }}>Rs.{item.price}</Text>
-              <Text style={{ ...FONTS.body4, marginLeft: 20, color: COLORS.black }}>Kcal-{item.calories}</Text>
-            </View>
-
-            <View style={{  marginRight: "3%", }}>
-
+            <Text style={{...FONTS.body4, color: COLORS.black,fontWeight: '700',}}>
+              {item.name}
+            </Text>
+              <View style={{marginRight: '3%',marginTop: 5,}}>
               <ReadMore
                 numberOfLines={2}
-                renderTruncatedFooter={(handlePress) => <Text style={{ ...FONTS.body5, color: '#000',fontWeight: '900', }}
-                  onPress={handlePress}>read more</Text>
-                }
-              >
-                <Text style={{ ...FONTS.body5, color: COLORS.black }}>{item.description}</Text>
+                renderTruncatedFooter={handlePress => (
+                  <Text
+                    style={{...FONTS.body5, color: COLORS.darkgray, fontWeight: '900'}}
+                    onPress={handlePress}>
+                    read more
+                  </Text>
+                )}>
+                <Text style={{...FONTS.body5, color: COLORS.darkGray}}>
+                  {item.description}
+                </Text>
               </ReadMore>
             </View>
-
-
+            <View style={{flexDirection: 'row',marginTop: 5,}}>
+              <Text style={{...FONTS.body4, color: COLORS.darkgray}}>
+                Rs.{item.price}
+              </Text>
+              <Text
+                style={{...FONTS.body4, marginLeft: 20, color: COLORS.darkgray}}>
+                Kcal-{item.calories}
+              </Text>
+            </View>
           </View>
         </View>
-        {!checkIsItemInCart(item.id) ?
-          <TextButton 
+        {checkIsItemInCart(item.id) ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '40%',
+              alignItems: 'center',
+              backgroundColor: COLORS.primary,
+              position: 'absolute',
+              borderBottomLeftRadius: 25,
+              borderTopRightRadius: 25,
+              alignSelf: 'auto',
+              marginTop: 110,
+              height: 50,
+            }}>
+            <TextButton
+              label={'+'}
+              onPress={() => dispatch(addToCart(item))}
+              buttonContainerStyle={{
+                width: cart.cartQuantity<100?'50%' :'35%',
+                height: 50,
+                backgroundColor: null,
+              }}
+              labelStyle={{
+                fontSize: SIZES.font * 1.5,
+                fontWeight: '900',
+              }}
+            />
+
+            {cart.map(i =>
+              i.id == item.id ? (
+                <View key={item.id}  
+                  style={{
+                    width: cart.cartQuantity<100?'30%' :null,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: SIZES.font * 1.5,
+                      color: COLORS.white,
+                      fontWeight: '900',
+                    }}>
+                    {i.cartQuantity}
+                  </Text>
+                </View>
+              ) : null,
+            )}
+
+            <TextButton
+              label={'-'}
+              onPress={() => dispatch(decreaseCart(item))}
+              buttonContainerStyle={{
+                width:cart.cartQuantity<100?'50%' :'35%',
+                height: 50,
+                backgroundColor: null,
+              }}
+              labelStyle={{
+                fontSize: SIZES.font * 1.5,
+                fontWeight: '900',
+              }}
+            />
+          </View>
+        ) : (
+          <TextButton
             label={'ADD'}
             onPress={() => dispatch(addToCart(item))}
             buttonContainerStyle={{
               backgroundColor: '#ffe5c7',
-              borderColor: '#fa8f14',
-              borderWidth: 1,
               position: 'absolute',
               alignSelf: 'auto',
-              marginTop: 150,
+              marginTop: 110,
               width: '40%',
               height: 50,
               borderBottomLeftRadius: 25,
               borderTopRightRadius: 25,
-
             }}
             labelStyle={{
               color: COLORS.primary,
-              fontWeight: '900', 
-            }}
-
-          /> :
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '40%',
-            alignItems: 'center',
-            backgroundColor: COLORS.primary,
-            borderColor: '#ffe5c7',
-            borderWidth: 1,
-            position: 'absolute',
-            borderBottomLeftRadius: 25,
-            borderTopRightRadius: 25,
-            alignSelf: 'auto',
-            marginTop: 150,
-            height: 50,
-          }}>
- 
-            <TextButton 
-            label={'+'}
-            onPress={() => dispatch(addToCart(item))}
-            buttonContainerStyle={{
-              width: "50%",
-              height: 50,
-              backgroundColor:null
-            }}
-            labelStyle={{
-              fontSize:  SIZES.font * 1.5,
               fontWeight: '900',
             }}
-
-            />
-
-
-
-            {cart.map((i) => (
-              (i.id == item.id) ?
-                <View key={item.id}>
-                  <Text style={{ fontSize: SIZES.font * 1.5, color: COLORS.white, fontWeight: '900', }}>{i.cartQuantity}</Text>
-                </View>
-                : null
-            ))}
- 
-            <TextButton 
-            label={'-'}
-            onPress={() => dispatch(decreaseCart(item))}
-            buttonContainerStyle={{
-              width: "50%",
-              height: 50,
-              backgroundColor:null
-            }}
-            labelStyle={{
-              fontSize:  SIZES.font * 1.5,
-              fontWeight: '900',
-            }}
-            />
-
-          </View>
-        }
+          />
+        )}
       </View>
-    );
-
+      ) 
+   
     return (
-
-      <View  >
-        <ToastContainer position="top-center"  />
-        <FlatList
+      <ScrollView>
+        <ToastContainer position="bottom-center" />
+        < FlatList
           data={restaurants}
-          keyExtractor={(item) => `${item.id}`}
+          keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
           contentContainerStyle={{
             paddingHorizontal: SIZES.padding * 2,
             paddingBottom: 50,
           }}
+         
         />
-      </View>
-
+      </ScrollView>
     );
   }
 
   return (
-
     <SafeAreaView style={styles.container}>
       {/* {renderHeader()} */}
       {renderMainCategories()}
       {renderRestaurantList()}
     </SafeAreaView>
-
   );
 };
 
@@ -352,10 +356,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.lightGray4,
-
   },
   shadow: {
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 3,
