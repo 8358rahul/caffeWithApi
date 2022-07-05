@@ -116,6 +116,7 @@ const SignIn = ({navigation}) => {
               labelStyle={{
                 ...FONTS.body4,
                 color: COLORS.gray,
+                fontFamily:'BalooBhai2-ExtraBold'
               }}
               onPress={() => navigation.navigate('ForgotPassword')}
             />
@@ -144,7 +145,8 @@ const SignIn = ({navigation}) => {
             onPress={() => navigation.navigate('Home')}
           />
           {/* SignUP */}
-          <View
+          
+          {/* <View
             style={{
               flexDirection: 'row',
               marginTop: SIZES.radius-20,
@@ -172,7 +174,7 @@ const SignIn = ({navigation}) => {
               }}
               onPress={() => navigation.navigate('SignUp')}
             />
-          </View>
+          </View> */}
         </View>
         {/* Footer */}
 

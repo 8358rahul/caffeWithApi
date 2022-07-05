@@ -10,6 +10,7 @@ const cartSlice = createSlice({
         cartTotalQuantity: 0,
         cartTotalAmount: 0,
         tax: 0,
+        msg:'',
     },
     reducers: {
         addToCart: (state, action) => {
@@ -62,11 +63,17 @@ const cartSlice = createSlice({
                 state.tax = state.cartTotalAmount * 15 / 100;
             }
             )
+        },
+        
+        addInstruction: (state, action) => {
+            state.msg = action.payload;
+            toast.success(`${action.payload} instruction added`)
         }
+
 
     }
 });
 
 
-export const { addToCart, removeFromCart, decreaseCart, clearCart, getTotals } = cartSlice.actions;
+export const { addToCart, removeFromCart, decreaseCart, clearCart, getTotals,addInstruction } = cartSlice.actions;
 export default cartSlice.reducer;

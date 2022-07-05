@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, TouchableOpacity} from 'react-native';
+import {View, Image, TouchableOpacity,Text} from 'react-native';
 import {
   createBottomTabNavigator,
   BottomTabBar,
@@ -7,7 +7,7 @@ import {
 import Svg, {Path} from 'react-native-svg';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 
-import { Home } from '../screens';
+import { Home ,Search} from '../screens';
 import {COLORS, icons} from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -119,7 +119,7 @@ const TabNavigation = () => {
   
       <Tab.Screen
         name="Search"
-        component={Home}
+        component={Search}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

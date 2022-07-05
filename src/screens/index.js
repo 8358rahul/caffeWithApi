@@ -3,7 +3,7 @@ import ConfirmOrder from './ConfirmOrder'
 import Billing from './Billing'
 import Scan from './Scan'
 import OnBoarding from "./OnBoarding"
-
+import Search from './Search'
 
 // Authentication
 import SignIn from "./SignIn"
@@ -20,4 +20,5 @@ export {
     SignUp,
     Otp,
     ForgotPassword,
+    Search,
 }

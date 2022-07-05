@@ -68,8 +68,7 @@ const Home = ({navigation}) => {
   }
 
   function renderMainCategories() {
-    const renderItem = ({item}) => {
-      return (
+    const renderItem = ({item}) => (
         <TouchableOpacity
           style={{
             padding: SIZES.padding,
@@ -122,7 +121,7 @@ const Home = ({navigation}) => {
           </Text>
         </TouchableOpacity>
       );
-    };
+ 
 
     return (
       <View
@@ -138,23 +137,30 @@ const Home = ({navigation}) => {
             style={{
               ...FONTS.h2,
               color: COLORS.primary,
-              fontWeight: '900',
+              // fontWeight: '900',
               marginTop: 8,
+              marginBottom: 8,
+              fontFamily:'BalooBhai2-ExtraBold'
             }}>
             Categories
           </Text>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Button
-              icon={icons.dollar}
+              icon ={()=>(
+                <Image 
+                source={icons.rs}
+                style={{width: 16, height: 16}}
+                />
+              )}
               mode="elevated"
-              onPress={() => navigation.navigate('ConfirmOrder')}>
+              onPress={() => navigation.navigate('Scan')}>
               <Text style={{...FONTS.h3}}>{cartTotalAmount}</Text>
             </Button>
             <Button
               icon="cart"
               mode="elevated"
-              onPress={() => navigation.navigate('ConfirmOrder')}>
+              onPress={() => navigation.navigate('Scan')}>
               <Text style={{...FONTS.h3}}>{cartTotalQuantity}</Text>
             </Button>
           </View>
@@ -172,9 +178,8 @@ const Home = ({navigation}) => {
     );
   }
 
-  function renderRestaurantList() {
- 
-    const renderItem = ({item,index}) => (
+  function renderRestaurantList() { 
+    const renderItem = ({item}) => (
       <View
         style={{
           marginBottom: SIZES.padding * 2,
@@ -217,7 +222,7 @@ const Home = ({navigation}) => {
             </Text>
               <View style={{marginRight: '3%',marginTop: 5,}}>
               <ReadMore
-                numberOfLines={2}
+                numberOfLines={1}
                 renderTruncatedFooter={handlePress => (
                   <Text
                     style={{...FONTS.body5, color: COLORS.darkgray, fontWeight: '900'}}
@@ -231,11 +236,11 @@ const Home = ({navigation}) => {
               </ReadMore>
             </View>
             <View style={{flexDirection: 'row',marginTop: 5,}}>
-              <Text style={{...FONTS.body4, color: COLORS.darkgray}}>
+              <Text style={{...FONTS.body4, color: COLORS.black}}>
                 Rs.{item.price}
               </Text>
               <Text
-                style={{...FONTS.body4, marginLeft: 20, color: COLORS.darkgray}}>
+                style={{...FONTS.body4, marginLeft: 20, color: COLORS.black}}>
                 Kcal-{item.calories}
               </Text>
             </View>
@@ -329,7 +334,7 @@ const Home = ({navigation}) => {
     return (
       <ScrollView>
         <ToastContainer position="bottom-center" />
-        < FlatList
+        <FlatList
           data={restaurants}
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}

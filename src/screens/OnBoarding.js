@@ -171,6 +171,7 @@ const OnBoarding = ({ navigation }) => {
               color: COLORS.white,
               ...FONTS.h4,
               fontWeight: '900',
+              fontFamily: 'Roboto-Bold',
             }}
             onPress={() => navigation.navigate("SignIn")}
           />

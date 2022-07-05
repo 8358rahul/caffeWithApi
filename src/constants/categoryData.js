@@ -3,8 +3,8 @@ import { icons } from "../constants";
 export const categoryData = [
     {
       id: 1,
-      name: "AllCategories",
-      icon: icons.rice_bowl,
+      name: "All",
+      icon: icons.more,
     },
     {
       id: 2,

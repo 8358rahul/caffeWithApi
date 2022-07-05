@@ -52,6 +52,9 @@ const wallet = require("../assets/icons/wallet.png")
 const help = require("../assets/icons/help.png")
 const close = require("../assets/icons/close.png")
 const flash = require("../assets/icons/flash.png")
+const more = require("../assets/icons/more.png")
+const rs = require("../assets/icons/rs.png")
+const  plus = require("../assets/icons/plus.png")
 
 
 export default {
@@ -109,5 +112,7 @@ export default {
     wallet,
     help,
     flash,
-   
+    more,
+    rs,
+    plus,
 }

@@ -15,12 +15,7 @@ const FormInput = ({
   keyboardType = "default",
   autoCompleteType = "off",
   errorMsg = "",
-}) => {
-    
-    useEffect(()=>{
-console.log("test")
-    }, [])
-
+}) => { 
   return (
     <View
       style={{
@@ -32,6 +27,8 @@ console.log("test")
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
+          alignItems: "center",
+
         }}
       >
         <Text style={{ color: COLORS.gray, ...FONTS.body4 }}>{label}</Text>

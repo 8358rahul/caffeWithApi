@@ -163,7 +163,7 @@ const Scan = ({navigation}) => {
       }}
       onPress={() =>{
         if(isEnableNumber()){
-          navigation.navigate('Billing', {number: number});
+          navigation.navigate('ConfirmOrder', {number: number});
           setNumber('');
         }else{
           toast.info('Please Enter Table Number')

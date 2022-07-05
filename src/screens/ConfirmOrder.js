@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
@@ -18,19 +19,44 @@ import {
   decreaseCart,
   addToCart,
   clearCart,
+  addInstruction,
 } from '../redux/cartSlice';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Divider} from 'react-native-paper';
-import {TextButton} from '../components';
+import {TextButton,FormInput} from '../components';
 import AuthLayout from './AuthLayout';
-const ConfirmOrder = ({navigation}) => {
+
+
+
+
+const ConfirmOrder = (props) => {
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cartItems);
+  const [instructions, setInstructions] = React.useState('');
+  const [abc, setAbc] = React.useState(true);
+
+
+
+
+  
+const createTwoButtonAlert = () =>(
+  Alert.alert(
+    "Alert Title",
+    "Are you sure you want to continue without instructions?",
+    [
+      {
+        text: "No",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+      },
+      { text: "Yes", onPress: () =>props.navigation.navigate('Billing',{number:props?.route?.params?.number}) }
+    ]
+  ))
 
   return (
     <AuthLayout 
-      title= {cart.length==0?'No Items In Cart':'Your Order'}
+      title= {cart.length==0?'No Items In Cart':`Table - ${props?.route?.params?.number}`}
       subtitle={cart.length==0?'No Items In Cart':'Total - Rs. '+ cartTotalAmount + ', Items - '+cartTotalQuantity}
      
     > 
@@ -82,9 +108,46 @@ const ConfirmOrder = ({navigation}) => {
                 <Text style={{width: '20%', marginLeft: -30, paddingLeft: 15}}>
                   {item.totalPrice}
                 </Text>
-                <Divider />
               </View>
             ))}
+            <View style={{
+                 flex: 1,
+                  marginTop: SIZES.padding * 1,
+                  marginBottom: SIZES.padding * 1,
+            }}>
+            <FormInput
+            label="Instructions*"
+            placeholder="Add cooking instructions"
+            onChange={text =>{
+           setAbc(false);
+              setInstructions(text)}}
+            appendComponent={
+              <View
+                style={{
+                  justifyContent: 'center',
+
+                }}>
+                <TouchableOpacity
+                  onPress={() =>{ 
+                   setAbc(true);
+                    dispatch(addInstruction(instructions))}}>
+               
+                <Image
+                  source={icons.plus}
+                  style={{
+                    height: 20,
+                    width: 20,
+                    tintColor:COLORS.black
+                         
+                  }}
+                />
+                </TouchableOpacity>
+              </View>
+            }
+          />
+              
+            </View>
+
             <View style={styles.innerView}>
               <TextButton
                 label="Clear Cart"
@@ -122,7 +185,11 @@ const ConfirmOrder = ({navigation}) => {
                   ...FONTS.h6,
 
                 }}
-                onPress={() => navigation.navigate('Scan')}>
+              onPress={() =>{ 
+                  abc?
+                props.navigation.navigate('Billing',{number:props?.route?.params?.number})
+                : createTwoButtonAlert()
+              }}>
 
               </TextButton> 
             </View>
