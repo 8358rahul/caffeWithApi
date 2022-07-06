@@ -258,6 +258,7 @@ const OnBoarding = ({ navigation }) => {
                 <Text
                   style={{
                     ...FONTS.h2,
+                   fontFamily: "BalooBhai2-ExtraBold",
                   }}
                 >
                   {item.title}

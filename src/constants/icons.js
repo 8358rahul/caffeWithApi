@@ -55,6 +55,7 @@ const flash = require("../assets/icons/flash.png")
 const more = require("../assets/icons/more.png")
 const rs = require("../assets/icons/rs.png")
 const  plus = require("../assets/icons/plus.png")
+const print = require("../assets/icons/print.png")
 
 
 export default {
@@ -115,4 +116,5 @@ export default {
     more,
     rs,
     plus,
+    print,
 }

@@ -82,24 +82,34 @@ export const SIZES = {
 };
 
 export const FONTS = {
-    largeTitle: { fontFamily: "Roboto-regular", fontSize: SIZES.largeTitle, lineHeight: 55 },
-    h1: { fontFamily: "Roboto-Black", fontSize: SIZES.h1, lineHeight: 36 },
-    h2: { fontFamily: "Roboto-Bold", fontSize: SIZES.h2, lineHeight: 30 },
-    h3: { fontFamily: "Roboto-Bold", fontSize: SIZES.h3, lineHeight: 22 },
-    h4: { fontFamily: "Roboto-Bold", fontSize: SIZES.h4, lineHeight: 22 },
-    h5: { fontFamily: "Roboto-Bold", fontSize: SIZES.h5, lineHeight: 22 },
-    h6: { fontFamily: "Roboto-Bold", fontSize: SIZES.h6, lineHeight: 20 },
-    body1: { fontFamily: "Roboto-Regular", fontSize: SIZES.body1, lineHeight: 36 },
-    body2: { fontFamily: "Roboto-Regular", fontSize: SIZES.body2, lineHeight: 30 },
-    body3: { fontFamily: "Roboto-Regular", fontSize: SIZES.body3, lineHeight: 22 },
-    body4: { fontFamily: "Roboto-Regular", fontSize: SIZES.body4, lineHeight: 22 },
-    body5: { fontFamily: "Roboto-Regular", fontSize: SIZES.body5, lineHeight: 22 },
-    BalooBold: { fontFamily: "Baloo-Bhai2-Bold", fontSize: SIZES.body1, lineHeight: 36 },
-    BalooExtra: { fontFamily: "BalooBhai2-ExtraBold", fontSize: SIZES.body1, lineHeight: 36 },
-    BalooRegular: { fontFamily: "BalooBhai2-Regular", fontSize: SIZES.body1, lineHeight: 36 },
-    LatoBoldItalic: { fontFamily: "Lato-BoldItalic", fontSize: SIZES.body1, lineHeight: 36 },
+    largeTitle: {  fontSize: SIZES.largeTitle, lineHeight: 55 },
+    h1: {  fontSize: SIZES.h1, lineHeight: 36 },
+    h2: { fontSize: SIZES.h2, lineHeight: 30 },
+    h3: { fontSize: SIZES.h3, lineHeight: 22 },
+    h4: { fontSize: SIZES.h4, lineHeight: 22 },
+    h5: { fontSize: SIZES.h5, lineHeight: 22 },
+    h6: { fontSize: SIZES.h6, lineHeight: 20 },
+    body1: { fontSize: SIZES.body1, lineHeight: 36 },
+    body2: { fontSize: SIZES.body2, lineHeight: 30 },
+    body3: { fontSize: SIZES.body3, lineHeight: 22 },
+    body4: { fontSize: SIZES.body4, lineHeight: 22 },
+    body5: { fontSize: SIZES.body5, lineHeight: 22 },
+    
 };
 
-const appTheme = { COLORS, SIZES, FONTS };
+export const FAMALY = {
+    regular: "BalooBhai2-Regular",
+    light: "BalooBhai2-VariableFont_wght",
+    bold: "BalooBhai2-Bold",
+    semiBold: "BalooBhai2-SemiBold",
+    medium: "BalooBhai2-Medium",
+    extraBold: "BalooBhai2-ExtraBold",
+}
+
+
+
+
+
+const appTheme = { COLORS, SIZES, FONTS,FAMALY };
 
 export default appTheme;

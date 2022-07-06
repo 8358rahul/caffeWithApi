@@ -21,8 +21,7 @@ import {
   clearCart,
   addInstruction,
 } from '../redux/cartSlice';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Divider} from 'react-native-paper';
+import {Divider,Button} from 'react-native-paper';
 import {TextButton,FormInput} from '../components';
 import AuthLayout from './AuthLayout';
 
@@ -82,26 +81,19 @@ const createTwoButtonAlert = () =>(
                 <Divider />
                 <Text style={{width: '30%', flexShrink: 1}}>{item.name}</Text>
                 <View style={styles.btnStyle}>
-                  <Pressable
-                    onPress={() =>
-                      item.cartQuantity === 1
-                        ? dispatch(removeFromCart(item))
-                        : dispatch(decreaseCart(item))
-                    }>
-                    <AntDesign
-                      name={item.cartQuantity === 1 ? 'delete' : 'minuscircleo'}
-                      size={20}
-                      color={COLORS.black}
-                    />
-                  </Pressable>
-                  <Text style={{...FONTS.h4}}>{item.cartQuantity}</Text>
-                  <Pressable onPress={() => dispatch(addToCart(item))}>
-                    <AntDesign
-                      name="pluscircleo"
-                      size={20}
-                      color={COLORS.black}
-                    />
-                  </Pressable>
+                  <Button 
+                    onPress={() =>item.cartQuantity==1?dispatch(removeFromCart(item)):dispatch(decreaseCart(item))}
+                    mode="elevated"
+                    icon={item.cartQuantity==1?'delete':'minus'}
+                    style={{marginHorizontal: 10, marginLeft: 20,}}
+                  />
+                  <Text style={{...FONTS.h4,  }}>{item.cartQuantity}</Text>
+                    <Button 
+                    onPress={() => dispatch(addToCart(item))}
+                    mode="elevated"
+                    icon={'plus'}
+                    style={{marginHorizontal: 10,marginLeft:25 }}
+                  />
                 </View>
 
                 <Text style={{width: '20%', marginLeft: 30}}>{item.price}</Text>
@@ -222,12 +214,13 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     flexDirection: 'row',
-    width: '30%',
+    width: '25%',
     height: 40,
     borderRadius: 10,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     marginTop: 5,
+    marginBottom: 5,
     backgroundColor: COLORS.white,
     shadowColor: '#000',
     shadowOffset: {
@@ -241,10 +234,9 @@ const styles = StyleSheet.create({
   hearder: {
    ...FONTS.h5,
     width: '20%',
-    fontFamily: FONTS.BalooExtra.fontFamily,
     color: COLORS.black,
     textAlign: 'center',
-    fontWeight: '650',
+    fontWeight: '700',
   },
  
 });

@@ -5,15 +5,22 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  Animated
 } from 'react-native';
 import React from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
-import {icons, images, SIZES, COLORS, FONTS, animation} from '../constants';
+import {icons, images, SIZES, COLORS, FONTS,animation } from '../constants';
 import {useSelector, useDispatch} from 'react-redux';
 import LottieView from 'lottie-react-native';
 import AuthLayout from './AuthLayout';
+import {Button} from 'react-native-paper';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNPrint from 'react-native-print';
+
+
+
 const Billing = props => {
-  const {cartTotalQuantity, cartTotalAmount, tax,msg} = useSelector(
+  const {cartTotalQuantity, cartTotalAmount, tax, msg} = useSelector(
     state => state.cart,
   );
   const cart = useSelector(state => state.cart.cartItems);
@@ -24,6 +31,17 @@ const Billing = props => {
     'Total',
   ]);
   const [tableData, setTableData] = React.useState([]);
+  const translateAnim = React.useRef(new Animated.Value(0)).current;
+ 
+  React.useEffect(() => {
+   setTimeout(() => {
+    Animated.timing(translateAnim, {
+      toValue: -360,
+      duration: 1000,
+      useNativeDriver: true,
+    }).start();
+   }, 600);
+  }, []);
 
   React.useEffect(() => {
     setTableData(
@@ -39,18 +57,49 @@ const Billing = props => {
   const date = new Date(); // get current date
   const newDate = date.toGMTString().replace('GMT', '');
 
+
+  const printRemotePDF = async () =>{
+
+    await RNPrint.print({
+      filePath: 'http://www.africau.edu/images/default/sample.pdf',
+    })
+     
+  };
+
   return (
     <AuthLayout
       title={`Table - ${props?.route?.params?.number}`}
-      subtitle={`${newDate}`}>
-      {/* <View style={{
-          justifyContent: 'center',
+      subtitle={`${newDate}`}
+      hideHeader={true}
+      >
+      <Animated.View style={{
           alignItems: 'center',
-          minHeight: 150,
+          justifyContent: 'center',
+          position: "absolute",  //*
+          width: "100%",
+          height:  Dimensions.get('window').height,
+          transform: [{ translateY: translateAnim }],  
+          zIndex: 10,        
         }}>
-        <LottieView source={animation.check_mark} autoPlay loop  style={{  width: 150,  height: 150, }}  />
-        </View> */}
+          <LottieView 
+         loop={false}
+        source={animation.done} autoPlay   
+        style={{  width: 200,  height:200, }} 
+        size={20}
+         />
+         {/* </Animated.View> */}
+        
+        </Animated.View>
       <View style={{marginTop: 10}}>
+        <Button
+          icon= {icons.print}
+          mode="elevated"
+          onPress={()=> printRemotePDF()}
+          style={{  alignSelf: 'flex-end', marginVertical: 10,zIndex: 11,  }}         
+          labelStyle={{color: COLORS.black, fontWeight: '700',}}
+          >
+          Print
+        </Button>
         <Table borderStyle={{borderWidth: 1, borderColor: '#c8e1ff'}}>
           <Row
             data={tableHead1}
@@ -66,13 +115,15 @@ const Billing = props => {
           />
         </Table>
       </View>
-     {msg.length==0?null:<Text style={{...styles.bottom,color:COLORS.blue, marginLeft: 10, }} >* Cooking instructions - {msg}</Text>}
-    
 
+      {msg.length == 0 ? null : (
+        <Text style={{...styles.bottom, color: COLORS.blue, marginLeft: 10}}>
+          * Cooking instructions - {msg}
+        </Text>
+      )}
       <Text style={styles.bottom}>Total Quantity - {cartTotalQuantity}</Text>
       <Text style={styles.bottom}>Charges & Taxes - {tax}</Text>
       <Text style={styles.bottom}>Total Price - {cartTotalAmount}</Text>
-      {/*         
         <View style={{
           flex: 1,
           alignItems:'center',
@@ -83,7 +134,7 @@ const Billing = props => {
         
         }}>
         <LottieView source={animation.cooking} autoPlay loop  style={{  width: 150,  height: 150, }}/>
-        </View> */}
+        </View>
     </AuthLayout>
   );
 };

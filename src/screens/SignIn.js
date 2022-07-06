@@ -27,7 +27,7 @@ const SignIn = ({navigation}) => {
         <View
           style={{
             flex: 1,
-            marginTop: SIZES.padding,
+            marginVertical:  20,
           }}>
           {/* Form Inputs */}
           <FormInput
@@ -104,8 +104,10 @@ const SignIn = ({navigation}) => {
           <View
             style={{
               flexDirection: 'row',
-              marginTop: SIZES.radius-15,
+              marginTop: SIZES.radius,
               justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom:  SIZES.padding,
             }}>
             <CustomSwitch value={saveMe} onChange={value => setSaveMe(value)} />
             <TextButton
@@ -175,61 +177,6 @@ const SignIn = ({navigation}) => {
               onPress={() => navigation.navigate('SignUp')}
             />
           </View> */}
-        </View>
-        {/* Footer */}
-
-        <View  
-          style={{
-           marginTop:  SIZES.padding*2,
-
-          }}
-        >
-          {/* Facebook */}
-          <TextIconButton
-            containerStyle={{
-              height: 50,
-              alignItems: 'center',
-              borderRadius: SIZES.radius-20,
-              backgroundColor: COLORS.blue,
-            }}
-            icon={icons.fb}
-            iconPosition="LEFT"
-            iconStyle={{
-              tintColor: COLORS.white,
-            }}
-            label="Sign In with Facebook"
-            labelStyle={{
-              marginLeft: SIZES.radius,
-              color: COLORS.white,
-              ...FONTS.h5,
-              fontWeight: '900',
-            }}
-            onPress={() => console.log('Facebook')}
-          />
-
-          {/* Goggl?e */}
-          <TextIconButton
-            containerStyle={{
-              height: 50,
-              alignItems: 'center',
-              borderRadius: SIZES.radius-20,
-              marginTop: SIZES.radius-20,
-              backgroundColor: COLORS.gray2,
-            }}
-            icon={icons.google}
-            iconPosition="LEFT"
-            iconStyle={{
-              tintColor: null,
-            }}
-            label="Sign In with Google"
-            labelStyle={{
-              marginLeft: SIZES.radius,
-              color: COLORS.white,
-              ...FONTS.h5,
-              fontWeight: '900',
-            }}
-            onPress={() => console.log('Google')}
-          />
         </View>
       </AuthLayout>
   );

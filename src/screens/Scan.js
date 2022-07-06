@@ -83,9 +83,10 @@ const Scan = ({navigation}) => {
           source={images.focus}
           resizeMode="stretch"
           style={{
-            marginTop: '-55%',
+            position: 'absolute',
             width: '70%',
             height: 300,
+            top: '15%',
             tintColor: COLORS.blue,
           }}
         />
@@ -101,7 +102,7 @@ const Scan = ({navigation}) => {
           bottom: 0,
           left: 0,
           right: 0,
-          height: 220,
+          height: 220, 
           padding: SIZES.padding * 3,
           borderTopLeftRadius: SIZES.radius,
           borderTopRightRadius: SIZES.radius,

@@ -53,7 +53,6 @@ const FormInput = ({
             ...inputStyle,
             flex: 1,
             fontSize: SIZES.font * 1.2,
-            fontFamily: FONTS.BalooExtra.fontFamily,
             color: COLORS.black, 
           }}
           placeholder={placeholder}

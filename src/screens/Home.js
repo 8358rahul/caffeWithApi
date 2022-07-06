@@ -137,7 +137,7 @@ const Home = ({navigation}) => {
             style={{
               ...FONTS.h2,
               color: COLORS.primary,
-              // fontWeight: '900',
+              fontWeight: '900',
               marginTop: 8,
               marginBottom: 8,
               fontFamily:'BalooBhai2-ExtraBold'
@@ -215,7 +215,6 @@ const Home = ({navigation}) => {
               marginLeft: 10,
               flex: 1,
             }}>
-            {/* <FontAwesome5 name="utensils" size={20} color={COLORS.primary} style={{ marginLeft: '80%', }} /> */}
 
             <Text style={{...FONTS.body4, color: COLORS.black,fontWeight: '700',}}>
               {item.name}
