@@ -8,22 +8,22 @@ export const categoryData = [
     },
     {
       id: 2,
-      name: "Noodles",
+      name: "Burgers",
       icon: icons.noodle,
     },
     {
       id: 3,
-      name: "HotDogs",
+      name: "Pizza",
       icon: icons.hotdog,
     },
     {
       id: 4,
-      name: "Salads",
+      name: "HotDog",
       icon: icons.salad,
     },
     {
       id: 5,
-      name: "Burgers",
+      name: "Noodles" ,
       icon: icons.hamburger,
     },
     {

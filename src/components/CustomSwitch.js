@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import React from "react";
-import { FONTS, COLORS, SIZES, images, icons } from "../constants";
+import { FONTS, COLORS, SIZES, images, icons,FAMILY } from "../constants";
 
 const CustomSwitch = ({ value, onChange }) => {
   return (
@@ -28,6 +28,7 @@ const CustomSwitch = ({ value, onChange }) => {
             color: value ? COLORS.white : COLORS.gray,
             marginLeft: SIZES.base,
             ...FONTS.body4,
+            fontFamily:FAMILY.semiBold
           }}
         >
           Save me

@@ -87,7 +87,7 @@ const ForgotPassword = ({navigation}) => {
 
                     color: COLORS.white,
                     ...FONTS.h4,
-                    fontWeight: '900',
+                    // fontWeight: '900',
                 }}
                 onPress={() => navigation.goBack()}
             />

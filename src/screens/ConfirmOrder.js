@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {icons, images, SIZES, COLORS, FONTS,FAMILY} from '../constants';
 import {
   removeFromCart,
   decreaseCart,
@@ -79,7 +79,7 @@ const createTwoButtonAlert = () =>(
             {cart.map((item, index) => (
               <View key={index} style={styles.innerView}>
                 <Divider />
-                <Text style={{width: '30%', flexShrink: 1}}>{item.name}</Text>
+                <Text style={{width: '30%', flexShrink: 1,fontFamily:FAMILY.regular}}>{item.title}</Text>
                 <View style={styles.btnStyle}>
                   <Button 
                     onPress={() =>item.cartQuantity==1?dispatch(removeFromCart(item)):dispatch(decreaseCart(item))}
@@ -87,17 +87,17 @@ const createTwoButtonAlert = () =>(
                     icon={item.cartQuantity==1?'delete':'minus'}
                     style={{marginHorizontal: 10, marginLeft: 20,}}
                   />
-                  <Text style={{...FONTS.h4,  }}>{item.cartQuantity}</Text>
+                  <Text style={{...FONTS.h4, marginLeft: 5, fontFamily:FAMILY.regular,marginTop: 7,}}>{item.cartQuantity}</Text>
                     <Button 
                     onPress={() => dispatch(addToCart(item))}
                     mode="elevated"
                     icon={'plus'}
-                    style={{marginHorizontal: 10,marginLeft:25 }}
+                    style={{marginHorizontal: 10,marginLeft:30 }}
                   />
                 </View>
 
-                <Text style={{width: '20%', marginLeft: 30}}>{item.price}</Text>
-                <Text style={{width: '20%', marginLeft: -30, paddingLeft: 15}}>
+                <Text style={{width: '20%', marginLeft: 30, fontFamily:FAMILY.regular}}>{item.price}</Text>
+                <Text style={{width: '20%', marginLeft: -30, paddingLeft: 15,fontFamily:FAMILY.regular}}>
                   {item.totalPrice}
                 </Text>
               </View>
@@ -150,6 +150,7 @@ const createTwoButtonAlert = () =>(
                   borderRadius: 10,
                   borderWidth: 1,
                   borderColor: COLORS.red, 
+                  fontFamily: FAMILY.bold,
                 
                   
                 }}
@@ -175,6 +176,7 @@ const createTwoButtonAlert = () =>(
                   fontWeight: 'bold',
                   paddingHorizontal: 10,
                   ...FONTS.h6,
+                  fontFamily: FAMILY.bold,
 
                 }}
               onPress={() =>{ 
@@ -236,7 +238,10 @@ const styles = StyleSheet.create({
     width: '20%',
     color: COLORS.black,
     textAlign: 'center',
-    fontWeight: '700',
+    // fontWeight: 'bold',
+    marginTop: 5,
+    marginBottom: 5,
+    fontFamily:FAMILY.semiBold
   },
  
 });

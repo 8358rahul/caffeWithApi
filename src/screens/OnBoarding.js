@@ -7,8 +7,8 @@ import {
   Animated,
   FlatList,
 } from "react-native";
-
-import { constants, images, FONTS, SIZES, COLORS } from "../constants";
+ 
+import { constants, images, FONTS, SIZES, COLORS,FAMILY } from "../constants";
 import { TextButton } from "../components";
 
 const OnBoarding = ({ navigation }) => {
@@ -126,7 +126,7 @@ const OnBoarding = ({ navigation }) => {
             labelStyle={{
               color: COLORS.darkGray2,
               ...FONTS.h4,
-              fontWeight: '900',
+              fontFamily: FAMILY.bold,
 
             }}
             onPress={() => navigation.navigate("SignIn")}
@@ -137,12 +137,13 @@ const OnBoarding = ({ navigation }) => {
             buttonContainerStyle={{
               height: 50,
               width: 200,
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.radius-20,
             }}
             labelStyle={{
               color: COLORS.white,
-              ...FONTS.h4,
-              fontWeight: '900',
+              ...FONTS.h3,
+              fontFamily:FAMILY.bold,
+              fontWeight: 'bold',
             }}
             onPress={() => {
               flatListRef?.current?.scrollToIndex({
@@ -165,13 +166,13 @@ const OnBoarding = ({ navigation }) => {
             buttonContainerStyle={{
               height: 50,
               width: 300,  
-              borderRadius: SIZES.radius,
+              borderRadius: SIZES.radius-20,
             }}
             labelStyle={{
               color: COLORS.white,
               ...FONTS.h4,
-              fontWeight: '900',
-              fontFamily: 'Roboto-Bold',
+              fontWeight: 'bold',
+              fontFamily: FAMILY.bold,
             }}
             onPress={() => navigation.navigate("SignIn")}
           />
@@ -258,7 +259,7 @@ const OnBoarding = ({ navigation }) => {
                 <Text
                   style={{
                     ...FONTS.h2,
-                   fontFamily: "BalooBhai2-ExtraBold",
+                    fontFamily: FAMILY.bold,
                   }}
                 >
                   {item.title}
@@ -270,6 +271,7 @@ const OnBoarding = ({ navigation }) => {
                     color: COLORS.darkGray,
                     paddingHorizontal: SIZES.padding,
                     ...FONTS.body3,
+                    fontFamily: FAMILY.regular,
                   }}
                 >
                   {item.description}

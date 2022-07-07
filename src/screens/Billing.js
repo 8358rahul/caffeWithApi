@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
-import {icons, images, SIZES, COLORS, FONTS,animation } from '../constants';
+import {icons, images, SIZES, COLORS, FONTS,animation,FAMILY } from '../constants';
 import {useSelector, useDispatch} from 'react-redux';
 import LottieView from 'lottie-react-native';
 import AuthLayout from './AuthLayout';
@@ -46,7 +46,7 @@ const Billing = props => {
   React.useEffect(() => {
     setTableData(
       cart.map((item, index) => [
-        item.name,
+        item.title,
         item.cartQuantity,
         item.price,
         item.totalPrice,
@@ -72,6 +72,7 @@ const Billing = props => {
       subtitle={`${newDate}`}
       hideHeader={true}
       >
+       
       <Animated.View style={{
           alignItems: 'center',
           justifyContent: 'center',
@@ -90,13 +91,15 @@ const Billing = props => {
          {/* </Animated.View> */}
         
         </Animated.View>
+      
       <View style={{marginTop: 10}}>
         <Button
           icon= {icons.print}
           mode="elevated"
           onPress={()=> printRemotePDF()}
           style={{  alignSelf: 'flex-end', marginVertical: 10,zIndex: 11,  }}         
-          labelStyle={{color: COLORS.black, fontWeight: '700',}}
+          labelStyle={{ fontFamily:FAMILY.bold,}}
+          uppercase={false}
           >
           Print
         </Button>
@@ -117,7 +120,7 @@ const Billing = props => {
       </View>
 
       {msg.length == 0 ? null : (
-        <Text style={{...styles.bottom, color: COLORS.blue, marginLeft: 10}}>
+        <Text style={{...styles.bottom, color: COLORS.blue, marginLeft: 10, }}>
           * Cooking instructions - {msg}
         </Text>
       )}
@@ -130,6 +133,7 @@ const Billing = props => {
           justifyContent:'center',
           minHeight: 100,
           marginBottom: 10,
+           
 
         
         }}>
@@ -152,18 +156,17 @@ const styles = StyleSheet.create({
     ...FONTS.h5,
     height: 40,
     backgroundColor: '#f1f8ff',
-    color: COLORS.black,
-    fontWeight: '900',
   },
   text: {
     margin: 6,
     textAlign: 'center',
     color: COLORS.darkGray2,
+    fontFamily: FAMILY.regular,
   },
   bottom: {
     ...FONTS.h6,
     color: COLORS.darkGray,
-    marginTop: 10,
-    fontWeight: '700',
+    marginTop: 15,
+    fontFamily: FAMILY.semiBold,
   },
 });

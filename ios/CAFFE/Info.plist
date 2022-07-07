@@ -69,6 +69,12 @@
 		<string>Octicons.ttf</string>
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
+		<string>BalooBhai2-Bold.ttf</string>
+		<string>BalooBhai2-ExtraBold.ttf</string>
+		<string>BalooBhai2-Medium.ttf</string>
+		<string>BalooBhai2-Regular.ttf</string>
+		<string>BalooBhai2-SemiBold.ttf</string>
+		<string>BalooBhai2-VariableFont_wght.ttf</string>
 	</array>
 </dict>
 </plist>

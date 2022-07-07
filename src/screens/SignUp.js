@@ -268,7 +268,7 @@ const SignUp = ({navigation}) => {
             labelStyle={{
                 color: isEnableSignUp() ? COLORS.white : COLORS.gray,
                 ...FONTS.h4,
-                fontWeight: '900',
+                //fontWeight: '900',
             }}
             onPress={() => navigation.navigate("Otp")}
 
@@ -295,7 +295,7 @@ const SignUp = ({navigation}) => {
                     labelStyle={{
                         color: COLORS.primary,
                         ...FONTS.h4,
-                        fontWeight: '900',
+                      //  fontWeight: '900',
                       
                       }}
                 onPress={() => navigation.goBack()}
@@ -326,7 +326,7 @@ const SignUp = ({navigation}) => {
         marginLeft:SIZES.radius,
         color: COLORS.white,
         ...FONTS.h5,
-        fontWeight: '900',
+        //fontWeight: '900',
     }}
     onPress={() => console.log('Facebook')}
 />
@@ -351,7 +351,7 @@ const SignUp = ({navigation}) => {
         marginLeft:SIZES.radius,
         color: COLORS.white,
         ...FONTS.h5,
-        fontWeight: '900',
+       // fontWeight: '900',
     }}
     onPress={() => console.log('Google')}
 />

@@ -9,11 +9,11 @@ import {
   FlatList,
   ScrollView,
   Animated,
+  Dimensions,
 } from 'react-native';
 
-import {icons, images, SIZES, COLORS, FONTS} from '../constants';
+import {icons, images, SIZES, COLORS, FONTS, FAMILY} from '../constants';
 import {categoryData} from '../constants/categoryData';
-import {restaurantData} from '../constants/restaurantData';
 import {addToCart, decreaseCart, getTotals} from '../redux/cartSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {toast, ToastContainer} from '@jamsch/react-native-toastify';
@@ -21,6 +21,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Button} from 'react-native-paper';
 import ReadMore from 'react-native-read-more-text';
 import {TextButton} from '../components';
+import {restaurantData} from '../constants/restaurantData';
  
 
 
@@ -35,7 +36,21 @@ const Home = ({navigation}) => {
  
 
 
- 
+
+const getData = async () => {
+  try {
+    const response = await fetch('https://fakestoreapi.com/products');
+    const data = await response.json();
+    setRestaurants(data);
+  } catch (error) {
+    console.log(error);   
+  }
+}
+
+// React.useEffect(() => {
+//   getData();
+// },[]); 
+
    React.useEffect(() => {
     dispatch(getTotals());
     if (cart.length > 0) {
@@ -59,7 +74,7 @@ const Home = ({navigation}) => {
     return (
       <View style={{flexDirection: 'row', height: 50, marginVertical: 5}}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{...FONTS.h3, color: COLORS.primary, fontWeight: '900'}}>
+          <Text style={{...FONTS.h3, color: COLORS.primary,  }}>
             Our Menu
           </Text>
         </View>
@@ -83,15 +98,14 @@ const Home = ({navigation}) => {
           }}
           onPress={() => {
             setSelectedCategory(item);
-            setRestaurants(
-              restaurantData.filter(a => a.category.includes(item.name)),
-            );
+            setRestaurants(item.name==='All'? restaurants : 
+              restaurants.filter(a => a.category.includes(item.name))            
+            )
           }}>
           <View
             style={{
               width: 50,
-              height: 50,
-
+              height: 50, 
               borderRadius: 25,
               alignItems: 'center',
               justifyContent: 'center',
@@ -116,8 +130,11 @@ const Home = ({navigation}) => {
               color:
                 selectedCategory?.id == item.id ? COLORS.white : COLORS.black,
               ...FONTS.body5,
+              fontFamily: FAMILY.medium,
             }}>
+
             {item.name}
+
           </Text>
         </TouchableOpacity>
       );
@@ -137,10 +154,10 @@ const Home = ({navigation}) => {
             style={{
               ...FONTS.h2,
               color: COLORS.primary,
-              fontWeight: '900',
+              // fontWeight: '900',
               marginTop: 8,
               marginBottom: 8,
-              fontFamily:'BalooBhai2-ExtraBold'
+              fontFamily:FAMILY.extraBold,
             }}>
             Categories
           </Text>
@@ -182,7 +199,7 @@ const Home = ({navigation}) => {
     const renderItem = ({item}) => (
       <View
         style={{
-          marginBottom: SIZES.padding * 2,
+          marginBottom: SIZES.padding * 1.5,
           width: '100%',
           backgroundColor: COLORS.white,
           ...styles.shadow,
@@ -198,7 +215,8 @@ const Home = ({navigation}) => {
             flexDirection: 'row',
           }}>
           <Image
-            source={item.photo}
+            // source={{uri:item.image}}
+            source={item.image}
             resizeMode="cover"
             style={{
               width: '40%',
@@ -216,32 +234,32 @@ const Home = ({navigation}) => {
               flex: 1,
             }}>
 
-            <Text style={{...FONTS.body4, color: COLORS.black,fontWeight: '700',}}>
-              {item.name}
+            <Text style={{...FONTS.body4, color: COLORS.black, fontFamily:FAMILY.semiBold,}}>
+              {item.title}
             </Text>
               <View style={{marginRight: '3%',marginTop: 5,}}>
               <ReadMore
                 numberOfLines={1}
                 renderTruncatedFooter={handlePress => (
                   <Text
-                    style={{...FONTS.body5, color: COLORS.darkgray, fontWeight: '900'}}
+                    style={{...FONTS.body5, color: COLORS.darkgray,  fontFamily:FAMILY.light}}
                     onPress={handlePress}>
-                    read more
+                    ...more
                   </Text>
                 )}>
-                <Text style={{...FONTS.body5, color: COLORS.darkGray}}>
+                <Text style={{...FONTS.body5, color: COLORS.darkGray,fontFamily:FAMILY.light}}>
                   {item.description}
                 </Text>
               </ReadMore>
             </View>
             <View style={{flexDirection: 'row',marginTop: 5,}}>
-              <Text style={{...FONTS.body4, color: COLORS.black}}>
+              <Text style={{...FONTS.body4, color: COLORS.black,fontFamily:FAMILY.medium}}>
                 Rs.{item.price}
               </Text>
-              <Text
-                style={{...FONTS.body4, marginLeft: 20, color: COLORS.black}}>
+              {/* <Text
+                style={{...FONTS.body4, marginLeft: 20, color: COLORS.black,fontFamily:FAMILY.medium}}>
                 Kcal-{item.calories}
-              </Text>
+              </Text> */}
             </View>
           </View>
         </View>
@@ -260,17 +278,22 @@ const Home = ({navigation}) => {
               marginTop: 110,
               height: 50,
             }}>
+            
             <TextButton
-              label={'+'}
-              onPress={() => dispatch(addToCart(item))}
+              label={'-'}
+              onPress={() => dispatch(decreaseCart(item))}
               buttonContainerStyle={{
-                width: cart.cartQuantity<100?'50%' :'35%',
+                width:cart.cartQuantity<100?'50%' :'35%',
                 height: 50,
                 backgroundColor: null,
               }}
               labelStyle={{
-                fontSize: SIZES.font * 1.5,
-                fontWeight: '900',
+                fontSize: SIZES.font * 1.7,
+                fontWeight: 'bold',
+                color: COLORS.white,
+                fontFamily:FAMILY.bold,
+                marginTop: 4,
+
               }}
             />
 
@@ -285,7 +308,8 @@ const Home = ({navigation}) => {
                     style={{
                       fontSize: SIZES.font * 1.5,
                       color: COLORS.white,
-                      fontWeight: '900',
+                      fontWeight: 'bold',
+                      fontFamily:FAMILY.bold,
                     }}>
                     {i.cartQuantity}
                   </Text>
@@ -293,17 +317,20 @@ const Home = ({navigation}) => {
               ) : null,
             )}
 
-            <TextButton
-              label={'-'}
-              onPress={() => dispatch(decreaseCart(item))}
+
+<TextButton
+              label={'+'}
+              onPress={() => dispatch(addToCart(item))}
               buttonContainerStyle={{
-                width:cart.cartQuantity<100?'50%' :'35%',
+                width: cart.cartQuantity<100?'50%' :'35%',
                 height: 50,
                 backgroundColor: null,
               }}
               labelStyle={{
                 fontSize: SIZES.font * 1.5,
-                fontWeight: '900',
+                fontWeight: 'bold',
+                color: COLORS.white,
+                fontFamily:FAMILY.bold,
               }}
             />
           </View>
@@ -323,7 +350,10 @@ const Home = ({navigation}) => {
             }}
             labelStyle={{
               color: COLORS.primary,
-              fontWeight: '900',
+              fontWeight: 'bold',
+              fontFamily:FAMILY.bold,
+              fontSize: SIZES.font * 1.5,
+
             }}
           />
         )}
@@ -331,11 +361,11 @@ const Home = ({navigation}) => {
       ) 
    
     return (
-      <ScrollView>
-        <ToastContainer position="bottom-center" />
+      <>        
+      <ToastContainer position="bottom-center" />
         <FlatList
           data={restaurants}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor = {item => `${item.id}`}
           renderItem={renderItem}
           contentContainerStyle={{
             paddingHorizontal: SIZES.padding * 2,
@@ -343,7 +373,8 @@ const Home = ({navigation}) => {
           }}
          
         />
-      </ScrollView>
+        </>
+
     );
   }
 

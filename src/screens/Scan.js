@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import {COLORS, FONTS, SIZES, icons, images} from '../constants';
+import {COLORS, FONTS, SIZES, icons, images,FAMILY} from '../constants';
 import {toast} from '@jamsch/react-native-toastify';
 import {TextButton, FormInput} from '../components';
 import {utils} from '../utils';
@@ -42,7 +42,7 @@ const Scan = ({navigation}) => {
         </TouchableOpacity>
 
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{color: COLORS.white, ...FONTS.body3}}>
+          <Text style={{color: COLORS.white, ...FONTS.body3,fontFamily:FAMILY.extraBold, }}>
             Scan for QR Code
           </Text>
         </View>
@@ -160,7 +160,8 @@ const Scan = ({navigation}) => {
       }}
       labelStyle={{
         ...FONTS.h4,
-        fontWeight: '900',
+        fontWeight: 'bold',
+        fontFamily:FAMILY.bold,
       }}
       onPress={() =>{
         if(isEnableNumber()){

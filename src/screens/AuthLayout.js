@@ -1,7 +1,8 @@
 import {Image, StyleSheet, Text, View, ScrollView} from 'react-native';
 import React from 'react';
-import {FONTS, COLORS, SIZES, images} from '../constants';
+import {FONTS, COLORS, SIZES, images,FAMILY} from '../constants';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {toast, ToastContainer} from '@jamsch/react-native-toastify';
 
 const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader}) => {
   return (
@@ -39,6 +40,8 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
           ) : <View  style={{
             height: 100,
             width: 200,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
             </View>}
 
@@ -52,7 +55,8 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
               style={{
                 textAlign: 'center',
                 ...FONTS.h3,
-                fontWeight: '900',
+                fontWeight: 'bold',
+                fontFamily: FAMILY.bold,
               }}>
               {title}
             </Text>
@@ -62,6 +66,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
                 color: COLORS.darkGray,
                 marginTop: SIZES.base,
                 ...FONTS.body4,
+                fontFamily: FAMILY.semiBold,
               }}>
               {subtitle}
             </Text>
@@ -70,6 +75,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
           {/* Content / children */}
           {children}
         </KeyboardAwareScrollView>
+        <ToastContainer position="bottom-center" />
       </ScrollView>
     </View>
   );

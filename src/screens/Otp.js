@@ -81,7 +81,7 @@ const Otp = ({ navigation }) => {
             labelStyle={{
               color: COLORS.primary,
               ...FONTS.h4,
-              fontWeight: "900",
+              // fontWeight: "900",
             }}
             onPress={() => setTimer(60)}
           />
@@ -103,7 +103,7 @@ const Otp = ({ navigation }) => {
           labelStyle={{
             color: COLORS.white,
             ...FONTS.h4,
-            fontWeight: '900',
+            //fontWeight: '900',
           }}
           onPress={() =>  navigation.navigate('SignIn')}
         />
@@ -126,7 +126,7 @@ const Otp = ({ navigation }) => {
             labelStyle={{
               color: COLORS.primary,
               ...FONTS.h5,
-              fontWeight: '900',
+             // fontWeight: '900',
             }}
             onPress={() => console.log("Term and Service")}
           />

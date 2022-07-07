@@ -3,17 +3,17 @@ import { images } from "../constants";
 export const restaurantData = [
   {
     id: 1,
-    name: "Crispy Chicken Burgers",
-    photo: images.crispy_chicken_burger,
+    title: "Crispy Chicken Burgers",
+    image: images.crispy_chicken_burger,
     description: "Burgers with crispy chicken, cheese and lettuce on a bed of fries with a side of fries and a drink.Burgers with crispy chicken, cheese and lettuce on a bed of fries with a side of fries and a drink ",
     calories: 200,
-    category: "AllCategories",
+    category: "Burgers",
     price: 10,
   },
   {
     id: 2,
-    name: "Crispy Chicken Burgers with Honey Mustard",
-    photo: images.honey_mustard_chicken_burger,
+    title: "Crispy Chicken Burgers with Honey Mustard",
+    image: images.honey_mustard_chicken_burger,
     description: "Crispy Chicken Burgers with Honey Mustard Coleslawcheese and lettuce on a bed of fries with a side of fries ",
     calories: 250,
     category: "Burgers",
@@ -21,8 +21,8 @@ export const restaurantData = [
   },
   {
     id: 3,
-    name: "Crispy Baked French Fries",
-    photo: images.baked_fries,
+    title: "Crispy Baked French Fries",
+    image: images.baked_fries,
     description: "Crispy Baked French Fries",
     calories: 194,
     category: "Burgers",
@@ -31,8 +31,8 @@ export const restaurantData = [
 
   {
     id: 4,
-    name: "Hawaiian Pizza",
-    photo: images.hawaiian_pizza,
+    title: "Hawaiian Pizza",
+    image: images.hawaiian_pizza,
     description: "Canadian bacon, homemade pizza crust, pizza sauce",
     calories: 250,
     category: "Pizza",
@@ -40,8 +40,8 @@ export const restaurantData = [
   },
   {
     id: 5,
-    name: "Tomato & Basil Pizza",
-    photo: images.pizza,
+    title: "Tomato & Basil Pizza",
+    image: images.pizza,
     description: "Fresh tomatoes, aromatic basil pesto and melted bocconcini",
     calories: 250,
     category: "Pizza",
@@ -49,8 +49,8 @@ export const restaurantData = [
   },
   {
     id: 6,
-    name: "Tomato Pasta",
-    photo: images.tomato_pasta,
+    title: "Tomato Pasta",
+    image: images.tomato_pasta,
     description: "Pasta with fresh tomatoes",
     calories: 100,
     category: "Pizza",
@@ -58,8 +58,8 @@ export const restaurantData = [
   },
   {
     id: 7,
-    name: "Mediterranean Chopped Salad ",
-    photo: images.salad,
+    title: "Mediterranean Chopped Salad ",
+    image: images.salad,
     description: "Finely chopped lettuce, tomatoes, cucumbers",
     calories: 100,
     category: "Pizza",
@@ -68,8 +68,8 @@ export const restaurantData = [
 
   {
     id: 8,
-    name: "Chicago Style Hot Dog",
-    photo: images.chicago_hot_dog,
+    title: "Chicago Style Hot Dog",
+    image: images.chicago_hot_dog,
     description: "Fresh tomatoes, all beef hot dogs",
     calories: 100,
     category: "HotDog",
@@ -78,8 +78,8 @@ export const restaurantData = [
 
   {
     id: 9,
-    name: "Sushi sets",
-    photo: images.sushi,
+    title: "Sushi sets",
+    image: images.sushi,
     description: "Fresh salmon, sushi rice, fresh juicy avocado",
     calories: 100,
     category: "Sushi",
@@ -88,8 +88,8 @@ export const restaurantData = [
 
   {
     id: 10,
-    name: "Kolo Mee",
-    photo: images.kolo_mee,
+    title: "Kolo Mee",
+    image: images.kolo_mee,
     description: "Noodles with char siu",
     calories: 200,
     category: "Noodles",
@@ -97,8 +97,8 @@ export const restaurantData = [
   },
   {
     id: 11,
-    name: "Sarawak Laksa",
-    photo: images.sarawak_laksa,
+    title: "Sarawak Laksa",
+    image: images.sarawak_laksa,
     description: "Vermicelli noodles, cooked prawns",
     calories: 300,
     category: "Noodles",
@@ -106,8 +106,8 @@ export const restaurantData = [
   },
   {
     id: 12,
-    name: "Nasi Lemak",
-    photo: images.nasi_lemak,
+    title: "Nasi Lemak",
+    image: images.nasi_lemak,
     description: "A traditional Malay rice dish",
     calories: 300,
     category: "Cuisine",
@@ -115,8 +115,8 @@ export const restaurantData = [
   },
   {
     id: 13,
-    name: "Nasi Briyani with Mutton",
-    photo: images.nasi_briyani_mutton,
+    title: "Nasi Briyani with Mutton",
+    image: images.nasi_briyani_mutton,
     description: "A traditional Indian rice dish with mutton",
     calories: 300,
     category: "Cuisine",
@@ -125,8 +125,8 @@ export const restaurantData = [
 
   {
     id: 14,
-    name: "Teh C Peng",
-    photo: images.teh_c_peng,
+    title: "Teh C Peng",
+    image: images.teh_c_peng,
     description: "Three Layer Teh C Peng",
     calories: 100,
     category: "Desserts",
@@ -134,8 +134,8 @@ export const restaurantData = [
   },
   {
     id: 15,
-    name: "ABC Ice Kacang",
-    photo: images.ice_kacang,
+    title: "ABC Ice Kacang",
+    image: images.ice_kacang,
     description: "Shaved Ice with red beans",
     calories: 100,
     category: "Desserts",
@@ -143,8 +143,8 @@ export const restaurantData = [
   },
   {
     id: 16,
-    name: "Kek Lapis",
-    photo: images.kek_lapis,
+    title: "Kek Lapis",
+    image: images.kek_lapis,
     description: "Layer cakes",
     calories: 300,
     category: "Desserts",
@@ -152,8 +152,8 @@ export const restaurantData = [
   },
   {
     id: 17,
-    name: "Kek Lapis",
-    photo: images.kek_lapis,
+    title: "Kek Lapis",
+    image: images.kek_lapis,
     description: "Layer cakes",
     calories: 300,
     category: "Salads",
@@ -161,8 +161,8 @@ export const restaurantData = [
   },
   {
     id: 18,
-    name: "Kek Lapis",
-    photo: images.kek_lapis,
+    title: "Kek Lapis",
+    image: images.kek_lapis,
     description: "Layer cakes",
     calories: 300,
     category: "Snacks",
@@ -170,8 +170,8 @@ export const restaurantData = [
   },
   {
     id: 19,
-    name: "Kek Lapis",
-    photo: images.kek_lapis,
+    title: "Kek Lapis",
+    image: images.kek_lapis,
     description: "Layer cakes",
     calories: 300,
     category: "Drinks",

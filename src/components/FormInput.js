@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View ,TextInput,Image,TouchableOpacity} from "react-native";
 import React, { useEffect } from "react";
-import { FONTS, COLORS, SIZES, images } from "../constants";
+import { FONTS, COLORS, SIZES, images,FAMILY } from "../constants";
 
 const FormInput = ({
   label,
@@ -31,8 +31,8 @@ const FormInput = ({
 
         }}
       >
-        <Text style={{ color: COLORS.gray, ...FONTS.body4 }}>{label}</Text>
-        <Text style={{ color: COLORS.red, ...FONTS.body4 }}>{errorMsg}</Text>
+        <Text style={{ color: COLORS.gray, ...FONTS.body4,fontFamily:FAMILY.semiBold }}>{label}</Text>
+        <Text style={{ color: COLORS.red, ...FONTS.body4,fontFamily:FAMILY.semiBold }}>{errorMsg}</Text>
       </View>
 
       {/* TextInput */}

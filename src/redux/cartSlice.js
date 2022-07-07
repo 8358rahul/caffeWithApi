@@ -1,7 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from '@jamsch/react-native-toastify';
 
-
+export const userLogin = createAsyncThunk(
+    "userLogin",
+    async ({email,password} ) => {
+        try {
+            const response = await fetch('http://aceuss.3mad.in/api/v1/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({email,password})
+            });
+            const data = await response.json();
+            return data;
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+)
+ 
 
 const cartSlice = createSlice({
     name: "cart",
@@ -11,8 +30,17 @@ const cartSlice = createSlice({
         cartTotalAmount: 0,
         tax: 0,
         msg:'',
+        isLoading: false,
+        isError: false,
+        isSuccess: false,
+        isLoggedIn: false,
+        user: {}, 
+
     },
     reducers: {
+        saveUser: (state, action) => {
+            state.user = action.payload;
+        }, 
         addToCart: (state, action) => {
             const itemIndex = state.cartItems.findIndex((item) => item.id === action.payload.id)
             if (itemIndex >= 0) {
@@ -71,9 +99,29 @@ const cartSlice = createSlice({
         }
 
 
-    }
+    },
+    extraReducers: {
+        [userLogin.pending]: (state, action) => {
+            state.isLoading = true;
+            state.isError = false;
+            state.isSuccess = false;
+        },
+        [userLogin.fulfilled]: (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.isSuccess = true;
+            state.user = action.payload;
+            state.isLoggedIn = true;
+        },
+        [userLogin.rejected]: (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.isSuccess = false;
+        },
+
+}
 });
 
 
-export const { addToCart, removeFromCart, decreaseCart, clearCart, getTotals,addInstruction } = cartSlice.actions;
+export const { saveUser,addToCart, removeFromCart, decreaseCart, clearCart, getTotals,addInstruction } = cartSlice.actions;
 export default cartSlice.reducer;

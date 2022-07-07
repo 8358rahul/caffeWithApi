@@ -97,7 +97,7 @@ export const FONTS = {
     
 };
 
-export const FAMALY = {
+export const FAMILY = {
     regular: "BalooBhai2-Regular",
     light: "BalooBhai2-VariableFont_wght",
     bold: "BalooBhai2-Bold",
@@ -110,6 +110,6 @@ export const FAMALY = {
 
 
 
-const appTheme = { COLORS, SIZES, FONTS,FAMALY };
+const appTheme = { COLORS, SIZES, FONTS,FAMILY };
 
 export default appTheme;

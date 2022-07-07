@@ -1,6 +1,6 @@
 import React from 'react';
-import {View, Text, Image, TouchableOpacity, ScrollView} from 'react-native'
-import {FONTS, COLORS, SIZES, images, icons} from '../constants';
+import {View, Text, Image, TouchableOpacity, ScrollView,Alert} from 'react-native'
+import {FONTS, COLORS, SIZES, images, icons,FAMILY} from '../constants';
 import {
   FormInput,
   CustomSwitch,
@@ -9,14 +9,35 @@ import {
 } from '../components';
 import {utils} from '../utils';
 import AuthLayout from  './AuthLayout';
+import { userLogin } from '../redux/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from '@jamsch/react-native-toastify';
 
 const SignIn = ({navigation}) => {
+//redux hooks
+const dispatch = useDispatch();
+const {user} = useSelector(state => state.cart);
+React.useEffect(() => {
+  if(user?.success){
+    navigation.navigate('Home');
+    toast.success(`Welcome You're Logged In`);
+  }
+  else if(user?.success===false){
+    toast.error(`Invalid Credentials`);
+  }
+  
+},[user]);
+ 
+
+  //react hooks
   const [email, setEmail] = React.useState('');
   const [emailError, setEmailError] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordError, setPasswordError] = React.useState('');
   const [showPass, setShowPass] = React.useState(false);
   const [saveMe, setSaveMe] = React.useState(false);
+
+
 
   const isEnableSignIn = () => email != '' && password != '' && emailError == '';
 
@@ -118,7 +139,7 @@ const SignIn = ({navigation}) => {
               labelStyle={{
                 ...FONTS.body4,
                 color: COLORS.gray,
-                fontFamily:'BalooBhai2-ExtraBold'
+                fontFamily:FAMILY.bold
               }}
               onPress={() => navigation.navigate('ForgotPassword')}
             />
@@ -141,10 +162,12 @@ const SignIn = ({navigation}) => {
             labelStyle={{
               ...FONTS.h4,
               color: isEnableSignIn() ? COLORS.white : COLORS.gray,
-              fontWeight: '900',
+              fontWeight: 'bold',
+              fontFamily:FAMILY.bold
 
             }}
-            onPress={() => navigation.navigate('Home')}
+            // onPress={() => navigation.navigate('Home')}
+            onPress={() =>dispatch(userLogin({email, password}))}
           />
           {/* SignUP */}
           
@@ -172,7 +195,7 @@ const SignIn = ({navigation}) => {
               labelStyle={{
                 color: COLORS.primary,
                 ...FONTS.h4,
-                fontWeight: '900',
+                //fontWeight: '900',
               }}
               onPress={() => navigation.navigate('SignUp')}
             />
