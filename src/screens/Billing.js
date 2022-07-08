@@ -5,7 +5,8 @@ import {
   Image,
   ScrollView,
   Dimensions,
-  Animated
+  Animated,
+  Linking
 } from 'react-native';
 import React from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
@@ -59,9 +60,8 @@ const Billing = props => {
 
 
   const printRemotePDF = async () =>{
-
     await RNPrint.print({
-      filePath: 'http://www.africau.edu/images/default/sample.pdf',
+      filePath: 'https://unec.edu.az/application/uploads/2014/12/pdf-sample.pdf',
     })
      
   };
@@ -92,12 +92,12 @@ const Billing = props => {
         
         </Animated.View>
       
-      <View style={{marginTop: 10}}>
+      <View style={{ }}>
         <Button
           icon= {icons.print}
           mode="elevated"
-          onPress={()=> printRemotePDF()}
-          style={{  alignSelf: 'flex-end', marginVertical: 10,zIndex: 11,  }}         
+          onPress={()=>  printRemotePDF()}
+          style={{  alignSelf: 'flex-end',  zIndex: 11,  }}         
           labelStyle={{ fontFamily:FAMILY.bold,}}
           uppercase={false}
           >
@@ -118,24 +118,40 @@ const Billing = props => {
           />
         </Table>
       </View>
+      <View style={{marginTop: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}>
+      {msg.length == 0 ? null 
+      :      
+        <View style={{}}>      
+        <Text style={{...styles.bottom, color: COLORS.blue,  }}>
+        * Cooking instructions 
+      </Text>
+      {
+          msg.map((item, index) => (
+            <Text style={{...styles.bottom, color: COLORS.blue,fontFamily:FAMILY.light }}>
+           {index+1}{' )'} &nbsp;{item}
+          </Text>
 
-      {msg.length == 0 ? null : (
-        <Text style={{...styles.bottom, color: COLORS.blue, marginLeft: 10, }}>
-          * Cooking instructions - {msg}
-        </Text>
-      )}
-      <Text style={styles.bottom}>Total Quantity - {cartTotalQuantity}</Text>
+          ))
+      } 
+      </View>
+      }
+      <View style={{ }}> 
+      <Text style={styles.bottom }>Total Quantity - {cartTotalQuantity}</Text>
       <Text style={styles.bottom}>Charges & Taxes - {tax}</Text>
       <Text style={styles.bottom}>Total Price - {cartTotalAmount}</Text>
+      </View>
+      </View>
+         
         <View style={{
           flex: 1,
           alignItems:'center',
           justifyContent:'center',
           minHeight: 100,
-          marginBottom: 10,
-           
-
-        
+          marginBottom: 10, 
+          marginTop: 10,
         }}>
         <LottieView source={animation.cooking} autoPlay loop  style={{  width: 150,  height: 150, }}/>
         </View>
@@ -166,7 +182,9 @@ const styles = StyleSheet.create({
   bottom: {
     ...FONTS.h6,
     color: COLORS.darkGray,
-    marginTop: 15,
     fontFamily: FAMILY.semiBold,
+    marginVertical: SIZES.base-4,
+ 
+    
   },
 });

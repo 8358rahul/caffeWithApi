@@ -117,6 +117,7 @@ const Scan = ({navigation}) => {
             label="Table Number"
             placeholder="Enter table Number"
             keyboardType="numeric"
+            value={number}
             onChange={text =>{
                 utils.onlyValidNumbers(text, setError);
               setNumber(text)}}

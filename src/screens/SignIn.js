@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity, ScrollView,Alert} from 'react-native'
-import {FONTS, COLORS, SIZES, images, icons,FAMILY} from '../constants';
+import {FONTS, COLORS, SIZES, images, icons,FAMILY, animation} from '../constants';
 import {
   FormInput,
   CustomSwitch,
@@ -12,22 +12,50 @@ import AuthLayout from  './AuthLayout';
 import { userLogin } from '../redux/cartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from '@jamsch/react-native-toastify';
+import LottieView from 'lottie-react-native';
 
 const SignIn = ({navigation}) => {
 //redux hooks
 const dispatch = useDispatch();
-const {user} = useSelector(state => state.cart);
+const {user,isLoading,isError} = useSelector(state => state.cart);
+console.log('isLoading',isLoading , 'isError',isError);
+
+//state hooks
+
 React.useEffect(() => {
   if(user?.success){
     navigation.navigate('Home');
     toast.success(`Welcome You're Logged In`);
   }
+  // else if(isLoading==true){
+  //   <View style={{
+  //     flex: 1,
+  //     justifyContent: 'center',
+  //     alignItems: 'center',
+  //     // backgroundColor: '#fff',
+
+  //   }} >
+  //     <LottieView  source={animation.loading} autoPlay  style={{width:100, height:100}} />
+  //   </View>
+  // }
+  // else if(isError==true){
+  //   <View
+  //     style={{
+  //       flex: 1,
+  //       justifyContent: 'center',
+  //       alignItems: 'center',
+  //       // backgroundColor: '#fff',
+  //     }}
+  //   >
+  //     <LottieView  source={animation.error} autoPlay  style={{width:100, height:100}} />
+       
+  //   </View>
+  // }
   else if(user?.success===false){
     toast.error(`Invalid Credentials`);
   }
   
-},[user]);
- 
+},[user]); 
 
   //react hooks
   const [email, setEmail] = React.useState('');
@@ -56,6 +84,7 @@ React.useEffect(() => {
             placeholder="Enter your email"
             keyboardType="email-address"
             autoCompleteType="email"
+            value={email}
             onChange={text => {
               //Validate Email
               utils.validateEmail(text, setEmailError);
@@ -95,6 +124,7 @@ React.useEffect(() => {
             autoCompleteType="password"
             onChange={text => setPassword(text)}
             errorMsg={passwordError}
+            value={password}
             containerStyle={{
               marginTop: SIZES.padding,
             }}

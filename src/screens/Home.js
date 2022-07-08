@@ -10,9 +10,10 @@ import {
   ScrollView,
   Animated,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 
-import {icons, images, SIZES, COLORS, FONTS, FAMILY} from '../constants';
+import {icons, images, SIZES, COLORS, FONTS, FAMILY, animation} from '../constants';
 import {categoryData} from '../constants/categoryData';
 import {addToCart, decreaseCart, getTotals} from '../redux/cartSlice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -22,19 +23,21 @@ import {Button} from 'react-native-paper';
 import ReadMore from 'react-native-read-more-text';
 import {TextButton} from '../components';
 import {restaurantData} from '../constants/restaurantData';
+import LottieView from 'lottie-react-native';
  
 
 
 
 const Home = ({navigation}) => {
+  const [originalData, setOriginalData] = React.useState(restaurantData);
   const cart = useSelector(state => state.cart.cartItems);
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [restaurants, setRestaurants] = React.useState(restaurantData);
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
- 
 
+  const [isLoading, setIsLoading] = React.useState(false);
 
 
 const getData = async () => {
@@ -42,14 +45,18 @@ const getData = async () => {
     const response = await fetch('https://fakestoreapi.com/products');
     const data = await response.json();
     setRestaurants(data);
+    setOriginalData(data);
+    setIsLoading(true);
+    return data;
+
   } catch (error) {
     console.log(error);   
   }
 }
 
-// React.useEffect(() => {
-//   getData();
-// },[]); 
+React.useEffect(() => {
+  getData();  
+},[]); 
 
    React.useEffect(() => {
     dispatch(getTotals());
@@ -98,8 +105,9 @@ const getData = async () => {
           }}
           onPress={() => {
             setSelectedCategory(item);
-            setRestaurants(item.name==='All'? restaurants : 
-              restaurants.filter(a => a.category.includes(item.name))            
+            setRestaurants(
+              item.category==='All'? originalData : 
+              originalData.filter(a => a.category.includes(item.category))            
             )
           }}>
           <View
@@ -123,14 +131,16 @@ const getData = async () => {
               }}
             />
           </View>
+         
 
           <Text
             style={{
               marginTop: SIZES.padding,
               color:
-                selectedCategory?.id == item.id ? COLORS.white : COLORS.black,
+              selectedCategory?.id == item.id ? COLORS.white : COLORS.black,
               ...FONTS.body5,
               fontFamily: FAMILY.medium,
+              
             }}>
 
             {item.name}
@@ -200,6 +210,7 @@ const getData = async () => {
       <View
         style={{
           marginBottom: SIZES.padding * 1.5,
+          marginTop: SIZES.padding * 1.5,
           width: '100%',
           backgroundColor: COLORS.white,
           ...styles.shadow,
@@ -215,8 +226,8 @@ const getData = async () => {
             flexDirection: 'row',
           }}>
           <Image
-            // source={{uri:item.image}}
-            source={item.image}
+            source={{uri:item.image}}
+            // source={item.image}
             resizeMode="cover"
             style={{
               width: '40%',
@@ -235,7 +246,7 @@ const getData = async () => {
             }}>
 
             <Text style={{...FONTS.body4, color: COLORS.black, fontFamily:FAMILY.semiBold,}}>
-              {item.title}
+             {item.title.length > 30 ? item.title.substring(0, 30) + '...' : item.title}            
             </Text>
               <View style={{marginRight: '3%',marginTop: 5,}}>
               <ReadMore
@@ -244,7 +255,7 @@ const getData = async () => {
                   <Text
                     style={{...FONTS.body5, color: COLORS.darkgray,  fontFamily:FAMILY.light}}
                     onPress={handlePress}>
-                    ...more
+                    ..more
                   </Text>
                 )}>
                 <Text style={{...FONTS.body5, color: COLORS.darkGray,fontFamily:FAMILY.light}}>
@@ -363,16 +374,20 @@ const getData = async () => {
     return (
       <>        
       <ToastContainer position="bottom-center" />
-        <FlatList
-          data={restaurants}
-          keyExtractor = {item => `${item.id}`}
-          renderItem={renderItem}
-          contentContainerStyle={{
-            paddingHorizontal: SIZES.padding * 2,
-            paddingBottom: 50,
-          }}
-         
-        />
+     {!isLoading?<View style={{flex: 1, alignItems:'center', marginTop:Dimensions.get('window').height*0.1}}>
+     <LottieView  source={animation.loading} autoPlay  style={{width:100, height:100}} />
+     </View>
+     :
+     <FlatList
+        data={restaurants}
+        keyExtractor = {item => `${item.id}`}
+        renderItem={renderItem}
+        contentContainerStyle={{
+          paddingHorizontal: SIZES.padding * 2,
+          paddingBottom: 50,
+        }}         
+      />}
+
         </>
 
     );

@@ -29,7 +29,7 @@ const cartSlice = createSlice({
         cartTotalQuantity: 0,
         cartTotalAmount: 0,
         tax: 0,
-        msg:'',
+        msg:[],
         isLoading: false,
         isError: false,
         isSuccess: false,
@@ -46,18 +46,18 @@ const cartSlice = createSlice({
             if (itemIndex >= 0) {
                 state.cartItems[itemIndex].cartQuantity += 1;
                 state.cartItems[itemIndex].totalPrice = state.cartItems[itemIndex].cartQuantity*state.cartItems[itemIndex].price;
-                toast.info(`Incresed ${state.cartItems[itemIndex].name} quantity`)
+                toast.info(`${state.cartItems[itemIndex].title} Incresed`)
             } else {
                 const tempProduct = { ...action.payload, cartQuantity: 1,totalPrice:action.payload.price};
                 state.cartItems.push(tempProduct);
-                toast.success(`${action.payload.name} Added`)
+                toast.success(`${action.payload.title} Added`)
             }
 
         },
         removeFromCart: (state, action) => {
             const nextCartItems = state.cartItems.filter((item) => item.id !== action.payload.id)
             state.cartItems = nextCartItems;
-            toast.error(`${action.payload.name} Removed`)
+            toast.error(`${action.payload.title} Removed`)
 
         },
         decreaseCart: (state, action) => {
@@ -66,14 +66,14 @@ const cartSlice = createSlice({
                 if (state.cartItems[itemIndex].cartQuantity > 1) {
                     state.cartItems[itemIndex].cartQuantity -= 1
                     state.cartItems[itemIndex].totalPrice = state.cartItems[itemIndex].cartQuantity*state.cartItems[itemIndex].price;
-                    toast.info(`Decresed ${state.cartItems[itemIndex].name} quantity`)
+                    toast.info(`${state.cartItems[itemIndex].title} Decresed`)
                 } else {
                     state.cartItems.splice(itemIndex, 1)
-                    toast.error(`${action.payload.name} item is deleted`)
+                    toast.error(`${action.payload.title} item is deleted`)
                 }
             }
             else {
-                toast.error(`${action.payload.name} Item is not in cart`)
+                toast.error(`${action.payload.title} Item is not in cart`)
             }
 
         },
@@ -94,7 +94,7 @@ const cartSlice = createSlice({
         },
         
         addInstruction: (state, action) => {
-            state.msg = action.payload;
+            state.msg.push(action.payload);
             toast.success(`${action.payload} instruction added`)
         }
 

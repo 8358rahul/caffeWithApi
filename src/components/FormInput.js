@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View ,TextInput,Image,TouchableOpacity} from "react-native";
+import { StyleSheet, Text, View ,TextInput,Image,TouchableOpacity,} from "react-native";
 import React, { useEffect } from "react";
 import { FONTS, COLORS, SIZES, images,FAMILY } from "../constants";
 
@@ -15,6 +15,7 @@ const FormInput = ({
   keyboardType = "default",
   autoCompleteType = "off",
   errorMsg = "",
+  value
 }) => { 
   return (
     <View
@@ -54,13 +55,15 @@ const FormInput = ({
             flex: 1,
             fontSize: SIZES.font * 1.2,
             color: COLORS.black, 
+            fontFamily:FAMILY.semiBold
           }}
           placeholder={placeholder}
           secureTextEntry={secureTextEntry}
           autoCapitalize={autoCapitalize}
           keyboardType={keyboardType}
           autoCompleteType={autoCompleteType}
-          onChangeText={(text) => onChange(text)}
+          onChangeText={onChange? (text)=>onChange(text): ()=>{}}
+          value={value?value:""}
         />
 
         {appendComponent}

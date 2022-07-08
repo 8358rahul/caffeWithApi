@@ -31,6 +31,7 @@ import AuthLayout from './AuthLayout';
 const ConfirmOrder = (props) => {
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
+  const {msg} = useSelector(state => state.cart);
   const cart = useSelector(state => state.cart.cartItems);
   const [instructions, setInstructions] = React.useState('');
   const [abc, setAbc] = React.useState(true);
@@ -85,7 +86,7 @@ const createTwoButtonAlert = () =>(
                     onPress={() =>item.cartQuantity==1?dispatch(removeFromCart(item)):dispatch(decreaseCart(item))}
                     mode="elevated"
                     icon={item.cartQuantity==1?'delete':'minus'}
-                    style={{marginHorizontal: 10, marginLeft: 20,}}
+                    style={{marginHorizontal: 10, marginLeft: 30,}}
                   />
                   <Text style={{...FONTS.h4, marginLeft: 5, fontFamily:FAMILY.regular,marginTop: 7,}}>{item.cartQuantity}</Text>
                     <Button 
@@ -110,8 +111,9 @@ const createTwoButtonAlert = () =>(
             <FormInput
             label="Instructions*"
             placeholder="Add cooking instructions"
+            value={instructions}
             onChange={text =>{
-           setAbc(false);
+              setAbc(false);
               setInstructions(text)}}
             appendComponent={
               <View
@@ -121,8 +123,11 @@ const createTwoButtonAlert = () =>(
                 }}>
                 <TouchableOpacity
                   onPress={() =>{ 
-                   setAbc(true);
-                    dispatch(addInstruction(instructions))}}>
+                  setAbc(true);
+                  dispatch(addInstruction(instructions))
+                  setInstructions('')
+                    
+                    }}>
                
                 <Image
                   source={icons.plus}
@@ -136,8 +141,23 @@ const createTwoButtonAlert = () =>(
                 </TouchableOpacity>
               </View>
             }
-          />
-              
+          />{msg.length==0?null:
+            <View style={{
+              marginTop: 10,
+            }}>
+      
+      <Text style={{ color: COLORS.blue,  }}>
+      * Cooking instructions :
+    </Text>
+    {
+        msg.map((item, index) => (
+          <Text style={{color: COLORS.blue,fontFamily:FAMILY.light }}>
+         {index+1}{' )'} &nbsp;{item}
+        </Text>
+
+        ))
+    } 
+    </View>  }
             </View>
 
             <View style={styles.innerView}>
@@ -238,7 +258,6 @@ const styles = StyleSheet.create({
     width: '20%',
     color: COLORS.black,
     textAlign: 'center',
-    // fontWeight: 'bold',
     marginTop: 5,
     marginBottom: 5,
     fontFamily:FAMILY.semiBold
