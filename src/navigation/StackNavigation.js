@@ -23,13 +23,13 @@ const StackNavigation = () => {
         screenOptions={{
           headerShown: false,
         }}
-        initialRouteName={'OnBoarding'}>
+        initialRouteName={'Home'}>
         <Stack.Screen name="OnBoarding" component={OnBoarding} />
         <Stack.Screen name="SignIn" component={SignIn} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
         <Stack.Screen name="Otp" component={Otp} />
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Home" component={TabNavigation} />
         <Stack.Screen name="ConfirmOrder" component={ConfirmOrder} />
         <Stack.Screen name="Billing" component={Billing} />
         <Stack.Screen name="Scan" component={Scan} />

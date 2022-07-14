@@ -6,8 +6,8 @@ import {
 } from '@react-navigation/bottom-tabs';
 import Svg, {Path} from 'react-native-svg';
 import {isIphoneX} from 'react-native-iphone-x-helper';
-
-import { Home ,Search} from '../screens';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Home ,PendingOrders,CompleteOrder} from '../screens';
 import {COLORS, icons} from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -118,38 +118,22 @@ const TabNavigation = () => {
       />
   
       <Tab.Screen
-        name="Search"
-        component={Search}
+        name="PendingOrders"
+        component={PendingOrders}
         options={{
-          tabBarIcon: ({focused}) => (
-            <Image
-              source={icons.search}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
-              }}
-            />
+          tabBarIcon: ({focused}) => (             
+            <MaterialIcons name="pending" size={25} color={focused ? COLORS.primary : COLORS.secondary}/>
           ),
           tabBarButton: props => <TabBarCustomButton {...props} />,
         }}
       />
 
       <Tab.Screen
-        name="Like"
-        component={Home}
+        name="CompleteOrder"
+        component={CompleteOrder}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={icons.like}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
-              }}
-            />
+             <MaterialIcons name="cloud-done" size={25} color={focused ? COLORS.primary : COLORS.secondary}/>
           ),
           tabBarButton: props => <TabBarCustomButton {...props} />,
         }}

@@ -87,6 +87,7 @@ const Otp = ({ navigation }) => {
           />
         </View>
       </View>
+      
       {/* Footer */}
 
       <View style={{

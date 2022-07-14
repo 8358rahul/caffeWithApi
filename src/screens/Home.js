@@ -11,9 +11,18 @@ import {
   Animated,
   Dimensions,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 
-import {icons, images, SIZES, COLORS, FONTS, FAMILY, animation} from '../constants';
+import {
+  icons,
+  images,
+  SIZES,
+  COLORS,
+  FONTS,
+  FAMILY,
+  animation,
+} from '../constants';
 import {categoryData} from '../constants/categoryData';
 import {addToCart, decreaseCart, getTotals} from '../redux/cartSlice';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,41 +33,54 @@ import ReadMore from 'react-native-read-more-text';
 import {TextButton} from '../components';
 import {restaurantData} from '../constants/restaurantData';
 import LottieView from 'lottie-react-native';
- 
+import {ApiEndpoints} from '../helper/httpConfig';
+import {apiService} from '../helper/http';
 
-
+const initialKeys = {
+  "product":"product",
+  "description":"description",
+  "price":"price",
+}
 
 const Home = ({navigation}) => {
-  const [originalData, setOriginalData] = React.useState(restaurantData);
+  // redux hook
   const cart = useSelector(state => state.cart.cartItems);
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
+
+  // state hook
+  const [category , setCategory] = React.useState('');
+  const [originalData, setOriginalData] = React.useState();
   const [selectedCategory, setSelectedCategory] = React.useState(null);
-  const [restaurants, setRestaurants] = React.useState(restaurantData);
+  const [restaurants, setRestaurants] = React.useState();
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  const [isLoading, setIsLoading] = React.useState(false);
-
-
-const getData = async () => {
-  try {
-    const response = await fetch('https://fakestoreapi.com/products');
-    const data = await response.json();
-    setRestaurants(data);
-    setOriginalData(data);
-    setIsLoading(true);
-    return data;
-
-  } catch (error) {
-    console.log(error);   
+ // API CALLING FUNCTIONS
+  const getCategoryData = async () => {    
+     let response = await apiService( 'POST', ApiEndpoints.CATEGORYS, {} );
+     let data = response.data;
+     setCategory(data); 
   }
-}
 
-React.useEffect(() => {
-  getData();  
-},[]); 
+  const getData = async () => {
+    let response = await apiService( 'POST', ApiEndpoints.PRODUCT_MENUS, {} );
+    let data = response.data;
+    setOriginalData(data);
+    setRestaurants(data);
+    setIsLoading(false);     
+  }
 
-   React.useEffect(() => {
+
+
+
+  React.useEffect(() => {
+    getData();
+    getCategoryData();
+  }, []);
+
+  React.useEffect(() => {
     dispatch(getTotals());
     if (cart.length > 0) {
       let cart_item_id = cart.map(item => item.id);
@@ -81,9 +103,7 @@ React.useEffect(() => {
     return (
       <View style={{flexDirection: 'row', height: 50, marginVertical: 5}}>
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{...FONTS.h3, color: COLORS.primary,  }}>
-            Our Menu
-          </Text>
+          <Text style={{...FONTS.h3, color: COLORS.primary}}>Our Menu</Text>
         </View>
       </View>
     );
@@ -91,64 +111,60 @@ React.useEffect(() => {
 
   function renderMainCategories() {
     const renderItem = ({item}) => (
-        <TouchableOpacity
+      <TouchableOpacity
+        style={{
+          padding: SIZES.padding,
+          paddingBottom: SIZES.padding * 2,
+          backgroundColor:
+            selectedCategory?.id == item.id ? COLORS.primary : COLORS.white,
+          borderRadius: SIZES.radius,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginRight: SIZES.padding,
+          ...styles.shadow,
+        }}
+        onPress={() => {
+          setSelectedCategory(item);
+          setRestaurants(
+            item.category === 'All'
+              ? originalData
+              : originalData.filter(a => a.category_id==item.id),
+          );
+        }}
+        >
+        <View
           style={{
-            padding: SIZES.padding,
-            paddingBottom: SIZES.padding * 2,
-            backgroundColor:
-              selectedCategory?.id == item.id ? COLORS.primary : COLORS.white,
-            borderRadius: SIZES.radius,
+            width: 50,
+            height: 50,
+            borderRadius: 25,
             alignItems: 'center',
             justifyContent: 'center',
-            marginRight: SIZES.padding,
-            ...styles.shadow,
-          }}
-          onPress={() => {
-            setSelectedCategory(item);
-            setRestaurants(
-              item.category==='All'? originalData : 
-              originalData.filter(a => a.category.includes(item.category))            
-            )
+            backgroundColor:
+              selectedCategory?.id == item.id ? COLORS.white : COLORS.lightGray,
           }}>
-          <View
+          <Image
+            // source={item.icon}
+            source={{uri: 'https://picsum.photos/200/300'}}
+            resizeMode="contain"
             style={{
-              width: 50,
-              height: 50, 
-              borderRadius: 25,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor:
-                selectedCategory?.id == item.id
-                  ? COLORS.white
-                  : COLORS.lightGray,
-            }}>
-            <Image
-              source={item.icon}
-              resizeMode="contain"
-              style={{
-                width: 30,
-                height: 30,
-              }}
-            />
-          </View>
-         
+              width: 30,
+              height: 30,
+            }}
+          />
+        </View>
 
-          <Text
-            style={{
-              marginTop: SIZES.padding,
-              color:
+        <Text
+          style={{
+            marginTop: SIZES.padding,
+            color:
               selectedCategory?.id == item.id ? COLORS.white : COLORS.black,
-              ...FONTS.body5,
-              fontFamily: FAMILY.medium,
-              
-            }}>
-
-            {item.name}
-
-          </Text>
-        </TouchableOpacity>
-      );
- 
+            ...FONTS.body5,
+            fontFamily: FAMILY.medium,
+          }}>
+          {item.category}
+        </Text>
+      </TouchableOpacity>
+    );
 
     return (
       <View
@@ -167,34 +183,32 @@ React.useEffect(() => {
               // fontWeight: '900',
               marginTop: 8,
               marginBottom: 8,
-              fontFamily:FAMILY.extraBold,
+              fontFamily: FAMILY.extraBold,
             }}>
             Categories
           </Text>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Button
-              icon ={()=>(
-                <Image 
-                source={icons.rs}
-                style={{width: 16, height: 16}}
-                />
+              icon={() => (
+                <Image source={icons.rs} style={{width: 16, height: 16}} />
               )}
               mode="elevated"
-              onPress={() => navigation.navigate('Scan')}>
+              onPress={() => navigation.navigate('ConfirmOrder')}>
               <Text style={{...FONTS.h3}}>{cartTotalAmount}</Text>
             </Button>
             <Button
               icon="cart"
               mode="elevated"
-              onPress={() => navigation.navigate('Scan')}>
+              onPress={() => navigation.navigate('ConfirmOrder')}
+              >
               <Text style={{...FONTS.h3}}>{cartTotalQuantity}</Text>
             </Button>
           </View>
         </View>
 
         <FlatList
-          data={categoryData}
+          data={category}
           horizontal
           showsHorizontalScrollIndicator={false}
           keyExtractor={item => `${item.id}`}
@@ -205,7 +219,7 @@ React.useEffect(() => {
     );
   }
 
-  function renderRestaurantList() { 
+  function renderRestaurantList() {
     const renderItem = ({item}) => (
       <View
         style={{
@@ -226,7 +240,7 @@ React.useEffect(() => {
             flexDirection: 'row',
           }}>
           <Image
-            source={{uri:item.image}}
+            source={{uri: 'https://picsum.photos/200/300'}}
             // source={item.image}
             resizeMode="cover"
             style={{
@@ -244,28 +258,48 @@ React.useEffect(() => {
               marginLeft: 10,
               flex: 1,
             }}>
-
-            <Text style={{...FONTS.body4, color: COLORS.black, fontFamily:FAMILY.semiBold,}}>
-             {item.title.length > 30 ? item.title.substring(0, 30) + '...' : item.title}            
+            <Text
+              style={{
+                ...FONTS.body4,
+                color: COLORS.black,
+                fontFamily: FAMILY.semiBold,
+              }}>
+              {item[initialKeys["product"]].length > 30
+                ? item[initialKeys["product"]].substring(0, 30) + '...'
+                : item[initialKeys["product"]]}
             </Text>
-              <View style={{marginRight: '3%',marginTop: 5,}}>
+            <View style={{marginRight: '3%', marginTop: 5}}>
               <ReadMore
                 numberOfLines={1}
                 renderTruncatedFooter={handlePress => (
                   <Text
-                    style={{...FONTS.body5, color: COLORS.darkgray,  fontFamily:FAMILY.light}}
+                    style={{
+                      ...FONTS.body5,
+                      color: COLORS.darkgray,
+                      fontFamily: FAMILY.light,
+                    }}
                     onPress={handlePress}>
                     ..more
                   </Text>
                 )}>
-                <Text style={{...FONTS.body5, color: COLORS.darkGray,fontFamily:FAMILY.light}}>
-                  {item.description}
+                <Text
+                  style={{
+                    ...FONTS.body5,
+                    color: COLORS.darkGray,
+                    fontFamily: FAMILY.light,
+                  }}>
+                  {item[initialKeys["description"]]}
                 </Text>
               </ReadMore>
             </View>
-            <View style={{flexDirection: 'row',marginTop: 5,}}>
-              <Text style={{...FONTS.body4, color: COLORS.black,fontFamily:FAMILY.medium}}>
-                Rs.{item.price}
+            <View style={{flexDirection: 'row', marginTop: 5}}>
+              <Text
+                style={{
+                  ...FONTS.body4,
+                  color: COLORS.black,
+                  fontFamily: FAMILY.medium,
+                }}>
+                Rs.{item[initialKeys["price"]]}
               </Text>
               {/* <Text
                 style={{...FONTS.body4, marginLeft: 20, color: COLORS.black,fontFamily:FAMILY.medium}}>
@@ -289,12 +323,11 @@ React.useEffect(() => {
               marginTop: 110,
               height: 50,
             }}>
-            
             <TextButton
               label={'-'}
               onPress={() => dispatch(decreaseCart(item))}
               buttonContainerStyle={{
-                width:cart.cartQuantity<100?'50%' :'35%',
+                width: cart.quantity < 100 ? '50%' : '35%',
                 height: 50,
                 backgroundColor: null,
               }}
@@ -302,38 +335,36 @@ React.useEffect(() => {
                 fontSize: SIZES.font * 1.7,
                 fontWeight: 'bold',
                 color: COLORS.white,
-                fontFamily:FAMILY.bold,
+                fontFamily: FAMILY.bold,
                 marginTop: 4,
-
               }}
             />
 
             {cart.map(i =>
               i.id == item.id ? (
-                <View key={item.id}  
+                <View
+                  key={item.id}
                   style={{
-                    width: cart.cartQuantity<100?'30%' :null,
-                  }}
-                >
+                    width: cart.quantity < 100 ? '30%' : null,
+                  }}>
                   <Text
                     style={{
                       fontSize: SIZES.font * 1.5,
                       color: COLORS.white,
                       fontWeight: 'bold',
-                      fontFamily:FAMILY.bold,
+                      fontFamily: FAMILY.bold,
                     }}>
-                    {i.cartQuantity}
+                    {i.quantity}
                   </Text>
                 </View>
               ) : null,
             )}
 
-
-<TextButton
+            <TextButton
               label={'+'}
               onPress={() => dispatch(addToCart(item))}
               buttonContainerStyle={{
-                width: cart.cartQuantity<100?'50%' :'35%',
+                width: cart.quantity < 100 ? '50%' : '35%',
                 height: 50,
                 backgroundColor: null,
               }}
@@ -341,7 +372,7 @@ React.useEffect(() => {
                 fontSize: SIZES.font * 1.5,
                 fontWeight: 'bold',
                 color: COLORS.white,
-                fontFamily:FAMILY.bold,
+                fontFamily: FAMILY.bold,
               }}
             />
           </View>
@@ -362,34 +393,50 @@ React.useEffect(() => {
             labelStyle={{
               color: COLORS.primary,
               fontWeight: 'bold',
-              fontFamily:FAMILY.bold,
+              fontFamily: FAMILY.bold,
               fontSize: SIZES.font * 1.5,
-
             }}
           />
         )}
       </View>
-      ) 
-   
+    );
+
     return (
-      <>        
-      <ToastContainer position="bottom-center" />
-     {!isLoading?<View style={{flex: 1, alignItems:'center', marginTop:Dimensions.get('window').height*0.1}}>
-     <LottieView  source={animation.loading} autoPlay  style={{width:100, height:100}} />
-     </View>
-     :
-     <FlatList
-        data={restaurants}
-        keyExtractor = {item => `${item.id}`}
-        renderItem={renderItem}
-        contentContainerStyle={{
-          paddingHorizontal: SIZES.padding * 2,
-          paddingBottom: 50,
-        }}         
-      />}
-
-        </>
-
+      <>
+        <ToastContainer position= "top-center" />        
+        {isLoading ? (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              marginTop: Dimensions.get('window').height * 0.1,
+            }}>
+            <LottieView
+              source={animation.loading}
+              autoPlay
+              style={{width: 100, height: 100}}
+            />
+          </View>
+        ) : (
+          <FlatList
+            data={restaurants}
+            keyExtractor={item => `${item.id}`}
+            renderItem={renderItem}
+            contentContainerStyle={{
+              paddingHorizontal: SIZES.padding * 2,
+              paddingBottom: 50,
+            }}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={() => {
+                  restaurants.length = 0;
+                }}
+              />
+            }
+          />
+        )}
+      </>
     );
   }
 

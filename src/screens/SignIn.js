@@ -17,8 +17,8 @@ import LottieView from 'lottie-react-native';
 const SignIn = ({navigation}) => {
 //redux hooks
 const dispatch = useDispatch();
-const {user,isLoading,isError} = useSelector(state => state.cart);
-console.log('isLoading',isLoading , 'isError',isError);
+const {user } = useSelector(state => state.cart);
+const [loader, setLoader] = React.useState(false);
 
 //state hooks
 
@@ -27,34 +27,12 @@ React.useEffect(() => {
     navigation.navigate('Home');
     toast.success(`Welcome You're Logged In`);
   }
-  // else if(isLoading==true){
-  //   <View style={{
-  //     flex: 1,
-  //     justifyContent: 'center',
-  //     alignItems: 'center',
-  //     // backgroundColor: '#fff',
-
-  //   }} >
-  //     <LottieView  source={animation.loading} autoPlay  style={{width:100, height:100}} />
-  //   </View>
-  // }
-  // else if(isError==true){
-  //   <View
-  //     style={{
-  //       flex: 1,
-  //       justifyContent: 'center',
-  //       alignItems: 'center',
-  //       // backgroundColor: '#fff',
-  //     }}
-  //   >
-  //     <LottieView  source={animation.error} autoPlay  style={{width:100, height:100}} />
-       
-  //   </View>
-  // }
+  
   else if(user?.success===false){
     toast.error(`Invalid Credentials`);
-  }
-  
+    setLoader(true);
+    setTimeout(() => {setLoader(false)}, 1000);
+  }  
 },[user]); 
 
   //react hooks
@@ -69,6 +47,20 @@ React.useEffect(() => {
 
   const isEnableSignIn = () => email != '' && password != '' && emailError == '';
 
+ if(loader){
+    return(
+    <View style={{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '100%',
+      height: '100%', 
+    }} >
+     <LottieView  source={animation.error} autoPlay  style={{width:300, height:300}} />       
+    </View>
+    )
+  }
+   
   return (
       <AuthLayout
         title="Let's Sign You In"

@@ -12,6 +12,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
         paddingVertical: SIZES.padding,
         backgroundColor: COLORS.white,
         paddingHorizontal: SIZES.padding,
+      
         
       }}>
       <ScrollView>
@@ -27,6 +28,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
               style={{
                 alignItems: 'center',
                 justifyContent: 'center',
+                
               }}>
               <Image
                 source={images.logo_02}
@@ -75,7 +77,7 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
           {/* Content / children */}
           {children}
         </KeyboardAwareScrollView>
-        <ToastContainer position="bottom-center" />
+        <ToastContainer position="top-center" />
       </ScrollView>
     </View>
   );

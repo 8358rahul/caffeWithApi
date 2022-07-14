@@ -11,7 +11,7 @@ const TextButton = ({ label, buttonContainerStyle, labelStyle, onPress,disabled 
         ...buttonContainerStyle,
       }}
       disabled={disabled}
-      onPress={onPress}
+      onPress={onPress ?()=>onPress() : () => {}}
     >
       <Text
         style={{

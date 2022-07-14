@@ -11,14 +11,12 @@ export const like = require("../assets/icons/like.png");
 export const list = require("../assets/icons/list.png");
 export const location = require("../assets/icons/location.png");
 export const master_card = require("../assets/icons/mastercard.png");
-export const nearby = require("../assets/icons/nearby.png");
 export const noodle = require("../assets/icons/noodle.png");
 export const pin = require("../assets/icons/pin.png");
 export const pizza = require("../assets/icons/pizza.png");
 export const red_pin = require("../assets/icons/red-pin.png");
 export const rice_bowl = require("../assets/icons/rice-bowl.png");
 export const salad = require("../assets/icons/salad.png");
-export const search = require("../assets/icons/search.png");
 export const basket = require("../assets/icons/shopping-basket.png");
 export const star = require("../assets/icons/star.png");
 export const sushi = require("../assets/icons/sushi.png");
@@ -29,7 +27,6 @@ export const logo = require("../assets/icons/fast-food.png");
 const coupon = require("../assets/icons/coupon.png")
 const cross = require("../assets/icons/cross.png")
 const cart = require("../assets/icons/cart.png")
-const menu = require("../assets/icons/menu.png")
 const filter = require("../assets/icons/filter.png")
 const down_arrow = require("../assets/icons/down_arrow.png")
 const eye = require("../assets/icons/eye.png")
@@ -48,7 +45,6 @@ const logout = require("../assets/icons/logout.png")
 const notification = require("../assets/icons/notification.png")
 const profile = require("../assets/icons/profile.png")
 const setting = require("../assets/icons/setting.png")
-const wallet = require("../assets/icons/wallet.png")
 const help = require("../assets/icons/help.png")
 const close = require("../assets/icons/close.png")
 const flash = require("../assets/icons/flash.png")
@@ -56,9 +52,16 @@ const more = require("../assets/icons/more.png")
 const rs = require("../assets/icons/rs.png")
 const  plus = require("../assets/icons/plus.png")
 const print = require("../assets/icons/print.png")
-
+const p = require("../assets/icons/p.png")
+const done = require("../assets/icons/done.png")
+const c = require("../assets/icons/c.png")
+const edit = require("../assets/icons/edit.png")
+const delete_ = require("../assets/icons/delete.png")
 
 export default {
+    delete_,
+    edit,
+    c,
     close,
     back,
     car,
@@ -73,7 +76,6 @@ export default {
     list,
     location,
     master_card,
-    nearby,
     noodle,
     pin,
     pizza,
@@ -90,8 +92,6 @@ export default {
     coupon,
     cross,
     cart,
-    menu,
-    search,
     filter,
     down_arrow,
     eye,
@@ -110,11 +110,12 @@ export default {
     notification,
     profile,
     setting,
-    wallet,
     help,
     flash,
     more,
     rs,
     plus,
     print,
+    p,
+    done,
 }
