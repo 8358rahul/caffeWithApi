@@ -42,7 +42,7 @@ const initialKeys = {
   "price":"price",
 }
 
-const Home = ({navigation}) => {
+const Home = (props) => {
   // redux hook
   const cart = useSelector(state => state.cart.cartItems);
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
@@ -54,7 +54,6 @@ const Home = ({navigation}) => {
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [restaurants, setRestaurants] = React.useState();
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
-  const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
 
  // API CALLING FUNCTIONS
@@ -73,12 +72,18 @@ const Home = ({navigation}) => {
   }
 
 
-
-
   React.useEffect(() => {
     getData();
     getCategoryData();
   }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getData();
+      getCategoryData();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
 
   React.useEffect(() => {
     dispatch(getTotals());
@@ -126,7 +131,7 @@ const Home = ({navigation}) => {
         onPress={() => {
           setSelectedCategory(item);
           setRestaurants(
-            item.category === 'All'
+            item.category == 'all'
               ? originalData
               : originalData.filter(a => a.category_id==item.id),
           );
@@ -194,13 +199,13 @@ const Home = ({navigation}) => {
                 <Image source={icons.rs} style={{width: 16, height: 16}} />
               )}
               mode="elevated"
-              onPress={() => navigation.navigate('ConfirmOrder')}>
+              onPress={() => props.navigation.navigate('ConfirmOrder')}>
               <Text style={{...FONTS.h3}}>{cartTotalAmount}</Text>
             </Button>
             <Button
               icon="cart"
               mode="elevated"
-              onPress={() => navigation.navigate('ConfirmOrder')}
+              onPress={() => props.navigation.navigate('ConfirmOrder')}
               >
               <Text style={{...FONTS.h3}}>{cartTotalQuantity}</Text>
             </Button>
@@ -214,6 +219,12 @@ const Home = ({navigation}) => {
           keyExtractor={item => `${item.id}`}
           renderItem={renderItem}
           contentContainerStyle={{paddingVertical: SIZES.padding * 2}}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() =>  getCategoryData()}
+            />
+          }
         />
       </View>
     );
@@ -428,10 +439,8 @@ const Home = ({navigation}) => {
             }}
             refreshControl={
               <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={() => {
-                  restaurants.length = 0;
-                }}
+                refreshing={false}
+                onRefresh={() => getData()}
               />
             }
           />

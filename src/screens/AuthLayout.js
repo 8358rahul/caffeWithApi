@@ -11,17 +11,15 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
         flex: 1,
         paddingVertical: SIZES.padding,
         backgroundColor: COLORS.white,
-        paddingHorizontal: SIZES.padding,
-      
+        paddingHorizontal: SIZES.padding,  
         
-      }}>
-      <ScrollView>
-        <KeyboardAwareScrollView
+      }}>   
+        {/* <KeyboardAwareScrollView
           keyboardDismissMode="on-drag"
           contentContainerStyle={{
             paddingHorizontal: SIZES.padding,
             flex: 1,
-          }}>
+          }}> */}
           {/* App Icon */}
           {!hideHeader ? (
             <View
@@ -76,9 +74,9 @@ const AuthLayout = ({title, subtitle, titleContainerStyle, children,hideHeader})
 
           {/* Content / children */}
           {children}
-        </KeyboardAwareScrollView>
+        {/* </KeyboardAwareScrollView> */}
         <ToastContainer position="top-center" />
-      </ScrollView>
+     
     </View>
   );
 };

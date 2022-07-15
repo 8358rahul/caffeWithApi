@@ -7,7 +7,7 @@ import {
 import Svg, {Path} from 'react-native-svg';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { Home ,PendingOrders,CompleteOrder} from '../screens';
+import { Home ,PendingOrders,CompleteOrder,User} from '../screens';
 import {COLORS, icons} from '../constants';
 
 const Tab = createBottomTabNavigator();
@@ -141,7 +141,7 @@ const TabNavigation = () => {
 
       <Tab.Screen
         name="User"
-        component={Home}
+        component={User}
         options={{
           tabBarIcon: ({focused}) => (
             <Image

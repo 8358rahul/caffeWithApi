@@ -11,19 +11,18 @@ export const apiService = async (
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + '',
       },
       body: payload
         ? JSON.stringify({
             ...payload,
-          })
+          })  
         : null,
     });
     let data = await response.json();
     return data;
    
   } catch (e) {
-    console.log('Error', e);
+    console.log(e,'something went wrong');
     return e;
   }
 };

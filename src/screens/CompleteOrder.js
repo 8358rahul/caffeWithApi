@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View, FlatList, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Image,
+  RefreshControl,
+} from 'react-native';
 import React from 'react';
 import AuthLayout from './AuthLayout';
 import {
@@ -10,30 +17,36 @@ import {
   FAMILY,
   animation,
 } from '../constants';
-import {useSelector, useDispatch} from 'react-redux';
 import {List, Button} from 'react-native-paper';
 import RNPrint from 'react-native-print';
 import {ApiEndpoints} from '../helper/httpConfig';
 import {apiService} from '../helper/http';
 import LottieView from 'lottie-react-native';
 
-const CompleteOrder = () => {
-  const dispatch = useDispatch();
-  const {compltedOrder} = useSelector(state => state.cart);
-  const [completeOrder , setCompleteOrder] = React.useState();
+const CompleteOrder = (props) => {
+  const [completeOrder, setCompleteOrder] = React.useState();
   const [isLoading, setIsLoading] = React.useState(true);
 
-
   // API CALLING FOR COMPLETED ORDERS
- const getData = async () => {
-    let response = await apiService('POST',ApiEndpoints.COMPLETED, {});
+  const getData = async () => {
+    let response = await apiService('POST', ApiEndpoints.COMPLETED, {});
+    if (response.success) {
     setCompleteOrder(response);
-    setIsLoading(false); 
-  }
+    setIsLoading(false);
+    }
+  };
 
   React.useEffect(() => {
     getData();
   }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getData();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
 
   const printRemotePDF = async () => {
     await RNPrint.print({
@@ -45,63 +58,70 @@ const CompleteOrder = () => {
   return (
     <AuthLayout
       title="Completed Orders"
-      subtitle={'Total Order - ' +completeOrder?.data?.length}>
-      {isLoading?(  <View
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: COLORS.white,
-
-            }}>
-            <LottieView
-              source={animation.loading}
-              autoPlay
-              style={{width: 100, height: 100}}
+      subtitle={'Total Order - ' + completeOrder?.data?.length}>
+      {isLoading ? (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: COLORS.white,
+          }}>
+          <LottieView
+            source={animation.loading}
+            autoPlay
+            style={{width: 100, height: 100}}
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={completeOrder?.data}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item, index}) => (
+            <View
+              style={{
+                flex: 1,
+                backgroundColor: COLORS.white,
+              }}>
+              <List.Item
+                title={'Table #' + item.table_number}
+                titleStyle={{fontFamily: FAMILY.bold}}
+                description={item.order_status == 1 ? 'Completed ☑' : null}
+                descriptionStyle={{fontFamily: FAMILY.light}}
+                left={() => (
+                  <Image
+                    source={icons.c}
+                    style={{width: 40, height: 40, marginTop: 5}}
+                  />
+                )}
+                right={() => (
+                  <View
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Button
+                      icon={icons.print}
+                      mode="elevated"
+                      onPress={() => printRemotePDF()}
+                      labelStyle={{fontFamily: FAMILY.bold}}
+                      uppercase={false}>
+                      Print
+                    </Button>
+                  </View>
+                )}
+                style={styles.listItem}
+              />
+            </View>
+          )}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() =>  getData()}
             />
-          </View>):(
-      <FlatList
-        data={completeOrder?.data}
-        renderItem={({item, index}) => (
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: COLORS.white,
-            }}>
-            <List.Item
-              title={'Table #' + item.table_number}
-              titleStyle={{fontFamily: FAMILY.bold}}
-              description={item.order_status==1?"Completed ☑":null}
-              descriptionStyle={{fontFamily: FAMILY.light}}
-              left={() => (
-                <Image
-                  source={icons.c}
-                  style={{width: 40, height: 40, marginTop: 5}}
-                />
-              )}
-              right={() => (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Button
-                    icon={icons.print}
-                    mode="elevated"
-                    onPress={() => printRemotePDF()}
-                    labelStyle={{fontFamily: FAMILY.bold}}
-                    uppercase={false} >
-                    
-                    Print
-                  </Button>
-                </View>
-              )}
-              style={styles.listItem}
-            />
-          </View>
-        )}
-      /> )
-}
+          }
+        />
+      )}
     </AuthLayout>
   );
 };
@@ -122,7 +142,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
-    
   },
   btn: {
     elevation: 5,

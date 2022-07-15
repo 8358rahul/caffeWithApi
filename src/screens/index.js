@@ -5,6 +5,7 @@ import Scan from './Scan'
 import OnBoarding from "./OnBoarding"
 import PendingOrders from './PendingOrders'
 import CompleteOrder from './CompleteOrder'
+import User from './User'
 
 
 // Authentication
@@ -24,4 +25,5 @@ export {
     ForgotPassword,
     PendingOrders,
     CompleteOrder,
+    User,
 }

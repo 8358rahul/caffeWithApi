@@ -1,6 +1,13 @@
-import {Image, StyleSheet, Text, View, FlatList} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import React from 'react';
-import {List, Button} from 'react-native-paper';
+import {List} from 'react-native-paper';
 import {
   icons,
   images,
@@ -11,70 +18,72 @@ import {
   animation,
   Dimensions,
 } from '../constants';
-import {useSelector, useDispatch} from 'react-redux';
 import AuthLayout from './AuthLayout';
-import {TextButton} from '../components';
 import LottieView from 'lottie-react-native';
 import {ApiEndpoints} from '../helper/httpConfig';
 import {apiService} from '../helper/http';
 import {CountdownCircleTimer} from 'react-native-countdown-circle-timer';
+import {Button} from '@rneui/themed';
 
-const PendingOrders = () => {
-  const dispatch = useDispatch();
-  // const {timer} = useSelector(state => state.cart);
+const PendingOrders = props => {
   const [pendingOrder, setPendingOrder] = React.useState(null);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isBtnLoading, setIsBtnLoading] = React.useState(false);
 
   // API CALLING FOR PENDING ORDERS
   const getData = async () => {
     let response = await apiService('POST', ApiEndpoints.PENDING, {});
-    console.log('response', response);
-    setPendingOrder(response);
-    setIsLoading(false);
+    if(response.success){
+      setPendingOrder(response);
+      setIsLoading(true);
+    }
   };
 
   React.useEffect(() => {
     getData();
   }, []);
 
+  React.useEffect(() => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
+      getData();
+    });
+    return unsubscribe;
+  }, [props.navigation]);
+
   const compltedOrder = async item => {
-    const response = await apiService('PUT', ApiEndpoints.UPDATE + item.id, {
+    setIsBtnLoading(item.id);
+    const response = await apiService('PUT', ApiEndpoints.ORDERS + item.id, {
       order_contains: item.order_contains,
       order_status: '2',
       table_number: item.table_number,
     });
-    console.log('order status------', response);
-    setIsLoading(false);
-    return response;
+    if (response.success) {
+      setIsBtnLoading();
+      getData();
+    } 
   };
- 
-  const UrgeWithPleasureComponent = ( duration = 0) => (
-  
+
+  const UrgeWithPleasureComponent = (duration = 0) => (
     <CountdownCircleTimer
       size={50}
       isPlaying
-      // initialRemainingTime={15}
       duration={pendingOrder !== null ? parseInt(duration) : 0}
       colors={['#004777', '#F7B801', '#A30000', '#A30000']}
       colorsTime={[7, 5, 3, 0]}
-      strokeWidth={7}
-      // onComplete={() => {
-      //   return { shouldRepeat: true, delay: 1} 
-      // }}      
-      >   
-      {({ remainingTime }) => <Text>{remainingTime}</Text>}
+      strokeWidth={7}>
+      {({remainingTime}) => <Text>{remainingTime}</Text>}
     </CountdownCircleTimer>
-  )
+  );
 
   return (
     <AuthLayout
       title={
-        pendingOrder?.data?.length == 0
+        pendingOrder?.length == 0
           ? 'You have no pending orders'
           : 'Pending Orders'
       }
       subtitle="You have pending orders">
-      {isLoading ? (
+      {!isLoading ? (
         <View
           style={{
             flex: 1,
@@ -97,22 +106,18 @@ const PendingOrders = () => {
                 flex: 1,
                 backgroundColor: COLORS.white,
                 width: '100%',
-              }}>             
+              }}>
               <List.Item
-             
                 title={'Table #' + item.table_number}
                 titleStyle={{fontFamily: FAMILY.bold}}
-                description={ "Pending " }
-                left={() => (
+                description={'Pending '}
+                left={() =>
                   // <Image
                   //   source={icons.p}
                   //   style={{width: 50, height: 50, marginTop: 5}}
                   // />
-         
-                  UrgeWithPleasureComponent(item.table_number) 
-                  
-                  
-                )}
+                  UrgeWithPleasureComponent(item.table_number)
+                }
                 right={() => (
                   <View
                     style={{
@@ -120,28 +125,37 @@ const PendingOrders = () => {
                       alignItems: 'center',
                     }}>
                     <Button
-                      mode="contained"
-                      icon={icons.done}
-                      color={COLORS.green}
-                      loading={isLoading}
-                      labelStyle={{
-                        color: COLORS.white,
-                        fontFamily: FAMILY.bold,
-                        fontSize: SIZES.h5,
+                      title="DONE"
+                      loading={ item.id==isBtnLoading? true:false}
+                      titleStyle={{fontWeight: 'bold', fontFamily: FAMILY.bold}}
+                      buttonStyle={{
+                        backgroundColor: COLORS.green,
+                        borderColor: 'transparent',
+                        borderWidth: 0,
+                        borderRadius: 5,
+                        marginVertical: 5,
                       }}
-                      style={styles.btn}
+                      containerStyle={{
+                        width: 80,
+                        height: 50,
+                        borderRadius: 5,
+                      }}
                       onPress={() => {
                         compltedOrder(item);
-                        getData();
-                      }}>
-                      Done
-                    </Button>
+                      }}
+                    />
                   </View>
                 )}
                 style={styles.listItem}
               />
             </View>
           )}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => getData()}
+            />
+          }
         />
       )}
     </AuthLayout>
@@ -164,14 +178,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 2,
     elevation: 5,
-  },
-  btn: {
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 5,
-    borderRadius: 5,
   },
 });

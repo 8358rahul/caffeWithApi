@@ -2,13 +2,10 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
-  ScrollView,
   Dimensions,
   Animated,
-  Linking,
   BackHandler,
-  Alert,
+  ScrollView
 } from 'react-native';
 import React from 'react';
 import {Table, Row, Rows} from 'react-native-table-component';
@@ -21,13 +18,12 @@ import {
   animation,
   FAMILY,
 } from '../constants';
-import {useSelector, useDispatch} from 'react-redux';
 import LottieView from 'lottie-react-native';
 import AuthLayout from './AuthLayout';
 import {Button} from 'react-native-paper';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import RNPrint from 'react-native-print';
-import {clearCart, clearInstructions} from '../redux/cartSlice';
+import {useSelector, useDispatch} from 'react-redux';
+import { clearCart, clearInstructions } from '../redux/cartSlice';
 
 const Billing = props => {
   const dispatch = useDispatch();
@@ -45,7 +41,6 @@ const Billing = props => {
   React.useEffect(() => {
     const data = props?.route?.params?.response;
     setTableData(data);
-
     setMainData(
       tableData?.order_contains?.map((item, index) => [
         item.product,
@@ -54,11 +49,8 @@ const Billing = props => {
         item.price,
         item.totalPrice,
       ]),
-    )   
-    
+    )       
   }, [tableData]);
-
- 
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener(
@@ -66,7 +58,6 @@ const Billing = props => {
       () => {
         props.navigation.navigate('Home');
         dispatch(clearCart());
-        dispatch(clearInstructions());
         return true;
       },
     );
@@ -83,7 +74,7 @@ const Billing = props => {
       }).start();
     }, 600);
    
-  }, [ ]);
+  }, []);
 
   const date = new Date(); // get current date
   const newDate = date.toGMTString().replace('GMT', '');
@@ -96,6 +87,8 @@ const Billing = props => {
   };
 
   return (
+     
+    <ScrollView style={styles.container}  >
     <AuthLayout
       title={`Table - ${tableData?.table_number}`}
       subtitle={`${newDate}`}
@@ -127,18 +120,6 @@ const Billing = props => {
           alignItems: 'center',
           zIndex: 10,
         }}>
-        {/* <Button
-          mode="elevated"
-          onPress={() => {
-            dispatch(clearCart());
-            dispatch(clearInstructions());
-            props.navigation.navigate('Home');
-          }}
-          labelStyle={{fontFamily: FAMILY.bold}}
-          uppercase={false}
-          icon={icons.back}>
-          goBack
-        </Button> */}
         <Button
           icon={icons.print}
           mode="elevated"
@@ -163,7 +144,6 @@ const Billing = props => {
           style={{marginVertical: SIZES.base}}
         />
       </Table>
-
       {tableData != null ? (
         <View
           style={{
@@ -187,12 +167,12 @@ const Billing = props => {
 
       <View
         style={{
-          flex: 1,
+          // flex: 1,
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: 100,
-          marginBottom: 10,
-          marginTop: 10,
+          marginTop: 20,
+
+    
         }}>
         <LottieView
           source={animation.cooking}
@@ -202,6 +182,8 @@ const Billing = props => {
         />
       </View>
     </AuthLayout>
+    </ScrollView>
+  
   );
 };
 
@@ -210,9 +192,13 @@ export default Billing;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    paddingTop: 10,
     backgroundColor: '#fff',
+    width: '100%',
+    height: '100%',
+    padding: SIZES.base,
+    paddingTop: SIZES.base * 2,
+    paddingBottom: SIZES.base * 2,
+    
   },
   head: {
     ...FONTS.h5,
