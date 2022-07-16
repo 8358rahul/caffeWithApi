@@ -7,10 +7,7 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
-  ScrollView,
-  Animated,
   Dimensions,
-  ActivityIndicator,
   RefreshControl,
 } from 'react-native';
 
@@ -23,54 +20,54 @@ import {
   FAMILY,
   animation,
 } from '../constants';
-import {categoryData} from '../constants/categoryData';
 import {addToCart, decreaseCart, getTotals} from '../redux/cartSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {toast, ToastContainer} from '@jamsch/react-native-toastify';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {Button} from 'react-native-paper';
+import {ToastContainer} from '@jamsch/react-native-toastify';
+import {Button, Divider, Checkbox} from 'react-native-paper';
 import ReadMore from 'react-native-read-more-text';
-import {TextButton} from '../components';
-import {restaurantData} from '../constants/restaurantData';
+import {TextButton, BottomModal} from '../components';
 import LottieView from 'lottie-react-native';
 import {ApiEndpoints} from '../helper/httpConfig';
 import {apiService} from '../helper/http';
+import BottomSheet from 'react-native-gesture-bottom-sheet';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const initialKeys = {
-  "product":"product",
-  "description":"description",
-  "price":"price",
-}
+  product: 'product',
+  description: 'description',
+  price: 'price',
+};
 
-const Home = (props) => {
+const Home = props => {
   // redux hook
   const cart = useSelector(state => state.cart.cartItems);
   const {cartTotalQuantity, cartTotalAmount} = useSelector(state => state.cart);
   const dispatch = useDispatch();
 
   // state hook
-  const [category , setCategory] = React.useState('');
+  const [checked, setChecked] = React.useState(false);
+  const bottomSheet = React.useRef();
+  const [category, setCategory] = React.useState('');
   const [originalData, setOriginalData] = React.useState();
   const [selectedCategory, setSelectedCategory] = React.useState(null);
   const [restaurants, setRestaurants] = React.useState();
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
- // API CALLING FUNCTIONS
-  const getCategoryData = async () => {    
-     let response = await apiService( 'POST', ApiEndpoints.CATEGORYS, {} );
-     let data = response.data;
-     setCategory(data); 
-  }
+  // API CALLING FUNCTIONS
+  const getCategoryData = async () => {
+    let response = await apiService('POST', ApiEndpoints.CATEGORYS, {});
+    let data = response.data;
+    setCategory(data);
+  };
 
   const getData = async () => {
-    let response = await apiService( 'POST', ApiEndpoints.PRODUCT_MENUS, {} );
+    let response = await apiService('POST', ApiEndpoints.PRODUCT_MENUS, {});
     let data = response.data;
     setOriginalData(data);
     setRestaurants(data);
-    setIsLoading(false);     
-  }
-
+    setIsLoading(false);
+  };
 
   React.useEffect(() => {
     getData();
@@ -133,10 +130,9 @@ const Home = (props) => {
           setRestaurants(
             item.category == 'all'
               ? originalData
-              : originalData.filter(a => a.category_id==item.id),
+              : originalData.filter(a => a.category_id == item.id),
           );
-        }}
-        >
+        }}>
         <View
           style={{
             width: 50,
@@ -205,8 +201,7 @@ const Home = (props) => {
             <Button
               icon="cart"
               mode="elevated"
-              onPress={() => props.navigation.navigate('ConfirmOrder')}
-              >
+              onPress={() => props.navigation.navigate('ConfirmOrder')}>
               <Text style={{...FONTS.h3}}>{cartTotalQuantity}</Text>
             </Button>
           </View>
@@ -222,7 +217,7 @@ const Home = (props) => {
           refreshControl={
             <RefreshControl
               refreshing={false}
-              onRefresh={() =>  getCategoryData()}
+              onRefresh={() => getCategoryData()}
             />
           }
         />
@@ -243,6 +238,161 @@ const Home = (props) => {
           borderTopRightRadius: SIZES.radius,
           borderBottomLeftRadius: SIZES.radius,
         }}>
+        <BottomSheet hasDraggableIcon ref={bottomSheet} height={300}>
+          <View style={{flex: 1, backgroundColor: COLORS.lightGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.padding,
+                top: -SIZES.padding * 1,
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h2,
+                  color: COLORS.primary,
+                  fontFamily: FAMILY.semiBold,
+                }}>
+                {item.product}
+              </Text>
+              <TouchableOpacity
+                onPress={() => bottomSheet.current.snapTo(0)}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 30,
+                  height: 30,
+                  borderRadius: 25,
+                  backgroundColor: COLORS.lightGray3,
+                  ...styles.shadow,
+                }}>
+                <Entypo name="cross" size={25} color={COLORS.black} />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                ...FONTS.body2,
+                marginHorizontal: SIZES.padding,
+                fontFamily: FAMILY.bold,
+                marginBottom: SIZES.padding,
+                marginTop: -10,
+                color: COLORS.black,
+              }}>
+              Customise as per your taste
+            </Text>
+            <Divider
+              style={{color: COLORS.black, height: 2, marginHorizontal: 10}}
+            />
+            <Text
+              style={{
+                ...FONTS.body3,
+                marginHorizontal: SIZES.padding,
+                fontFamily: FAMILY.bold,
+                marginTop: SIZES.padding,
+                color: COLORS.black,
+              }}>
+              Quantity
+            </Text>
+            <View
+              style={{
+                ...styles.shadow,
+                backgroundColor: COLORS.white,
+                borderRadius: SIZES.radius - 10,
+                marginHorizontal: SIZES.padding,
+                marginVertical: SIZES.padding,
+                padding: SIZES.padding,
+                paddingVertical: SIZES.padding-50 ,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: SIZES.padding,
+                  bottom: -SIZES.padding * 1,
+
+                }}>
+                <Text style={{
+                  ...FONTS.body3,
+                  marginHorizontal: SIZES.padding,
+                  fontFamily: FAMILY.bold,
+                  marginTop: SIZES.padding,
+                  color: COLORS.black,
+                  
+                }}>Half</Text>
+                <Checkbox.Item
+                  label={`Rs.${item.price}`} 
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                    
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: SIZES.padding,
+
+                }}>
+                <Text style={{
+                  ...FONTS.body3,
+                  marginHorizontal: SIZES.padding,
+                  fontFamily: FAMILY.bold,
+                  marginTop: SIZES.padding,
+                  color: COLORS.black,
+
+                }} >Full</Text>
+                <Checkbox.Item
+                  label={`Rs.${item.price}`} 
+                  status={checked ? 'checked' : 'unchecked'}
+                  onPress={() => {
+                    setChecked(!checked);
+                    
+                  }}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.padding,
+                top: -SIZES.padding * 1,
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h2,
+                  color: COLORS.gray,
+                  fontFamily: FAMILY.semiBold,
+                  top: SIZES.padding * 1,
+                  color: COLORS.black,
+                }}>
+                Rs.{item.price}
+              </Text>
+              <TextButton
+                label=" Add to Cart"
+                onPress={() => {
+                  bottomSheet.current.snapTo(0);
+                  dispatch(addToCart(item));
+                }}
+                buttonContainerStyle={{
+                  backgroundColor: COLORS.primary,
+                  borderRadius: SIZES.radius - 20,
+                  ...styles.shadow,
+                  height: 40,
+                  width: '50%',
+                }}
+                labelStyle={{
+                  color: COLORS.white,
+                  fontFamily: FAMILY.semiBold,
+                  fontSize: SIZES.font * 1.2,
+                  fontWeight: 'bold',
+                }}
+              />
+            </View>
+          </View>
+        </BottomSheet>
         {/* Image */}
         <View
           style={{
@@ -275,9 +425,9 @@ const Home = (props) => {
                 color: COLORS.black,
                 fontFamily: FAMILY.semiBold,
               }}>
-              {item[initialKeys["product"]].length > 30
-                ? item[initialKeys["product"]].substring(0, 30) + '...'
-                : item[initialKeys["product"]]}
+              {item[initialKeys['product']].length > 30
+                ? item[initialKeys['product']].substring(0, 30) + '...'
+                : item[initialKeys['product']]}
             </Text>
             <View style={{marginRight: '3%', marginTop: 5}}>
               <ReadMore
@@ -299,7 +449,7 @@ const Home = (props) => {
                     color: COLORS.darkGray,
                     fontFamily: FAMILY.light,
                   }}>
-                  {item[initialKeys["description"]]}
+                  {item[initialKeys['description']]}
                 </Text>
               </ReadMore>
             </View>
@@ -310,7 +460,7 @@ const Home = (props) => {
                   color: COLORS.black,
                   fontFamily: FAMILY.medium,
                 }}>
-                Rs.{item[initialKeys["price"]]}
+                Rs.{item[initialKeys['price']]}
               </Text>
               {/* <Text
                 style={{...FONTS.body4, marginLeft: 20, color: COLORS.black,fontFamily:FAMILY.medium}}>
@@ -390,7 +540,10 @@ const Home = (props) => {
         ) : (
           <TextButton
             label={'ADD'}
-            onPress={() => dispatch(addToCart(item))}
+            onPress={() => {
+              dispatch(addToCart(item));
+              bottomSheet.current.show();
+            }}
             buttonContainerStyle={{
               backgroundColor: '#ffe5c7',
               position: 'absolute',
@@ -414,7 +567,7 @@ const Home = (props) => {
 
     return (
       <>
-        <ToastContainer position= "top-center" />        
+        <ToastContainer position="top-center" />
         {isLoading ? (
           <View
             style={{
@@ -438,10 +591,7 @@ const Home = (props) => {
               paddingBottom: 50,
             }}
             refreshControl={
-              <RefreshControl
-                refreshing={false}
-                onRefresh={() => getData()}
-              />
+              <RefreshControl refreshing={false} onRefresh={() => getData()} />
             }
           />
         )}
@@ -451,7 +601,6 @@ const Home = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* {renderHeader()} */}
       {renderMainCategories()}
       {renderRestaurantList()}
     </SafeAreaView>

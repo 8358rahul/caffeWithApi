@@ -5,7 +5,7 @@ import {COLORS, FONTS, SIZES, icons, images,FAMILY} from '../constants';
 import {toast} from '@jamsch/react-native-toastify';
 import {TextButton, FormInput} from '../components';
 import {utils} from '../utils';
-import { Divider } from 'react-native-paper';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const Scan = ({navigation}) => {
   const [number, setNumber] = useState('');
@@ -28,6 +28,8 @@ const Scan = ({navigation}) => {
             height: 25,
             alignItems: "center",
             justifyContent: "center",
+            backgroundColor: COLORS.lightGray1,
+            borderRadius: 5,
           }}
           onPress={() => console.log('flash')}
         >
@@ -36,7 +38,7 @@ const Scan = ({navigation}) => {
             style={{
               height: 25,
               width: 25,
-              tintColor: COLORS.white,
+              tintColor: COLORS.black,
             }}
           />
         </TouchableOpacity>
@@ -58,14 +60,7 @@ const Scan = ({navigation}) => {
           }}
           onPress={() => navigation.navigate("Home")}
         >
-          <Image
-            source={icons.cross}
-            style={{
-              height: 20,
-              width: 20,
-              tintColor: COLORS.black,
-            }}
-          />
+        <Entypo name="cross" size={25} color={COLORS.black}/>
         </TouchableOpacity>
       </View>
     );

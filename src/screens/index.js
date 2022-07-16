@@ -10,8 +10,6 @@ import User from './User'
 
 // Authentication
 import SignIn from "./SignIn"
-import SignUp from "./SignUp"
-import Otp from "./Otp"
 import ForgotPassword from "./ForgotPassword"
 export {
     Home,
@@ -20,8 +18,6 @@ export {
     Scan,
     OnBoarding,
     SignIn,
-    SignUp,
-    Otp,
     ForgotPassword,
     PendingOrders,
     CompleteOrder,

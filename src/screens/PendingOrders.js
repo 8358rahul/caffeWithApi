@@ -64,21 +64,35 @@ const PendingOrders = props => {
   };
 
   const UrgeWithPleasureComponent = (duration = 0) => (
+
+ 
     <CountdownCircleTimer
       size={50}
       isPlaying
       duration={pendingOrder !== null ? parseInt(duration) : 0}
       colors={['#004777', '#F7B801', '#A30000', '#A30000']}
       colorsTime={[7, 5, 3, 0]}
-      strokeWidth={7}>
+      strokeWidth={7}  
+      onTimeElapsed={() => {
+        getData();
+
+      }}
+      onComplete={() => {
+        getData();
+      }}
+      onUpdate={() => {
+        getData();
+
+      }}
+      >
       {({remainingTime}) => <Text>{remainingTime}</Text>}
-    </CountdownCircleTimer>
+    </CountdownCircleTimer> 
   );
 
   return (
     <AuthLayout
       title={
-        pendingOrder?.length == 0
+        pendingOrder?.data?.length == 0
           ? 'You have no pending orders'
           : 'Pending Orders'
       }
@@ -111,13 +125,7 @@ const PendingOrders = props => {
                 title={'Table #' + item.table_number}
                 titleStyle={{fontFamily: FAMILY.bold}}
                 description={'Pending '}
-                left={() =>
-                  // <Image
-                  //   source={icons.p}
-                  //   style={{width: 50, height: 50, marginTop: 5}}
-                  // />
-                  UrgeWithPleasureComponent(item.table_number)
-                }
+                left={() => UrgeWithPleasureComponent(item.table_number) }
                 right={() => (
                   <View
                     style={{

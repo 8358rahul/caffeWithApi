@@ -33,8 +33,6 @@ const cartSlice = createSlice({
     isSuccess: false,
     isLoggedIn: false,
     user: {},
-    draftOrder:[],
-    compltedOrder:[],
     status_id:'1',
  
    
@@ -125,28 +123,7 @@ const cartSlice = createSlice({
         toast.error('Item is not in cart');
       }
       
-    },
-    clearInstructions: (state, action) => {
-      state.cartItems.forEach(item => {
-        item.instructions = '';
-      });
-     
-      // toast.success(`Instructions cleared`);
-    },
-
-    addPendingOrder: (state, action) => {
-      state.draftOrder.push(action.payload);
-      // toast.success(`${action.payload} added to draft order`);
-
     }, 
-    // markComplete: (state, action) => { 
-    //   state.draftOrder[action.payload].status_id = 1;
-    //   state.compltedOrder.push(state.draftOrder[action.payload]);
-    //   state.draftOrder.splice(action.payload, 1);       
-    //   toast.success(`Order marked as complete`);      
-    // },    
- 
-
   },
   extraReducers: {
     [userLogin.pending]: (state, action) => {

@@ -90,7 +90,7 @@ const CompleteOrder = (props) => {
                 descriptionStyle={{fontFamily: FAMILY.light}}
                 left={() => (
                   <Image
-                    source={icons.c}
+                    source={icons.right}
                     style={{width: 40, height: 40, marginTop: 5}}
                   />
                 )}
@@ -101,7 +101,7 @@ const CompleteOrder = (props) => {
                       alignItems: 'center',
                     }}>
                     <Button
-                      icon={icons.print}
+                      icon= 'printer'
                       mode="elevated"
                       onPress={() => printRemotePDF()}
                       labelStyle={{fontFamily: FAMILY.bold}}

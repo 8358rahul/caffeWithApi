@@ -2,13 +2,8 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
-  Dimensions,
   Image,
-  Pressable,
-  ScrollView,
   TouchableOpacity,
-  Alert,
   BackHandler,
   FlatList,
 } from 'react-native';
@@ -29,6 +24,7 @@ import {TextButton, FormInput} from '../components';
 import AuthLayout from './AuthLayout';
 import {ApiEndpoints} from '../helper/httpConfig';
 import {apiService} from '../helper/http';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const ConfirmOrder = props => {
   const dispatch = useDispatch();
@@ -292,22 +288,6 @@ const ConfirmOrder = props => {
                           }}>
                           *{item.instructions}
                         </Text>
-                        {/* <TouchableOpacity
-                          style={{
-                            marginLeft: SIZES.padding,
-                          }}
-                          onPress={() => {
-                            setVisible(true);
-                            setAbc(index);
-                          }}>
-                          <Image
-                            source={icons.edit}
-                            style={{
-                              height: 20,
-                              width: 20,
-                            }}
-                          />
-                        </TouchableOpacity> */}
                         <TouchableOpacity
                           style={{
                             justifyContent:'flex-end',
@@ -317,15 +297,7 @@ const ConfirmOrder = props => {
                           onPress={() => {
                             dispatch(removeInstruction(index));
                           }}>
-                          <Image
-                            source={icons.delete_}
-                            style={{
-                              height: 15,
-                              width: 15,
-                              tintColor: COLORS. red,
-                              right: SIZES.padding,
-                            }}
-                          />
+                           <AntDesign name="delete" size={20} color={COLORS.black} />
                         </TouchableOpacity>
                       </View>
                     ) : 
@@ -361,14 +333,7 @@ const ConfirmOrder = props => {
                                 );
                                 setInstructions('');
                               }}>
-                              <Image
-                                source={icons.plus}
-                                style={{
-                                  height: 20,
-                                  width: 20,
-                                  tintColor: COLORS.black,
-                                }}
-                              />
+                              <AntDesign name="plus" size={20} color={COLORS.black}/>
                             </TouchableOpacity>
                           </View>
                         }

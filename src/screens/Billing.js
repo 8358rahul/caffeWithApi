@@ -22,8 +22,8 @@ import LottieView from 'lottie-react-native';
 import AuthLayout from './AuthLayout';
 import {Button} from 'react-native-paper';
 import RNPrint from 'react-native-print';
-import {useSelector, useDispatch} from 'react-redux';
-import { clearCart, clearInstructions } from '../redux/cartSlice';
+import { clearCart } from '../redux/cartSlice';
+import { useDispatch } from 'react-redux';
 
 const Billing = props => {
   const dispatch = useDispatch();
@@ -121,7 +121,7 @@ const Billing = props => {
           zIndex: 10,
         }}>
         <Button
-          icon={icons.print}
+          icon= 'printer'
           mode="elevated"
           onPress={() => printRemotePDF()}
           labelStyle={{fontFamily: FAMILY.bold}}

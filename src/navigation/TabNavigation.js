@@ -7,6 +7,7 @@ import {
 import Svg, {Path} from 'react-native-svg';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { Home ,PendingOrders,CompleteOrder,User} from '../screens';
 import {COLORS, icons} from '../constants';
 
@@ -99,7 +100,7 @@ const TabNavigation = () => {
       }}
       tabBar={props => <CustomTabBar props={props} />}>
       <Tab.Screen
-        name="Home"
+        name="Menu"
         component={Home}
         options={{
           tabBarIcon: ({focused}) => (
@@ -144,15 +145,7 @@ const TabNavigation = () => {
         component={User}
         options={{
           tabBarIcon: ({focused}) => (
-            <Image
-              source={icons.user}
-              resizeMode="contain"
-              style={{
-                width: 25,
-                height: 25,
-                tintColor: focused ? COLORS.primary : COLORS.secondary,
-              }}
-            />
+            <FontAwesome name="user" size={25} color={focused ? COLORS.primary : COLORS.secondary}/>
           ),
           tabBarButton: props => <TabBarCustomButton {...props} />,
         }}
