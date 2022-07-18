@@ -4,7 +4,7 @@ export const apiService = async (
   method = null,
   path = null,
   payload,
-) => {
+) => {  
   try {
     const response = await fetch(`${baseUrl}${path}`, {
       method,

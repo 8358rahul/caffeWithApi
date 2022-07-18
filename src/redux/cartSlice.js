@@ -48,10 +48,10 @@ const cartSlice = createSlice({
       if (itemIndex >= 0) {
         state.cartItems[itemIndex].quantity += 1;
         state.cartItems[itemIndex].totalPrice =
-          state.cartItems[itemIndex].quantity *
-          state.cartItems[itemIndex].price;
+          state.cartItems[itemIndex].quantity * state.cartItems[itemIndex].price;     
         // toast.info(`${state.cartItems[itemIndex].product} Incresed`);
-      } else {
+      } 
+      else {
         const tempProduct = {
           ...action.payload,
           quantity: 1,
@@ -60,6 +60,7 @@ const cartSlice = createSlice({
         state.cartItems.push(tempProduct);
         // toast.success(`${action.payload.product} Added`);
       }
+      
     },
     removeFromCart: (state, action) => {
       const nextCartItems = state.cartItems.filter(

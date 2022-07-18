@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
-import { FONTS, COLORS, SIZES } from "../constants";
+import { FONTS, COLORS, SIZES,FAMILY } from "../constants";
+
 const TextButton = ({ label, buttonContainerStyle, labelStyle, onPress,disabled }) => {
   return (
     <TouchableOpacity
