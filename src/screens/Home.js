@@ -25,18 +25,17 @@ import {useDispatch, useSelector} from 'react-redux';
 import {ToastContainer} from '@jamsch/react-native-toastify';
 import {Button, Divider, RadioButton} from 'react-native-paper';
 import ReadMore from 'react-native-read-more-text';
-import {TextButton, BottomSheetComponent} from '../components';
+import {TextButton} from '../components';
 import LottieView from 'lottie-react-native';
 import {ApiEndpoints} from '../helper/httpConfig';
 import {apiService} from '../helper/http';
 import BottomSheet from 'react-native-gesture-bottom-sheet';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 const initialKeys = {
   product: 'product',
   description: 'description',
   price: 'price',
-  half_price: 'half_price',
-
 };
 
 const Home = props => {
@@ -47,8 +46,9 @@ const Home = props => {
   const dispatch = useDispatch();
 
   // state hook
-  const [key1 , setKey] = React.useState();
+  const [key1, setKey] = React.useState();
   const [checked, setChecked] = React.useState();
+  const [selectedItem, setSelectedItem] = React.useState(null);
   const bottomSheet = React.useRef();
   const [category, setCategory] = React.useState('');
   const [originalData, setOriginalData] = React.useState();
@@ -56,7 +56,6 @@ const Home = props => {
   const [restaurants, setRestaurants] = React.useState();
   const [cart_item_ids, setcart_item_ids] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  // console.log('restaurants', restaurants);
   // API CALLING FUNCTIONS
   const getCategoryData = async () => {
     let response = await apiService('POST', ApiEndpoints.CATEGORYS, {});
@@ -102,16 +101,6 @@ const Home = props => {
     } else {
       return false;
     }
-  }
-
-  function renderHeader() {
-    return (
-      <View style={{flexDirection: 'row', height: 50, marginVertical: 5}}>
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text style={{...FONTS.h3, color: COLORS.primary}}>Our Menu</Text>
-        </View>
-      </View>
-    );
   }
 
   function renderMainCategories() {
@@ -228,11 +217,8 @@ const Home = props => {
     );
   }
 
-  
-
   function renderRestaurantList() {
-    const renderItem = ({item, index}) => 
-    (
+    const renderItem = ({item, index}) => (
       <View
         style={{
           marginBottom: SIZES.padding * 1.5,
@@ -244,47 +230,6 @@ const Home = props => {
           borderTopRightRadius: SIZES.radius,
           borderBottomLeftRadius: SIZES.radius,
         }}>
-        <BottomSheet hasDraggableIcon ref={bottomSheet} height={280}>
-          <BottomSheetComponent
-            key1={key1}
-            item={item}
-            closeBottomSheet={()=>bottomSheet.current.close()}
-            title={'Customise as per your taste'}
-            subtitle={'Quantity'}
-            onPress={() =>{
-              dispatch(addToCart(item))
-              bottomSheet.current.close()
-            }}
-           
-            >
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Text>Half</Text>
-              <Text>{item?.half_price?.price}</Text>
-              <RadioButton
-                value={checked}
-                status={checked === item?.half_price?.price ? 'checked' : 'unchecked'}
-                onPress={() => setChecked(item?.half_price?.price )}
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
-              <Text>Full</Text>
-              <Text>{item.price}</Text>
-              <RadioButton
-                value={checked}
-                status={checked === item.price ? 'checked' : 'unchecked'}
-                onPress={() => setChecked(item?.price)}
-              />
-            </View>
-          </BottomSheetComponent>
-        </BottomSheet>
         {/* Image */}
         <View
           style={{
@@ -302,9 +247,6 @@ const Home = props => {
               borderBottomRightRadius: 25,
             }}
           />
-        <Text>
-          {item.id}
-          </Text>
           {/* Restaurant Info */}
 
           <View
@@ -354,11 +296,19 @@ const Home = props => {
                   color: COLORS.black,
                   fontFamily: FAMILY.medium,
                 }}>
-                Rs.{item[initialKeys['price']]}
+                Rs.
+                {item.half_price != null
+                  ? item.half_price.price
+                  : item[initialKeys['price']]}
               </Text>
               {/* <Text
-                style={{...FONTS.body4, marginLeft: 20, color: COLORS.black,fontFamily:FAMILY.medium}}>
-                Kcal-{item.calories}
+                style={{
+                  ...FONTS.body4,
+                  marginLeft: 20,
+                  color: COLORS.black,
+                  fontFamily: FAMILY.medium,
+                }}>
+                Id-{item.id}
               </Text> */}
             </View>
           </View>
@@ -417,13 +367,13 @@ const Home = props => {
 
             <TextButton
               label={'+'}
-              onPress={() => { 
+              onPress={() => {
                 setKey('increase');
-                if(item.half_price){
+                if (item.half_price) {
                   bottomSheet.current.show();
-                }else{
-                dispatch(addToCart(item));
-                }              
+                } else {
+                  dispatch(addToCart(item));
+                }
               }}
               buttonContainerStyle={{
                 width: cart.quantity < 100 ? '50%' : '35%',
@@ -443,10 +393,11 @@ const Home = props => {
             label={'ADD'}
             onPress={() => {
               setKey('add');
-              if(item.half_price){
+              if (item.half_price) {
+                setSelectedItem(item);
                 bottomSheet.current.show();
-              }else{
-              dispatch(addToCart(item));
+              } else {
+                dispatch(addToCart(item));
               }
             }}
             buttonContainerStyle={{
@@ -508,6 +459,267 @@ const Home = props => {
     <SafeAreaView style={styles.container}>
       {renderMainCategories()}
       {renderRestaurantList()}
+      <BottomSheet hasDraggableIcon ref={bottomSheet} height={280}>
+        {key1 === 'add' ? (
+          <View style={{flex: 1, backgroundColor: COLORS.lightGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.padding,
+                top: -SIZES.padding * 1,
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h2,
+                  color: COLORS.primary,
+                  fontFamily: FAMILY.semiBold,
+                }}>
+                {selectedItem?.product}
+              </Text>
+              <TouchableOpacity
+                onPress={() => bottomSheet.current.close()}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 30,
+                  height: 30,
+                  borderRadius: 25,
+                  backgroundColor: COLORS.lightGray3,
+                  ...styles.shadow,
+                }}>
+                <Entypo name="cross" size={25} color={COLORS.black} />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                ...FONTS.body2,
+                marginHorizontal: SIZES.padding,
+                fontFamily: FAMILY.bold,
+                marginBottom: SIZES.padding,
+                marginTop: -10,
+                color: COLORS.black,
+              }}>
+              Customise your order  
+            </Text>
+            <Divider
+              style={{color: COLORS.black, height: 2, marginHorizontal: 10}}
+            />
+            <Text
+              style={{
+                ...FONTS.body3,
+                marginHorizontal: SIZES.padding,
+                fontFamily: FAMILY.bold,
+                marginTop: SIZES.padding,
+                color: COLORS.black,
+              }}>
+              Quantity
+            </Text>
+            <View
+              style={{
+                ...styles.shadow,
+                backgroundColor: COLORS.white,
+                borderRadius: SIZES.radius - 10,
+                marginHorizontal: SIZES.padding,
+                marginVertical: SIZES.padding,
+                padding: SIZES.padding,
+                paddingVertical: SIZES.padding - 50,
+              }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginHorizontal: 16,
+                }}>
+                <Text style={styles.textStyle}>Half</Text>
+                <Text style={[styles.textStyle, {marginLeft: '60%'}]}>
+                  Rs.{selectedItem?.half_price?.price}
+                </Text>
+                <RadioButton
+                  value={checked}
+                  status={
+                    checked === selectedItem?.half_price?.price
+                      ? 'checked'
+                      : 'unchecked'
+                  }
+                  onPress={() => setChecked(selectedItem?.half_price?.price)}
+                />
+              </View>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginHorizontal: 16,
+                }}>
+                <Text style={styles.textStyle}>Full</Text>
+                <Text style={[styles.textStyle, {marginLeft: '60%'}]}>
+                  Rs.{selectedItem?.price}
+                </Text>
+                <RadioButton
+                  value={checked}
+                  status={
+                    checked === selectedItem?.price ? 'checked' : 'unchecked'
+                  }
+                  onPress={() => setChecked(selectedItem?.price)}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.padding,
+                top: -SIZES.padding * 1,
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h2,
+                  color: COLORS.gray,
+                  fontFamily: FAMILY.semiBold,
+                  top: SIZES.padding * 1,
+                  color: COLORS.black,
+                }}>
+                Rs. {selectedItem?.price}
+              </Text>
+              <TextButton
+                label=" Add to Cart"
+                onPress={() => {
+                  dispatch(addToCart(selectedItem));
+                  bottomSheet.current.close();
+                }}
+                buttonContainerStyle={{
+                  backgroundColor: COLORS.primary,
+                  borderRadius: SIZES.radius - 20,
+                  ...styles.shadow,
+                  height: 50,
+                  width: '50%',
+                }}
+                labelStyle={{
+                  color: COLORS.white,
+                  fontFamily: FAMILY.semiBold,
+                  fontSize: SIZES.font * 1.2,
+                  fontWeight: 'bold',
+                }}
+              />
+            </View>
+          </View>
+        ) : (
+          <View style={{flex: 1, backgroundColor: COLORS.lightGray}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.padding,
+                top: -SIZES.padding * 1,
+              }}>
+              <Text
+                style={{
+                  ...FONTS.h2,
+                  color: COLORS.primary,
+                  fontFamily: FAMILY.semiBold,
+                }}>
+                {selectedItem?.product}
+              </Text>
+              <TouchableOpacity
+                onPress={() => bottomSheet.current.close()}
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 30,
+                  height: 30,
+                  borderRadius: 25,
+                  backgroundColor: COLORS.lightGray3,
+                  ...styles.shadow,
+                }}>
+                <Entypo name="cross" size={25} color={COLORS.black} />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={{
+                ...FONTS.body2,
+                marginHorizontal: SIZES.padding,
+                fontFamily: FAMILY.bold,
+                marginBottom: SIZES.padding,
+                marginTop: -10,
+                color: COLORS.black,
+              }}>
+              Reapeat your order as per your taste
+            </Text>
+            <Divider
+              style={{color: COLORS.black, height: 2, marginHorizontal: 10}}
+            />
+            <Text
+              style={{
+                ...FONTS.body3,
+                marginHorizontal: SIZES.padding,
+                fontFamily: FAMILY.bold,
+                marginTop: SIZES.padding,
+                color: COLORS.black,
+              }}>
+              Quantity
+            </Text>
+            <View
+              style={{
+                ...styles.shadow,
+                backgroundColor: COLORS.white,
+                borderRadius: SIZES.radius - 10,
+                marginHorizontal: SIZES.padding,
+                marginVertical: SIZES.padding,
+                paddingVertical: SIZES.padding + 10,
+                padding: SIZES.padding,
+              }}>
+              <Text style={styles.textStyle}> selected order show</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                padding: SIZES.padding,
+                top: -SIZES.padding * 1,
+              }}>
+              <TextButton
+                label="I'll choose"
+                onPress={() => alert('I will choose')}
+                buttonContainerStyle={{
+                  backgroundColor: COLORS.primary,
+                  borderRadius: SIZES.radius - 20,
+                  ...styles.shadow,
+                  height: 50,
+                  width: '47%',
+                }}
+                labelStyle={{
+                  color: COLORS.white,
+                  fontFamily: FAMILY.semiBold,
+                  fontSize: SIZES.font * 1.2,
+                  fontWeight: 'bold',
+                }}
+              />
+              <TextButton
+                label="Reapeat"
+                onPress={() => {
+                  dispatch(addToCart(selectedItem));
+                  bottomSheet.current.close();
+                }}
+                buttonContainerStyle={{
+                  backgroundColor: COLORS.primary,
+                  borderRadius: SIZES.radius - 20,
+                  ...styles.shadow,
+                  height: 50,
+                  width: '47%',
+                }}
+                labelStyle={{
+                  color: COLORS.white,
+                  fontFamily: FAMILY.semiBold,
+                  fontSize: SIZES.font * 1.2,
+                  fontWeight: 'bold',
+                }}
+              />
+            </View>
+          </View>
+        )}
+      </BottomSheet>
     </SafeAreaView>
   );
 };
@@ -526,6 +738,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3,
     elevation: 1,
+  },
+  textStyle: {
+    ...FONTS.h4,
+    fontFamily: FAMILY.regular,
   },
 });
 

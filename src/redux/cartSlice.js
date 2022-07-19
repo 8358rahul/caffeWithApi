@@ -42,22 +42,30 @@ const cartSlice = createSlice({
       state.user = action.payload;
     },
     addToCart: (state, action) => {
+      console.log('action.payload', action?.payload?.half_price?.price,);
       const itemIndex = state.cartItems.findIndex(
         item => item.id === action.payload.id,
       );
-      if (itemIndex >= 0) {
+      if (itemIndex >= 0 ) {
         state.cartItems[itemIndex].quantity += 1;
-        state.cartItems[itemIndex].totalPrice =
-          state.cartItems[itemIndex].quantity * state.cartItems[itemIndex].price;     
+        state.cartItems[itemIndex].totalPrice = state.cartItems[itemIndex].quantity * state.cartItems[itemIndex].price;  
         // toast.info(`${state.cartItems[itemIndex].product} Incresed`);
       } 
-      else {
-        const tempProduct = {
-          ...action.payload,
-          quantity: 1,
-          totalPrice: action.payload.price,
-        };
-        state.cartItems.push(tempProduct);
+      else{
+        if(action?.payload?.half_price!=null){
+          state.cartItems.push({
+            ...action.payload,
+            quantity: 1,
+            totalPrice: action?.payload?.half_price?.price,
+          });
+        }
+        else{
+          state.cartItems.push({
+            ...action.payload,
+            quantity: 1,
+            totalPrice: action?.payload?.price,
+          });
+      }
         // toast.success(`${action.payload.product} Added`);
       }
       
