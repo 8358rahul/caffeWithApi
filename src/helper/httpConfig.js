@@ -1,4 +1,4 @@
-export const baseUrl = "http://192.168.1.24:8000/api/"
+export const baseUrl = "http://192.168.1.19:8000/api/"
 export const ApiEndpoints = {
     CATEGORYS: "categorys/",
     PRODUCT_MENUS: "product-menus/",

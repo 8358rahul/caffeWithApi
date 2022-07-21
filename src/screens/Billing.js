@@ -43,7 +43,7 @@ const Billing = props => {
     setTableData(data);
     setMainData(
       tableData?.order_contains?.map((item, index) => [
-        item.product,
+        item.name,
         item.instructions,
         item.quantity,
         item.price,

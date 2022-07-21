@@ -33,9 +33,10 @@ import BottomSheet from 'react-native-gesture-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 const initialKeys = {
-  product: 'product',
+  name: 'name',
   description: 'description',
   price: 'price',
+ 
 };
 
 const Home = props => {
@@ -47,8 +48,9 @@ const Home = props => {
 
   // state hook
   const [key1, setKey] = React.useState();
-  const [checked, setChecked] = React.useState();
+  const [checked, setChecked] = React.useState({});
   const [selectedItem, setSelectedItem] = React.useState(null);
+  console.log('selectedItem', selectedItem);
   const bottomSheet = React.useRef();
   const [category, setCategory] = React.useState('');
   const [originalData, setOriginalData] = React.useState();
@@ -120,7 +122,7 @@ const Home = props => {
         onPress={() => {
           setSelectedCategory(item);
           setRestaurants(
-            item.category == 'all'
+            item.name == 'All'
               ? originalData
               : originalData.filter(a => a.category_id == item.id),
           );
@@ -136,12 +138,11 @@ const Home = props => {
               selectedCategory?.id == item.id ? COLORS.white : COLORS.lightGray,
           }}>
           <Image
-            // source={item.icon}
-            source={{uri: 'https://picsum.photos/200/300'}}
+            source={{uri: item.image_url}}
             resizeMode="contain"
             style={{
-              width: 30,
-              height: 30,
+              width: 35,
+              height: 35,
             }}
           />
         </View>
@@ -154,7 +155,7 @@ const Home = props => {
             ...FONTS.body5,
             fontFamily: FAMILY.medium,
           }}>
-          {item.category}
+          {item.name}
         </Text>
       </TouchableOpacity>
     );
@@ -198,7 +199,6 @@ const Home = props => {
             </Button>
           </View>
         </View>
-
         <FlatList
           data={category}
           horizontal
@@ -238,8 +238,7 @@ const Home = props => {
             flexDirection: 'row',
           }}>
           <Image
-            source={{uri: 'https://picsum.photos/200/300'}}
-            // source={item.image}
+            source={{uri:item.image_url}}
             resizeMode="cover"
             style={{
               width: '40%',
@@ -261,9 +260,9 @@ const Home = props => {
                 color: COLORS.black,
                 fontFamily: FAMILY.semiBold,
               }}>
-              {item[initialKeys['product']].length > 30
-                ? item[initialKeys['product']].substring(0, 30) + '...'
-                : item[initialKeys['product']]}
+              {item[initialKeys['name']].length > 30
+                ? item[initialKeys['name']].substring(0, 30) + '...'
+                : item[initialKeys['name']]}
             </Text>
             <View style={{marginRight: '3%', marginTop: 5}}>
               <ReadMore
@@ -301,15 +300,6 @@ const Home = props => {
                   ? item.half_price.price
                   : item[initialKeys['price']]}
               </Text>
-              {/* <Text
-                style={{
-                  ...FONTS.body4,
-                  marginLeft: 20,
-                  color: COLORS.black,
-                  fontFamily: FAMILY.medium,
-                }}>
-                Id-{item.id}
-              </Text> */}
             </View>
           </View>
         </View>
@@ -359,7 +349,7 @@ const Home = props => {
                       fontWeight: 'bold',
                       fontFamily: FAMILY.bold,
                     }}>
-                    {i.quantity}
+                    {i.quantity==null?i.half_quantity:i.quantity}
                   </Text>
                 </View>
               ) : null,
@@ -372,7 +362,7 @@ const Home = props => {
                 if (item.half_price) {
                   bottomSheet.current.show();
                 } else {
-                  dispatch(addToCart(item));
+                  dispatch(addToCart({selectedItem: item, price: false}));
                 }
               }}
               buttonContainerStyle={{
@@ -397,11 +387,12 @@ const Home = props => {
                 setSelectedItem(item);
                 bottomSheet.current.show();
               } else {
-                dispatch(addToCart(item));
+                // dispatch(addToCart(item));
+                dispatch(addToCart({selectedItem: item, price: false}));
               }
             }}
             buttonContainerStyle={{
-              backgroundColor: '#ffe5c7',
+              backgroundColor: '#9dd194',
               position: 'absolute',
               alignSelf: 'auto',
               marginTop: 110,
@@ -475,7 +466,7 @@ const Home = props => {
                   color: COLORS.primary,
                   fontFamily: FAMILY.semiBold,
                 }}>
-                {selectedItem?.product}
+                {selectedItem?.name}
               </Text>
               <TouchableOpacity
                 onPress={() => bottomSheet.current.close()}
@@ -500,7 +491,7 @@ const Home = props => {
                 marginTop: -10,
                 color: COLORS.black,
               }}>
-              Customise your order  
+              Customise your order
             </Text>
             <Divider
               style={{color: COLORS.black, height: 2, marginHorizontal: 10}}
@@ -537,13 +528,18 @@ const Home = props => {
                   Rs.{selectedItem?.half_price?.price}
                 </Text>
                 <RadioButton
-                  value={checked}
+                  value={checked.price}
                   status={
-                    checked === selectedItem?.half_price?.price
+                    checked.price === selectedItem?.half_price?.price
                       ? 'checked'
                       : 'unchecked'
                   }
-                  onPress={() => setChecked(selectedItem?.half_price?.price)}
+                  onPress={() =>
+                    setChecked({
+                      isHalf: true,
+                      price: selectedItem?.half_price?.price,
+                    })
+                  }
                 />
               </View>
               <View
@@ -558,11 +554,16 @@ const Home = props => {
                   Rs.{selectedItem?.price}
                 </Text>
                 <RadioButton
-                  value={checked}
+                  value={checked.price}
                   status={
-                    checked === selectedItem?.price ? 'checked' : 'unchecked'
+                    checked.price === selectedItem?.price ? 'checked' : 'unchecked'
                   }
-                  onPress={() => setChecked(selectedItem?.price)}
+                  onPress={() =>
+                    setChecked({
+                      isHalf: false,
+                      price: selectedItem?.price,
+                    })
+                  }
                 />
               </View>
             </View>
@@ -586,7 +587,9 @@ const Home = props => {
               <TextButton
                 label=" Add to Cart"
                 onPress={() => {
-                  dispatch(addToCart(selectedItem));
+                  dispatch(
+                    addToCart({selectedItem: selectedItem, price: checked}),
+                  );
                   bottomSheet.current.close();
                 }}
                 buttonContainerStyle={{
@@ -620,7 +623,7 @@ const Home = props => {
                   color: COLORS.primary,
                   fontFamily: FAMILY.semiBold,
                 }}>
-                {selectedItem?.product}
+                {selectedItem?.name}
               </Text>
               <TouchableOpacity
                 onPress={() => bottomSheet.current.close()}
@@ -670,7 +673,9 @@ const Home = props => {
                 paddingVertical: SIZES.padding + 10,
                 padding: SIZES.padding,
               }}>
-              <Text style={styles.textStyle}> selected order show</Text>
+              <Text style={styles.textStyle}>
+                {checked.isHalf ? 'Half🔻' : 'Full🔻'}
+              </Text>
             </View>
             <View
               style={{
@@ -681,7 +686,9 @@ const Home = props => {
               }}>
               <TextButton
                 label="I'll choose"
-                onPress={() => alert('I will choose')}
+                onPress={() => {
+                  setKey('add');
+                }}
                 buttonContainerStyle={{
                   backgroundColor: COLORS.primary,
                   borderRadius: SIZES.radius - 20,
@@ -699,7 +706,11 @@ const Home = props => {
               <TextButton
                 label="Reapeat"
                 onPress={() => {
-                  dispatch(addToCart(selectedItem));
+                  // dispatch(addToCart(selectedItem));
+                  dispatch(
+                    addToCart({selectedItem: selectedItem, price: false}),
+                  );
+
                   bottomSheet.current.close();
                 }}
                 buttonContainerStyle={{

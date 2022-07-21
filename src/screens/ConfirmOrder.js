@@ -17,9 +17,8 @@ import {
   clearCart,
   addInstruction,
   removeInstruction,
-  clearInstructions,
 } from '../redux/cartSlice';
-import {Modal, Portal, Button, Provider} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 import {TextButton, FormInput} from '../components';
 import AuthLayout from './AuthLayout';
 import {ApiEndpoints} from '../helper/httpConfig';
@@ -30,10 +29,9 @@ const ConfirmOrder = props => {
   const dispatch = useDispatch();
   const {status_id, cartTotalQuantity, cartTotalAmount, tax, cartItems} =
     useSelector(state => state.cart);
+    console.log('cartItems', cartItems);
   const [instructions, setInstructions] = React.useState('');
-  const [abc, setAbc] = React.useState();
   //Modal open
-  const [visible, setVisible] = React.useState(false);
   let tempCartItems = cartItems;
   let abcd = tempCartItems.map((item, index) => {
     let tempObj = {
@@ -45,13 +43,12 @@ const ConfirmOrder = props => {
     delete tempObj.id;
     delete tempObj.price;
     delete tempObj.description;
-    delete tempObj.totalPrice;
+    delete tempObj.actualPrice;
     delete tempObj.subcategory_id;
     delete tempObj.updated_at;
     delete tempObj.created_at;
     return tempObj;
   });
-
 
   let reducerdata1 = {
     table_number: 25,
@@ -62,7 +59,7 @@ const ConfirmOrder = props => {
     taxes: tax,
     order_contains: cartItems,
   };
- 
+
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -75,17 +72,17 @@ const ConfirmOrder = props => {
   }, []);
 
   const addDraftOrder = async () => {
-    let response = await apiService('POST', ApiEndpoints.ORDERS,  {      
-      "table_number" :55,
-      "order_status" :status_id,
-      "taxes": tax,
-      "order_contains":abcd,
+    let response = await apiService('POST', ApiEndpoints.ORDERS, {
+      table_number: 55,
+      order_status: status_id,
+      taxes: tax,
+      order_contains: abcd,
     });
     console.log('response-------', response);
     if (response.success) {
       dispatch(clearCart());
     }
-    props.navigation.navigate('Billing', {response: reducerdata1});    
+    props.navigation.navigate('Billing', {response: reducerdata1});
   };
 
   return (
@@ -100,67 +97,7 @@ const ConfirmOrder = props => {
           ? 'No Items In Cart'
           : 'Total - Rs. ' + cartTotalAmount + ', Items - ' + cartTotalQuantity
       }>
-      {/* <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-          contentContainerStyle={{
-            backgroundColor: COLORS.white,
-            borderRadius: 10,
-            padding: 20,
-            margin: 20,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <View
-            style={{
-              width: '100%',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <FormInput
-              label="Instructions"
-              placeholder="Write a cooking instructions"
-              containerStyle={{
-                width: '100%',
-              }}
-              inputStyle={{
-                fontFamily: FAMILY.medium,
-                fontSize: FONTS.medium,
-                color: COLORS.black,
-              }}
-              value={instructions}
-              onChange={text => {
-                setInstructions(text);
-              }}
-            />
-            <TextButton
-              instructions={instructions}
-              label="ADD"
-              buttonContainerStyle={{
-                backgroundColor: COLORS.primary,
-                width: '100%',
-                height: 45,
-                borderRadius: 10,
-                borderWidth: 1,
-                borderColor: COLORS.red,
-                fontFamily: FAMILY.bold,
-                marginTop: 10,
-              }}
-              labelStyle={{
-                fontWeight: 'bold',
-                paddingHorizontal: 10,
-                ...FONTS.h4,
-                color: COLORS.white,
-              }}
-              onPress={() => {
-                dispatch(addInstruction({instructions: instructions, id: abc}));
-                setInstructions('');
-                setVisible(false);
-              }}></TextButton>
-          </View>
-        </Modal>
-      </Portal> */}
+    
 
       {cartItems.length != 0 ? (
         <View
@@ -169,75 +106,67 @@ const ConfirmOrder = props => {
             width: '100%',
             backgroundColor: COLORS.white,
           }}>
-          <View style={styles.innerView}>
+          <View style={{...styles.innerView, paddingRight:SIZES.padding+15,}}>
             <Text style={styles.hearder}>Product</Text>
             <Text style={styles.hearder}>Price</Text>
             <Text style={styles.hearder}>Quentity</Text>
-            {/* <Text style={styles.hearder}>Total</Text> */}
           </View>
           <View style={{flex: 1}}>
             <FlatList
               data={cartItems}
               showsVerticalScrollIndicator={false}
               renderItem={({item, index}) => {
-                return(
+                return (
                   <View key={index}>
                     <View style={styles.innerView}>
                       <View
                         style={{
-                          width: '30%',
-                          marginLeft: 20,
+                          marginLeft: SIZES.padding+10,
                         }}>
                         <Text
                           style={{
                             marginLeft: SIZES.padding - 30,
                             flexShrink: 1,
                             fontFamily: FAMILY.regular,
+                            fontSize:SIZES.h5,
                           }}>
-                          {item.product}
+                          {item.name}
                         </Text>
                       </View>
-  
-                      {/* <View
-                    style={{
-                      width: '30%',
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                    }}> */}
+                      <View  style={{
+                        marginLeft: SIZES.padding+10,
+                      }} >
                       <Text
                         style={{
                           fontFamily: FAMILY.regular,
-                          // marginRight: 10,
+                          bottom: 5,
+                          fontSize:SIZES.h5,
                         }}>
-                        {item.price}
+                        H-{item?.half_price !== null ? item?.half_price?.price : 'not selected'}
                       </Text>
-  
-                      {/* <Text
-                  style={{
-                    width: '20%',
-                    marginLeft: -50,
-                    paddingLeft: 15,
-                    fontFamily: FAMILY.regular,
-                  }}>
-                  {item.totalPrice}
-                </Text> */}
-  
-                      {/* <TouchableOpacity
-                      onPress={() => {
-                        setVisible(true);
-                        setAbc(index);
-                      }}>
-                      <Image
-                        source={icons.plus}
+
+                      <Text
                         style={{
-                          height: 20,
-                          width: 20,
-                          tintColor: COLORS.black,
-                        }}
-                      />
-                    </TouchableOpacity> */}
-                      {/* </View> */}
+                          fontFamily: FAMILY.regular,
+                          top: 5,
+                          fontSize:SIZES.h5,
+                        }}>
+                        F-{item?.price !== null ? item?.price : 'z' }
+                      </Text>
+                      </View>
+
+                     
                       <View style={styles.btnStyle}>
+                        <View 
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-evenly',
+                            alignItems: 'center',
+                            top: 5,
+
+                          }}
+                           
+                        >
                         <Button
                           onPress={() =>
                             item.quantity == 1
@@ -253,9 +182,9 @@ const ConfirmOrder = props => {
                             ...FONTS.h4,
                             marginLeft: 5,
                             fontFamily: FAMILY.regular,
-                            marginTop: 7,
+                            marginTop: 10,
                           }}>
-                          {item.quantity}
+                          {item.quantity} 
                         </Text>
                         <Button
                           onPress={() => dispatch(addToCart(item))}
@@ -263,11 +192,47 @@ const ConfirmOrder = props => {
                           icon={'plus'}
                           style={{marginHorizontal: 10, marginLeft: 30}}
                         />
+                        </View>
+                        <View 
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'space-evenly',
+                              alignItems: 'center',
+                              bottom: 5,
+
+                            }}
+                        >
+                        <Button
+                          onPress={() =>
+                            item.quantity == 1
+                              ? dispatch(removeFromCart(item))
+                              : dispatch(decreaseCart(item))
+                          }
+                          mode="elevated"
+                          icon={item.quantity == 1 ? 'delete' : 'minus'}
+                          style={{marginHorizontal: 10, marginLeft: 30}}
+                        />
+                        <Text
+                          style={{
+                            ...FONTS.h4,
+                            marginLeft: 5,
+                            fontFamily: FAMILY.regular,
+                            marginTop: 10,
+                          }}>
+                          {item.quantity} 
+                        </Text>
+                        <Button
+                          onPress={() => dispatch(addToCart(item))}
+                          mode="elevated"
+                          icon={'plus'}
+                          style={{marginHorizontal: 10, marginLeft: 30}}
+                        />
+                        </View>
                       </View>
                     </View>
-  
+
                     {/* //input filed for instructions */}
-  
+
                     {item.instructions ? (
                       <View
                         style={{
@@ -277,7 +242,6 @@ const ConfirmOrder = props => {
                           justifyContent: 'flex-start',
                           alignItems: 'center',
                           paddingHorizontal: SIZES.padding,
-
                         }}>
                         <Text
                           style={{
@@ -290,26 +254,26 @@ const ConfirmOrder = props => {
                         </Text>
                         <TouchableOpacity
                           style={{
-                            justifyContent:'flex-end',
+                            justifyContent: 'flex-end',
                             marginLeft: SIZES.padding,
-                           
                           }}
                           onPress={() => {
                             dispatch(removeInstruction(index));
                           }}>
-                           <AntDesign name="delete" size={20} color={COLORS.black} />
+                          <AntDesign
+                            name="delete"
+                            size={20}
+                            color={COLORS.black}
+                          />
                         </TouchableOpacity>
                       </View>
-                    ) : 
-                    
-                    (
+                    ) : (
                       <FormInput
                         placeholder="Write a cooking instructions"
                         containerStyle={{
                           marginTop: SIZES.padding - 30,
                           borderRadius: 10,
                           paddingHorizontal: SIZES.padding,
-
                         }}
                         value={instructions}
                         onChange={text => {
@@ -333,14 +297,18 @@ const ConfirmOrder = props => {
                                 );
                                 setInstructions('');
                               }}>
-                              <AntDesign name="plus" size={20} color={COLORS.black}/>
+                              <AntDesign
+                                name="plus"
+                                size={20}
+                                color={COLORS.black}
+                              />
                             </TouchableOpacity>
                           </View>
                         }
                       />
                     )}
                   </View>
-                )
+                );
               }}
             />
           </View>
@@ -364,7 +332,6 @@ const ConfirmOrder = props => {
               }}
               onPress={() => {
                 dispatch(clearCart());
-                dispatch(clearInstructions());
               }}></TextButton>
             <TextButton
               label="Confirm Order"
@@ -393,7 +360,6 @@ const ConfirmOrder = props => {
             mode="elevated"
             onPress={() => {
               props.navigation.navigate('Home');
-              dispatch(clearInstructions());
             }}
             labelStyle={{fontFamily: FAMILY.bold}}
             uppercase={false}
@@ -428,15 +394,15 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   btnStyle: {
-    flexDirection: 'row',
     width: '30%',
-    height: 40,
+    height: 50,
     borderRadius: 10,
-    justifyContent: 'space-evenly',
     alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 10,   
+    paddingVertical: 6,   
     marginTop: 5,
     marginBottom: 5,
-    marginLeft: 30,
     backgroundColor: COLORS.white,
     shadowColor: '#000',
     shadowOffset: {

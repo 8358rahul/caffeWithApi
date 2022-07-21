@@ -2,7 +2,7 @@ import {baseUrl} from './httpConfig';
 
 export const apiService = async (method = null, path = null, payload) => {
   try {
-    const response = await fetch(`${baseUrl}${path}`, {
+    const response = await fetch(`${baseUrl}${path}`,{
       method,
       headers: {
         Accept: 'application/json',

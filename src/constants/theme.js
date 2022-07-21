@@ -12,7 +12,7 @@ export const heightPercentToDp = heightPercent => {
 
 export const COLORS = {
     // base colors
-    primary: "#FC6D3F", // orange
+    primary: "#27AE60",// orange
     secondary: "#CDCDD2",   // gray
 
     // colors
@@ -26,7 +26,7 @@ export const COLORS = {
     transparent: "transparent",
     darkgray: '#898C95',
     blue: '#4A90E2',
-    primary: "#FF6C44", //orange
+    primary: "#27AE60", //orange
     transparentPrimary: 'rgba(227, 120, 75, 0.4)',
     orange: "#FFA133",
     lightOrange: "#FFA133",
