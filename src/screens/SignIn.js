@@ -21,14 +21,13 @@ const {user } = useSelector(state => state.cart);
 const [loader, setLoader] = React.useState(false);
 
 //state hooks
-
 React.useEffect(() => {
   if(user?.success){
     navigation.navigate('Home');
     toast.success(`Welcome You're Logged In`);
   }
   
-  else if(user?.success===false){
+  else if(user?.success==false){
     toast.error(`Invalid Credentials`);
     setLoader(true);
     setTimeout(() => {setLoader(false)}, 1000);

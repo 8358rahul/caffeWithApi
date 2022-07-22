@@ -17,6 +17,7 @@ import {
   clearCart,
   addInstruction,
   removeInstruction,
+  
 } from '../redux/cartSlice';
 import {Button} from 'react-native-paper';
 import {TextButton, FormInput} from '../components';
@@ -29,7 +30,6 @@ const ConfirmOrder = props => {
   const dispatch = useDispatch();
   const {status_id, cartTotalQuantity, cartTotalAmount, tax, cartItems} =
     useSelector(state => state.cart);
-    console.log('cartItems', cartItems);
   const [instructions, setInstructions] = React.useState('');
   //Modal open
   let tempCartItems = cartItems;
@@ -97,8 +97,6 @@ const ConfirmOrder = props => {
           ? 'No Items In Cart'
           : 'Total - Rs. ' + cartTotalAmount + ', Items - ' + cartTotalQuantity
       }>
-    
-
       {cartItems.length != 0 ? (
         <View
           style={{
@@ -106,7 +104,7 @@ const ConfirmOrder = props => {
             width: '100%',
             backgroundColor: COLORS.white,
           }}>
-          <View style={{...styles.innerView, paddingRight:SIZES.padding+15,}}>
+          <View style={ styles.innerView }>
             <Text style={styles.hearder}>Product</Text>
             <Text style={styles.hearder}>Price</Text>
             <Text style={styles.hearder}>Quentity</Text>
@@ -118,118 +116,125 @@ const ConfirmOrder = props => {
               renderItem={({item, index}) => {
                 return (
                   <View key={index}>
-                    <View style={styles.innerView}>
-                      <View
-                        style={{
-                          marginLeft: SIZES.padding+10,
-                        }}>
-                        <Text
+                    {item.quantity > item.half_price.quantity?(
+                      <View style={ styles.innerView }>
+                        <View
                           style={{
-                            marginLeft: SIZES.padding - 30,
-                            flexShrink: 1,
-                            fontFamily: FAMILY.regular,
-                            fontSize:SIZES.h5,
+                            marginLeft: SIZES.padding + 10,
+                            width: '30%',
                           }}>
-                          {item.name}
-                        </Text>
-                      </View>
-                      <View  style={{
-                        marginLeft: SIZES.padding+10,
-                      }} >
-                      <Text
-                        style={{
-                          fontFamily: FAMILY.regular,
-                          bottom: 5,
-                          fontSize:SIZES.h5,
-                        }}>
-                        H-{item?.half_price !== null ? item?.half_price?.price : 'not selected'}
-                      </Text>
-
-                      <Text
-                        style={{
-                          fontFamily: FAMILY.regular,
-                          top: 5,
-                          fontSize:SIZES.h5,
-                        }}>
-                        F-{item?.price !== null ? item?.price : 'z' }
-                      </Text>
-                      </View>
-
-                     
-                      <View style={styles.btnStyle}>
-                        <View 
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-evenly',
-                            alignItems: 'center',
-                            top: 5,
-
-                          }}
-                           
-                        >
-                        <Button
-                          onPress={() =>
-                            item.quantity == 1
-                              ? dispatch(removeFromCart(item))
-                              : dispatch(decreaseCart(item))
-                          }
-                          mode="elevated"
-                          icon={item.quantity == 1 ? 'delete' : 'minus'}
-                          style={{marginHorizontal: 10, marginLeft: 30}}
-                        />
-                        <Text
-                          style={{
-                            ...FONTS.h4,
-                            marginLeft: 5,
-                            fontFamily: FAMILY.regular,
-                            marginTop: 10,
-                          }}>
-                          {item.quantity} 
-                        </Text>
-                        <Button
-                          onPress={() => dispatch(addToCart(item))}
-                          mode="elevated"
-                          icon={'plus'}
-                          style={{marginHorizontal: 10, marginLeft: 30}}
-                        />
-                        </View>
-                        <View 
+                          <Text
                             style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-evenly',
-                              alignItems: 'center',
-                              bottom: 5,
-
-                            }}
-                        >
-                        <Button
-                          onPress={() =>
-                            item.quantity == 1
-                              ? dispatch(removeFromCart(item))
-                              : dispatch(decreaseCart(item))
-                          }
-                          mode="elevated"
-                          icon={item.quantity == 1 ? 'delete' : 'minus'}
-                          style={{marginHorizontal: 10, marginLeft: 30}}
-                        />
+                              marginLeft: SIZES.padding - 30,
+                              flexShrink: 1,
+                              fontFamily: FAMILY.regular,
+                              fontSize: SIZES.h5,
+                            }}>
+                            {item.name}
+                          </Text>
+                        </View>
                         <Text
                           style={{
-                            ...FONTS.h4,
-                            marginLeft: 5,
                             fontFamily: FAMILY.regular,
-                            marginTop: 10,
+                            top: 5,
+                            fontSize: SIZES.h5,
+                            width: '30%',
+                            left: 25,
                           }}>
-                          {item.quantity} 
+                          {(item.quantity - item.half_price.quantity) * item.price}
                         </Text>
-                        <Button
-                          onPress={() => dispatch(addToCart(item))}
-                          mode="elevated"
-                          icon={'plus'}
-                          style={{marginHorizontal: 10, marginLeft: 30}}
-                        />
+                        <View style={styles.btnStyle}>
+                          <Button
+                            onPress={() =>
+                              item.quantity == 1
+                                ? dispatch(removeFromCart(item))
+                                : dispatch(decreaseCart(item))
+                            }
+                            mode="elevated"
+                            icon={item.quantity-item.half_price.quantity == 1 ? 'delete' : 'minus'}
+                            style={{marginHorizontal: 10, marginLeft: 30}}
+                          />
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              marginLeft: 5,
+                              fontFamily: FAMILY.regular,
+                              marginTop: 10,
+                            }}>
+                            {item.quantity - item.half_price.quantity}
+                          </Text>
+                          <Button
+                            onPress={() =>{
+                              dispatch(addToCart({selectedItem: item, price: item.price}))
+                            }}
+                            mode="elevated"
+                            icon={'plus'}
+                            style={{marginHorizontal: 10, marginLeft: 30}}
+                          />
                         </View>
                       </View>
-                    </View>
+                     ):null}
+                    {item.half_price.quantity?(
+                      <View style={ styles.innerView }>
+                        <View
+                          style={{
+                            marginLeft: SIZES.padding + 10,
+                            width: '30%',
+
+                          }}>
+                          <Text
+                            style={{
+                              marginLeft: SIZES.padding - 30,
+                              flexShrink: 1,
+                              fontFamily: FAMILY.regular,
+                              fontSize: SIZES.h5,
+                            }}>
+                            {item.half_price.name}
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontFamily: FAMILY.regular,
+                            top: 5,
+                            fontSize: SIZES.h5,
+                            width: '30%',
+                            left: 25,
+                          }}>
+                          {item.half_price.quantity*item.half_price.price}
+                        </Text>
+                        <View style={styles.btnStyle}>
+                          <Button
+                            onPress={() =>
+                              item.quantity == 1
+                                ? dispatch(removeFromCart(item))
+                                : dispatch(decreaseCart(item))
+                            }
+                            mode="elevated"
+                            icon={item.half_price.quantity == 1 ? 'delete' : 'minus'}
+                            style={{marginHorizontal: 10, marginLeft: 30}}
+                          />
+                          <Text
+                            style={{
+                              ...FONTS.h4,
+                              marginLeft: 5,
+                              fontFamily: FAMILY.regular,
+                              marginTop: 10,
+                            }}>
+                            {item.half_price.quantity}
+                          </Text>
+                          <Button
+                            onPress={() =>{
+                               dispatch(addToCart({selectedItem: item, price: item.half_price.price}))
+                            }
+                               
+                            }
+                            mode="elevated"
+                            icon={'plus'}
+                            style={{marginHorizontal: 10, marginLeft: 30}}
+                          />
+                        </View>
+                      </View>
+                    ):null}
 
                     {/* //input filed for instructions */}
 
@@ -395,12 +400,12 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     width: '30%',
-    height: 50,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 10,   
-    paddingVertical: 6,   
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    marginHorizontal: 10,
+    paddingVertical: 6,
     marginTop: 5,
     marginBottom: 5,
     backgroundColor: COLORS.white,

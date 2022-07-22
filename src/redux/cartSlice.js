@@ -13,6 +13,7 @@ export const userLogin = createAsyncThunk(
         body: JSON.stringify({email, password}),
       });
       const data = await response.json();
+      console.log('data', data);
       return data;
     } catch (error) {
       console.log(error);
@@ -40,16 +41,21 @@ const cartSlice = createSlice({
       state.user = action.payload;
     },
     addToCart: (state, action) => {
+      
       const itemIndex = state.cartItems.findIndex(
         item => item.id === action.payload.selectedItem.id,
       );
       if (itemIndex >= 0) {
         state.cartItems[itemIndex].quantity += 1;
+        if (action?.payload?.price.isHalf) {
+          state.cartItems[itemIndex].half_price.quantity += 1;
+        }
         if (action.payload?.selectedItem?.half_price) {
           if (action?.payload?.price) {
-            state.cartItems[itemIndex].totalPrice +=action?.payload?.price.price;
+            state.cartItems[itemIndex].totalPrice +=
+              action?.payload?.price.price;
           } else {
-            state.cartItems[itemIndex].totalPrice += totalPrice;
+            state.cartItems[itemIndex].totalPrice += action?.payload?.price.price;
           }
         } else {
           state.cartItems[itemIndex].totalPrice =
@@ -57,14 +63,17 @@ const cartSlice = createSlice({
             state.cartItems[itemIndex].price;
         }
       } else {
-        if (action?.payload?.price) {
-          if (action.payload.price.isHalf) {
-            state.cartItems.push({
-              ...action.payload.selectedItem,
-              quantity: 1,
-              totalPrice: action?.payload?.price.price,
-            });
+        if (action?.payload?.price){
+          let temp = {...action.payload.selectedItem};
+          temp.quantity = 1;
+          temp.totalPrice = action.payload.price.price;
+          if (action?.payload?.price.isHalf) {
+            temp.half_price.quantity = 1;
+          }else{
+            // temp.half_price = {quantity: 0, price: 0, name:null};
+            temp.half_price.quantity = 0;
           }
+          state.cartItems.push({...temp});
         } else {
           state.cartItems.push({
             ...action.payload.selectedItem,
@@ -73,14 +82,15 @@ const cartSlice = createSlice({
           });
         }
       }
-    },
-    removeFromCart: (state, action) => {
+    },   
+      removeFromCart: (state, action) => {
       const nextCartItems = state.cartItems.filter(
         item => item.id !== action.payload.id,
       );
       state.cartItems = nextCartItems;
       toast.error(`${action.payload.product} Removed`);
     },
+
     decreaseCart: (state, action) => {
       const itemIndex = state.cartItems.findIndex(
         item => item.id === action.payload.id,
@@ -91,18 +101,14 @@ const cartSlice = createSlice({
           state.cartItems[itemIndex].totalPrice =
             state.cartItems[itemIndex].quantity *
             state.cartItems[itemIndex].price;
-          toast.info(`${state.cartItems[itemIndex].product} Decresed`);
         } else {
           state.cartItems.splice(itemIndex, 1);
-          toast.error(`${action.payload.product} item is deleted`);
         }
-      } else {
-        toast.error(`${action.payload.product} Item is not in cart`);
-      }
+      }  
     },
     clearCart: state => {
       state.cartItems = [];
-      // toast.info('Cart Cleared');
+      toast.info('Cart Cleared');
     },
     getTotals: (state, action) => {
       state.cartTotalQuantity = 0;
@@ -139,7 +145,7 @@ const cartSlice = createSlice({
       } else {
         toast.error('Item is not in cart');
       }
-    },
+    },    
   },
   extraReducers: {
     [userLogin.pending]: (state, action) => {
@@ -173,5 +179,6 @@ export const {
   removeInstruction,
   clearInstructions,
   addPendingOrder,
+  addHalfPrice,
 } = cartSlice.actions;
 export default cartSlice.reducer;

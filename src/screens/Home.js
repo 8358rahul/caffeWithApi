@@ -50,7 +50,7 @@ const Home = props => {
   const [key1, setKey] = React.useState();
   const [checked, setChecked] = React.useState({});
   const [selectedItem, setSelectedItem] = React.useState(null);
-  console.log('selectedItem', selectedItem);
+  // console.log('selectedItem', selectedItem);
   const bottomSheet = React.useRef();
   const [category, setCategory] = React.useState('');
   const [originalData, setOriginalData] = React.useState();
@@ -296,9 +296,7 @@ const Home = props => {
                   fontFamily: FAMILY.medium,
                 }}>
                 Rs.
-                {item.half_price != null
-                  ? item.half_price.price
-                  : item[initialKeys['price']]}
+                {item[initialKeys['price']]}
               </Text>
             </View>
           </View>
@@ -320,7 +318,9 @@ const Home = props => {
             }}>
             <TextButton
               label={'-'}
-              onPress={() => dispatch(decreaseCart(item))}
+              onPress={() => {dispatch(decreaseCart(item))
+                setChecked('')
+              }}
               buttonContainerStyle={{
                 width: cart.quantity < 100 ? '50%' : '35%',
                 height: 50,
@@ -387,7 +387,6 @@ const Home = props => {
                 setSelectedItem(item);
                 bottomSheet.current.show();
               } else {
-                // dispatch(addToCart(item));
                 dispatch(addToCart({selectedItem: item, price: false}));
               }
             }}
@@ -502,7 +501,7 @@ const Home = props => {
                 marginHorizontal: SIZES.padding,
                 fontFamily: FAMILY.bold,
                 marginTop: SIZES.padding,
-                color: COLORS.black,
+                // color: COLORS.black,
               }}>
               Quantity
             </Text>
@@ -586,11 +585,12 @@ const Home = props => {
               </Text>
               <TextButton
                 label=" Add to Cart"
-                onPress={() => {
+                onPress={() =>{ 
                   dispatch(
                     addToCart({selectedItem: selectedItem, price: checked}),
                   );
                   bottomSheet.current.close();
+                  setChecked({});
                 }}
                 buttonContainerStyle={{
                   backgroundColor: COLORS.primary,
@@ -659,7 +659,7 @@ const Home = props => {
                 marginHorizontal: SIZES.padding,
                 fontFamily: FAMILY.bold,
                 marginTop: SIZES.padding,
-                color: COLORS.black,
+                // color: COLORS.black,
               }}>
               Quantity
             </Text>
@@ -706,9 +706,8 @@ const Home = props => {
               <TextButton
                 label="Reapeat"
                 onPress={() => {
-                  // dispatch(addToCart(selectedItem));
                   dispatch(
-                    addToCart({selectedItem: selectedItem, price: false}),
+                    addToCart({selectedItem: selectedItem, price: checked}),
                   );
 
                   bottomSheet.current.close();
